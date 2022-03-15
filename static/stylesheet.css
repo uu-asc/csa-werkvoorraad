@@ -1,0 +1,154 @@
+@import url('https://fonts.googleapis.com/css2?family=Bungee+Hairline&display=swap');
+@import "https://unpkg.com/open-props/colors.min.css";
+:root {
+    --surface-1: var(--gray-0);
+    --surface-2: var(--gray-3);
+    --surface-3: var(--gray-5);
+    --brand: var(--gray-8);
+    --text-1: var(--gray-9);
+    --text-2: var(--gray-7);
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --surface-1: var(--gray-9);
+        --surface-2: var(--gray-8);
+        --surface-3: var(--gray-7);
+        --brand: var(--gray-4);
+        --text-1: var(--gray-3);
+        --text-2: var(--gray-4);
+    }
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: auto;
+    width: clamp(320px, 80vw, 900px);
+    background: var(--surface-1);
+    font-family: Calibri;
+    color: var(--text-1);
+}
+header {
+    margin-bottom: .25rem;
+    font-family: "Courier New";
+    font-size: .75em;
+}
+header div {
+    display: flex;
+    align-items: center;
+    gap: .25rem;
+}
+header div :first-child {
+    margin-right: auto;
+}
+h1 {
+    font-family: 'Bungee Hairline', cursive;
+}
+h2 {
+    font-variant: small-caps;
+    font-weight: 300;
+}
+main {
+    margin-bottom: 5rem;
+}
+summary {
+    border-top: 1px solid var(--brand);
+    width: 100%;
+    padding: 0.5rem 0;
+    position: relative;
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+}
+summary:after {
+    content: "+";
+    color: var(--text-1);
+    position: absolute;
+    font-size: 1.75em;
+    line-height: 0;
+    margin-top: 0.75rem;
+    right: 0;
+    top: 25%;
+    font-weight: 200;
+    transform-origin: center;
+    transition: 100ms linear;
+}
+summary > * {
+    margin: 0;
+}
+section > details > summary {
+    display: flex;
+    border-top: 3px solid var(--brand);
+}
+.display {
+    margin-left: auto;
+    margin-right: 1.5rem;
+}
+details[open] > summary:after {
+    transform: rotate(45deg);
+    font-size: 2em;
+}
+details details {
+    font-size: 0.75em;
+}
+.item[open] > summary {
+    border-bottom: 1px dotted var(--brand);
+    margin-bottom: .5rem;
+}
+.item > summary {
+    display: grid;
+    width: 100%;
+    font-size: 1.2em;
+    grid-template-columns: 1fr 7rem 4rem;
+    gap: 0.5em;
+}
+.item > summary > label {
+    justify-self: end;
+    font-family: "Courier New";
+    font-size: .8em;
+}
+.item > summary > div:first-child {
+    grid-row: span 2;
+}
+.item > summary > button {
+    margin-right: 1.5rem;
+}
+.instructie {
+    display: flex;
+    gap: .5rem;
+}
+.instructie span {
+    font-weight: bold;
+}
+blockquote {
+    font-size: 1.2em;
+    padding: 1em;
+    margin: .5em;
+    background: var(--surface-2);
+    color: var(--text-2);
+    border-radius: 5px;
+}
+.empty {
+    display: none;
+}
+.show {
+    display: block;
+}
+button {
+    background: var(--surface-2);
+    color: var(--text-2);
+    border: 1px solid var(--surface-3);
+    border-radius: 3px;
+    font-family: "Courier New";
+    font-size: .8em;
+}
+button:hover {
+    cursor: pointer;
+    background: var(--surface-3);
+}
