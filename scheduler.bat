@@ -9,5 +9,6 @@ echo conda environment: %CONDA_DEFAULT_ENV%
 echo.
 set "scheduler=%drive%werkvoorraad/werkvoorraad.py"
 call python "%scheduler%"
+call conda deactivate
 echo.
 timeout 15

@@ -1,5 +1,5 @@
 {
-    "output": "./csa.werkvoorraad.html",
+    "output": "../csa.werkvoorraad.html",
     "collegejaar": 2022,
     "queries": {
         "inschrijving": [

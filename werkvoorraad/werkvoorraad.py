@@ -77,14 +77,14 @@ def translate_queries(queries, repo):
 
 class MaakRapportage:
     CONFIGFILE = PATH / 'config.json'
-    LOADER = FileSystemLoader(searchpath='static')
+    LOADER = FileSystemLoader(searchpath=PATH / 'static')
     TEMPLATE = 'template.jinja'
     ENV = Environment(loader=LOADER)
 
     def __init__(self, collegejaar=None, outfile=None):
         self.config = json.loads(self.CONFIGFILE.read_text())
         self.collegejaar = collegejaar or self.config['collegejaar']
-        self.outfile = Path(outfile) or Path(self.config['output'])
+        self.outfile = Path(outfile or self.config['output'])
         self.queries = self.config['queries']
         self.defaults = self.config['defaults']
         self.data = []
@@ -173,10 +173,7 @@ class FromMoedertabel(MaakRapportage):
 
 
 if __name__ == '__main__':
-    parser = ArgumentParser(
-        description='Maak werkvoorraad',
-        epilog='',
-    )
+    parser = ArgumentParser(description='Maak werkvoorraad')
     parser.add_argument('--collegejaar', type=int)
     parser.add_argument('--random', action='store_true')
     parser.add_argument('--outfile', '-f')
@@ -187,6 +184,8 @@ if __name__ == '__main__':
         werkvoorraad = WithRandomData(**kwargs)
     else:
         sys.path.insert(0, str(PATH.parent / 'moedertabel'))
+        import os
+        os.chdir(PATH)
         from moedertabel import Moedertabel
         werkvoorraad = FromMoedertabel(**kwargs)
 
