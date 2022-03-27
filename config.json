@@ -112,7 +112,7 @@
                 "instructie": "Controleer of idb aanwezig is in OSIRIS Document; zo ja, verwerk, zo nee, start proces CSA_IDB.",
                 "query": [
                     "<kansrijk>",
-                    "<isa|bachelor>",
+                    "<uitsluiten|bachelor|isa|niet_toegelaten>",
                     "statusbesluit_idb is null and not b_identiteit_status and not doc_idb"
                 ]
             },
@@ -147,29 +147,23 @@
             },
             {
                 "oms": "Kansrijk verzoek, identiteit nog niet geverifieerd (EU)",
+                "instructie": "Controleer of idb aanwezig is in OSIRIS Document; zo ja, verwerk, zo nee, start proces CSA_IDB.",
                 "query": [
                     "<kansrijk>",
-                    "<isa|bachelor>",
-                    "herkomst_nationaliteit != 'Non-EU/EER'",
+                    "<nationaliteit|eu>",
+                    "<uitsluiten|bachelor|isa|niet_toegelaten>",
+                    "<uitsluiten|master|niet_toegelaten>",
                     "k_identiteit_status == 'GEEL' and statusbesluit_idb is null"
                 ]
             },
             {
                 "oms": "Kansrijk verzoek, identiteit nog niet geverifieerd (non-EU)",
-                "query": [
-                    "<kansrijk>",
-                    "<isa|bachelor>",
-                    "herkomst_nationaliteit == 'Non-EU/EER'",
-                    "k_identiteit_status == 'GEEL' and statusbesluit_idb is null"
-                ]
-            },
-            {
-                "oms": "Kansrijk verzoek, identiteit nog niet geverifieerd (alleen status OOA == toegelaten)",
                 "instructie": "Controleer of idb aanwezig is in OSIRIS Document; zo ja, verwerk, zo nee, start proces CSA_IDB.",
                 "query": [
                     "<kansrijk>",
-                    "<isa|bachelor>",
-                    "statusbesluit_ooa == 'T'",
+                    "<nationaliteit|non-eu>",
+                    "<uitsluiten|bachelor|isa|niet_toegelaten>",
+                    "<uitsluiten|master|niet_toegelaten>",
                     "k_identiteit_status == 'GEEL' and statusbesluit_idb is null"
                 ]
             }
@@ -222,8 +216,8 @@
                 "instructie": "Stel vast of student vvr studie zou moeten krijgen; zo ja, geef door aan ISA, zo nee, doe uitvraag.",
                 "query": [
                     "<kansrijk>",
-                    "<isa|bachelor>",
-                    "<inschrijfregel|utrecht>",
+                    "<uitsluiten|bachelor|isa|niet_toegelaten>",
+                    "<uitsluiten|bachelor|ucr>",
                     "k_verblijfsdocument == 'GEEL' and statusbesluit_ooa == 'T' and not heeft_proces_vvr_csa and not heeft_proces_vvr_isa"
                 ]
             },
@@ -231,8 +225,8 @@
                 "oms": "Kansrijk verzoek, vvr nodig maar geen vvr proces (isa of csa)",
                 "query": [
                     "<kansrijk>",
-                    "<isa|bachelor>",
-                    "<inschrijfregel|utrecht>",
+                    "<uitsluiten|bachelor|isa|niet_toegelaten>",
+                    "<uitsluiten|bachelor|ucr>",
                     "k_verblijfsdocument == 'GEEL' and not heeft_proces_vvr_csa and not heeft_proces_vvr_isa"
                 ]
             },
@@ -463,20 +457,29 @@
         "personalia__idb",
         "document"
     ],
-    "defaults": {
+    "abstractions": {
+        "nationaliteit": {
+            "non-eu": "herkomst_nationaliteit == 'Non-EU/EER'",
+            "eu": {
+                "NL": "herkomst_nationaliteit == 'NL'",
+                "non-NL": "herkomst_nationaliteit == 'EU/EER'"
+            }
+        },
         "inschrijfregel": {
             "verzoek": "inschrijvingstatus == 'V'",
-            "hogerejaars": "hogerejaars_verzoek.fillna(False) and not hogerejaars_geaccepteerd.fillna(False)",
-            "utrecht": "opleiding != 'LASB-RA'"
+            "hogerejaars": "hogerejaars_verzoek.fillna(False) and not hogerejaars_geaccepteerd.fillna(False)"
         },
         "kansrijk": {
             "herinschrijving": "soort == 'herinschrijving'",
-            "master": "soort in ['master', 'selma'] and (toelatingsbeschikking == 'Ja.' or (toelatingsbeschikking == 'Voorwaardelijk.' and acceptatieform == 'A'))",
+            "master": {
+                "toegelaten": "soort in ['master', 'selma'] and toelatingsbeschikking == 'Ja.'",
+                "voorwaardelijk": "soort in ['master', 'selma'] and toelatingsbeschikking == 'Voorwaardelijk.' and acceptatieform == 'A'"
+            },
             "premaster": "soort in ['premaster', 'educatief'] and toelatingsbeschikking == 'Ja.'",
             "bachelor": {
                 "matching": {
                     "regulier": "soort == 'bachelor' and k_studiekeuzecheck == 'GROEN'",
-                    "geen_skc": "soort == 'bachelor' and statusbesluit_ooa.isna()"
+                    "geen_skc": "soort == 'bachelor' and statusbesluit_ooa is null"
                 },
                 "fixus": "soort == 'fixus' and plaatsingsbewijs == 'Status plaatsing is Geaccepteerd.'",
                 "selectie": {
@@ -486,8 +489,17 @@
                 }
             }
         },
-        "isa": {
-            "bachelor": "statusbesluit_dipw_isa is null or statusbesluit_dipw_isa in ['S', 'T']"
+        "uitsluiten": {
+            "bachelor": {
+                "ucr": "opleiding != 'LASB-RA'",
+                "isa": {
+                    "niet_toegelaten":
+                        "not (statusbesluit_dipw_isa is null or statusbesluit_dipw_isa in ['S', 'T'])"
+                }
+            },
+            "master": {
+                "niet_toegelaten": "not (soort in ['master', 'selma'] and statusbesluit_ooa != 'T')"
+            }
         },
         "heeft_proces": {
             "csa_dip": "proces_dipw_csa == 'CSA_I_DIPLOMA'",

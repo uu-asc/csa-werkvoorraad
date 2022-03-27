@@ -1,3 +1,4 @@
+// DATA
 function renderChapter(chapter, items) {
     let rendered = []
     let total = {stu: 0, sin: 0}
@@ -48,14 +49,101 @@ function copyData(event) {
     )
 }
 
+// METADATA
+function renderMetaData(metadata) {
+    let blocks = []
+    for (let [label, fields] of Object.entries(metadata)) {
+        let block = renderLabelData(label, fields)
+        blocks.push(block)
+    }
+    return `<table>
+        <thead>
+            <th>thema</th>
+            <th>veld</th>
+            <th>oms</th>
+            <th>dtype</th>
+            <th>null</th>
+            <th>cats</th>
+        </thead>
+        <tbody>${blocks.join("")}</tbody>
+    </table>`
+}
+
+function renderLabelData(label, fields) {
+    let rows = []
+    let length = 0
+    for (let [field, info] of Object.entries(fields)) {
+        let s = filterDatamodel.value.trim().toLowerCase()
+        if (s) {
+            if (!(field.toLowerCase().includes(s) || info.oms.toLowerCase().includes(s))) {
+                continue
+            }
+        }
+        length++
+        let cells = renderField(info)
+        cells.unshift(`<td>${field}</td>`)
+        rows.push(cells)
+    }
+    if (length === 0) { return "" }
+    th = `<th rowspan=${length}>${label.split("__").join(" ")}</th>`
+    rows[0].unshift(th)
+    return rows.map(row => `<tr>${row.join("")}</tr>`).join("")
+}
+
+function renderField(field) {
+    let render = i => `<td>${i}</td>`
+    return [field.oms, field.dtype, field.hasnans, renderCats(field?.cats)].map(render)
+}
+
+function renderCats(cats) {
+    if (!cats) { return "" }
+    return cats.map(i => `[${i}]`).join("\n")
+}
+
+// ABSTRACTIONS
+function renderAbstractions(abstractions) {
+    let output = []
+    for (let [key, val] of Object.entries(abstractions)) {
+        if (typeof val === 'string') {
+            output.push(`<details><summary>${key}</summary><blockquote>${val}</blockquote></details>`)
+        } else {
+            output.push(`<details open><summary>${key}</summary>${renderAbstractions(val)}</details>`)
+        }
+    }
+    return output.join("")
+}
+
+// DATA
 let data = {{ data|tojson }}
+let metadata = {{ metadata|tojson }}
+let abstractions = {{ abstractions|tojson }}
+
+// DATAMODEL
+let datamodel = document.querySelector(`section[data-component="datamodel"] div:last-child`)
+let filterDatamodel = document.querySelector(`section[data-component="datamodel"] input`)
+let clearFilter = document.querySelector(`section[data-component="datamodel"] button`)
+datamodel.innerHTML = renderMetaData(metadata)
+filterDatamodel.addEventListener("keyup", ({key}) => {
+    if (key === 'Enter') { datamodel.innerHTML = renderMetaData(metadata) }
+})
+clearFilter.addEventListener("click", () => {
+    filterDatamodel.value = ""
+    datamodel.innerHTML = renderMetaData(metadata)
+})
+
+// BOUWSTENEN
+let bouwstenen = document.querySelector(`section[data-component="bouwstenen"]`)
+// bouwstenen.innerHTML = '<pre>' + JSON.stringify(abstractions, null, 2) + '</pre>'
+bouwstenen.innerHTML = renderAbstractions(abstractions)
+
+// WERKVOORRAAD
 let output = []
 for (let [chapter, items] of Object.entries(data)) {
     output.push(renderChapter(chapter, items))
 }
-let main = document.querySelector("main")
-main.innerHTML = output.join("")
-main.addEventListener("click", copyData)
+let werkvoorraad = document.querySelector(`section[data-component="werkvoorraad"] div:last-child`)
+werkvoorraad.innerHTML = output.join("")
+werkvoorraad.addEventListener("click", copyData)
 document.getElementById("toonalles").addEventListener("click", function() {
     document.querySelectorAll("section > details").forEach(node => node.setAttribute("open", ""))
 })
@@ -64,8 +152,34 @@ document.getElementById("verbergalles").addEventListener("click", function() {
 })
 document.getElementById("toonleeg").addEventListener("click", function() {
     if (this.checked) {
-        document.querySelectorAll(".empty").forEach(node => node.classList.add("show"))
+        werkvoorraad.querySelectorAll(".empty").forEach(node => node.classList.add("show"))
     } else {
-        document.querySelectorAll(".empty").forEach(node => node.classList.remove("show"))
+        werkvoorraad.querySelectorAll(".empty").forEach(node => node.classList.remove("show"))
+    }
+})
+
+// NAVIGATION
+let navigation = document.querySelector("nav")
+navigation.addEventListener("click", function(event) {
+    let target = event.target.dataset.showTarget
+    if (target != undefined) {
+        let sections = document.querySelectorAll("section[data-component]")
+        sections.forEach(node => {
+            let component = node.dataset.component
+            if (component === target) {
+                node.classList.remove("empty")
+            } else {
+                node.classList.add("empty")
+            }
+        })
+        let buttons = navigation.querySelectorAll("button")
+        buttons.forEach(node => {
+            let component = node.dataset.showTarget
+            if (component === target) {
+                node.setAttribute("selected", "")
+            } else {
+                node.removeAttribute("selected", "")
+            }
+        })
     }
 })

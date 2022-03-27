@@ -6,26 +6,30 @@ bevatten. Een item bestaat uit een omschrijving, één of meerdere queries en
 eventueel een instructie.
 
 Queries kunnen direct zijn vastgelegd bij het item, maar het is ook mogelijk om
-naar één of meerdere default queries te verwijzen die eveneens in config.json
-zijn gedefinieerd. In dat geval bestaat de query instructie uit een <sleutel>
-(gebruik vishaken om naar defaults te verwijzen).
+naar één of meerdere queries te verwijzen die onder "abstractions" zijn
+gedefenieerd in config.json. Deze "abstractions" fungeren als een soort
+bouwstenen waarmee je gemakkelijk een complexere query kunt opbouwen. Verwijzen
+naar een bouwsteen gebeurt met een <sleutel> (gebruik vishaken om naar
+een bouwsteen te verwijzen).
 
-Een sleutel kan naar één query in defaults verwijzen, maar evt. ook naar een
-subset. In dat laatste geval worden alle onderliggende queries verenigd. Dit
-maakt het bijv. mogelijk om zowel toegelaten masters als ingelote bachelors te
-selecteren.
+Een sleutel kan naar één specifieke query in "abstractions" verwijzen, maar
+evt. ook naar een subset van queries. In dat laatste geval worden alle
+onderliggende queries verenigd. Dit maakt het bijv. mogelijk om met één
+instructie zowel toegelaten masters als ingelote bachelors te selecteren.
 """
 
+import os
 import sys
 import json
 import random
-from string import ascii_uppercase
 from argparse import ArgumentParser
+from collections import defaultdict
 from datetime import datetime
 from pathlib import Path
+from string import ascii_uppercase
 from jinja2 import Environment, FileSystemLoader
 
-PATH = Path(__file__).parent.parent.absolute()
+PATH = Path(__file__).parent.parent.resolve()
 
 
 def fetch_queries(repo, ref=None, sep='|'):
@@ -64,9 +68,9 @@ def fetch_queries(repo, ref=None, sep='|'):
 
 def translate_queries(queries, repo):
     """
-    Translate references to query defaults (<key>) into queries that
+    Translate references to query abstractions (<key>) into queries that
     moedertabel can execute:
-    - Use key to look up query in config.json defaults
+    - Use key to look up query in config.json abstractions
     - If key refers to set op queries then join them with ' or '
     - Regular queries will be returned unmodified
     """
@@ -86,8 +90,9 @@ class MaakRapportage:
         self.collegejaar = collegejaar or self.config['collegejaar']
         self.outfile = Path(outfile or self.config['output'])
         self.queries = self.config['queries']
-        self.defaults = self.config['defaults']
+        self.abstractions = self.config['abstractions']
         self.data = []
+        self.metadata = {}
 
     def add_results_to_item(self):
         """
@@ -96,19 +101,24 @@ class MaakRapportage:
         """
         pass
 
-    def add_results(self):
+    def process_queries(self):
+        """
+        Run all queries and add results to respective items.
+        Modifies in place.
+        """
         for items in self.queries.values():
             for item in items:
                 self.add_results_to_item(item)
 
     def render(self):
-        self.add_results()
         template = self.ENV.get_template(self.TEMPLATE)
         updated = datetime.now().strftime('%H:%M %d-%m-%Y')
         return template.render(
             updated=updated,
             collegejaar=self.collegejaar,
             data=self.queries,
+            metadata=self.metadata,
+            abstractions=self.abstractions,
         )
 
     def write(self):
@@ -120,7 +130,12 @@ class WithRandomData(MaakRapportage):
     NUMS = '0123456789'
     LETTERS = ascii_uppercase
 
-    def add_results(self):
+    def __init__(self, collegejaar=None, outfile=None):
+        super().__init__(**kwargs)
+        path = (PATH / 'ex.datamodel.json')
+        self.metadata = json.loads(path.read_text(encoding='utf8'))
+
+    def process_queries(self):
         for items in self.queries.values():
             skip_chapter = random.random() > .8
             for item in items:
@@ -154,14 +169,18 @@ class FromMoedertabel(MaakRapportage):
         super().__init__(**kwargs)
         self.ops = self.config['ops']
         self.data = self.laad_moedertabel()
+        self.metadata = self.laad_metadata()
 
     def add_results_to_item(self, item):
-        queries = translate_queries(item['query'], self.defaults)
+        queries = translate_queries(item['query'], self.abstractions)
         data = self.data.query(*queries)
         item['stu'] = data.snr(output='series').to_list()
         item['sin'] = data.snr(output='series', uniek=False).index.to_list()
 
     def laad_moedertabel(self):
+        path_to_moeder = str(PATH.parent / 'moedertabel')
+        sys.path.insert(0, path_to_moeder)
+        from moedertabel import Moedertabel
         query = "inschrijvingstatus != 'G'"
         moedertabel = Moedertabel(
             'monitor',
@@ -171,8 +190,41 @@ class FromMoedertabel(MaakRapportage):
         moedertabel(*self.ops, query=query)
         return moedertabel
 
+    def laad_metadata(self):
+        datamodel = defaultdict(dict)
+        dtypes = {
+            "datetime64[ns]": "date",
+            "object": "str",
+            "category": "cat",
+            "float64": "float",
+            "int64": "int",
+            "boolean": "bool",
+        }
+        raw = self.data.metadata.raw
+        for op, info in raw.items():
+            info = info.get('toegevoegde velden', {})
+            if not info:
+                continue
+            for col, oms in info.items():
+                name = col.split(':')[0].strip()
+                s = self.data.data[name]
+                info = dict(
+                    oms = oms,
+                    dtype = dtypes.get(s.dtype.name, s.dtype.name),
+                    hasnans = s.hasnans,
+                )
+                if info['dtype'] == 'cat':
+                    info['cats'] = list(
+                        s
+                        .cat.remove_unused_categories()
+                        .cat.categories
+                    )
+                datamodel[op].update({name: info})
+        return datamodel
+
 
 if __name__ == '__main__':
+    os.chdir(PATH)
     parser = ArgumentParser(description='Maak werkvoorraad')
     parser.add_argument('--collegejaar', type=int)
     parser.add_argument('--random', action='store_true')
@@ -183,10 +235,6 @@ if __name__ == '__main__':
     if args['random']:
         werkvoorraad = WithRandomData(**kwargs)
     else:
-        sys.path.insert(0, str(PATH.parent / 'moedertabel'))
-        import os
-        os.chdir(PATH)
-        from moedertabel import Moedertabel
         werkvoorraad = FromMoedertabel(**kwargs)
-
+    werkvoorraad.process_queries()
     werkvoorraad.write()

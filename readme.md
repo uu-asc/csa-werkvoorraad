@@ -19,9 +19,10 @@ Het configuratiebestand 'config.json' bevat de volgende elementen:
 - **defaults** : default queries waarnaar verwezen kan worden in de item definitie
 
 ## Queries
-Het is mogelijk om meerdere queries op te geven bij een item. In dat geval komt een record alleen dan in de output voor als het record aan alle queries voldoet. De queries worden iaw met `and` uitgevoerd. Het resultaat vormt een *intersectie* van de opgegeven queries.
+Het is mogelijk om meerdere queries op te geven bij een item. In dat geval komt een record alleen dan in de output voor als het record aan alle vastgelegde queries voldoet. Het resultaat vormt iaw de *intersectie* van de opgegeven queries.
 
-In de queries verwijs je naar defaults op basis van een sleutel. De defaults kunnen geneste queries bevatten. Neem het volgende voorbeeld:
+### Abstractions
+Bij het opbouwen van een query kun je gebruik maken van de zogenaamde "abstractions". Dit zijn bouwstenen die zijn vastgelegd onder "abstractions" in 'config.json' waarmee je gemakkelijk complexere queries kunt opbouwen. In de queries verwijs je naar zo'n bouwsteen door in de query definitie van het item de bijbehorende sleutel op te geven tussen vishaken. Het is daarbij ook mogelijk om een sleutel op te geven die waaronder meerdere geneste queries vallen. Neem het volgende voorbeeld:
 
 ```json
 "kansrijk": {

@@ -6,13 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>csa werkvoorraad inschrijfcampagne</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Bungee+Hairline&display=swap');
-@import "https://unpkg.com/open-props/colors.min.css";
+@import url('https://fonts.googleapis.com/css2?family=Bungee+Hairline&display=swap');
+@import "https://unpkg.com/open-props";
 
 :root {
     --surface-1: var(--gray-0);
     --surface-2: var(--gray-3);
-    --surface-3: var(--gray-5);
+    --surface-3: var(--gray-4);
+    --surface-4: var(--gray-5);
     --brand: var(--gray-8);
     --text-1: var(--gray-9);
     --text-2: var(--gray-7);
@@ -22,6 +23,7 @@
         --surface-1: var(--gray-9);
         --surface-2: var(--gray-8);
         --surface-3: var(--gray-7);
+        --surface-4: var(--gray-6);
         --brand: var(--gray-4);
         --text-1: var(--gray-3);
         --text-2: var(--gray-4);
@@ -44,7 +46,7 @@ body {
     margin: auto;
     width: clamp(320px, 80vw, 900px);
     height: 100%;
-    background: var(--surface-1);
+    background-color: var(--surface-1);
     font-family: Calibri;
     color: var(--text-1);
 }
@@ -57,19 +59,75 @@ header h1 {
     line-height: 1em;
     margin-block: 1.5rem;
 }
-header div {
-    font-family: "Courier New";
-    font-size: .75em;
-    display: flex;
-    align-items: center;
-    gap: .25rem;
+header h1 + div {
+    font-family: var(--font-mono);
+    font-size: .8rem;
 }
-header div :first-child {
-    margin-right: auto;
+header nav {
+    display: flex;
+    margin-block: 1rem;
+}
+header nav > button {
+    flex-grow: 1;
+    font-size: .9em;
+    background-color: var(--surface-2);
+    border: 1px solid var(--surface-4);
+    border-bottom: 7px solid var(--surface-4);
+    border-radius: 0;
+    padding: .5rem;
+}
+header nav > button:first-child {
+    border-left: none;
+}
+header nav > button:last-child {
+    border-right: none
+}
+header nav > button:hover {
+    background-color: var(--surface-3);
+}
+header nav > button[selected] {
+    background-color: var(--surface-1);
+    border-bottom: none;
+    font-weight: bold;
 }
 main {
     margin-bottom: 5rem;
 }
+
+section[data-component="werkvoorraad"] > div:first-child {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    margin-bottom: .75rem;
+    font-family: var(--font-mono);
+    font-size: .9em;
+}
+
+section[data-component="datamodel"] div:first-child {
+    display: flex;
+    gap: .5rem;
+    margin-bottom: .75rem;
+}
+
+section[data-component="datamodel"] table {
+    border-collapse: collapse;
+    font-size: .8em;
+    font-family: var(--font-mono);
+}
+section[data-component="datamodel"] th, td {
+    border-bottom: 1px solid var(--surface-4);
+    padding: .25rem;
+}
+
+section[data-component="bouwstenen"] details details {
+    margin-left: .75rem;
+    border-left: 3px solid var(--brand);
+    margin-bottom: 0;
+}
+section[data-component="bouwstenen"] summary {
+    padding-left: .75rem
+}
+
 footer {
     margin-top: auto;
     padding-block: 1.5rem;
@@ -117,7 +175,7 @@ section > details > summary {
     margin-right: 1.5rem;
 }
 details details {
-    font-size: 0.75em;
+    font-size: 0.9em;
 }
 
 .item[open] > summary {
@@ -133,7 +191,7 @@ details details {
 }
 .item > summary > label {
     justify-self: end;
-    font-family: "Courier New";
+    font-family: var(--font-mono);
     font-size: .8em;
 }
 .item > summary > div:first-child {
@@ -151,10 +209,10 @@ details details {
     font-weight: bold;
 }
 blockquote {
-    font-size: 1.2em;
+    font-size: 1rem;
     padding: 1em;
     margin: .5em;
-    background: var(--surface-2);
+    background-color: var(--surface-2);
     color: var(--text-2);
     border-radius: 5px;
 }
@@ -166,37 +224,59 @@ blockquote {
     display: block;
 }
 button {
-    background: var(--surface-2);
+    background-color: var(--surface-2);
     color: var(--text-2);
-    border: 1px solid var(--surface-3);
+    border: 1px solid var(--surface-4);
     border-radius: 3px;
-    font-family: "Courier New";
+    font-family: var(--font-mono);
     font-size: .8em;
 }
 button:hover {
     cursor: pointer;
-    background: var(--surface-3);
+    background-color: var(--surface-3);
+}
+button:active {
+    background-color: var(--surface-4);
 }
     </style>
 </head>
 <body>
     <header>
         <h1>csa | collegejaar 2022 | werkvoorraad</h1>
-        <div>
-            <span>Laatste update: 23:00 15-03-2022</span>
-            <button id="toonalles">Toon alles</button>
-            <button id="verbergalles">Verberg alles</button>
-            <input type="checkbox" name="toonleeg" id="toonleeg"><label for="toonleeg">queries zonder resultaten</label>
-        </div>
+        <div>Laatste update: 13:31 27-03-2022</div>
+        <nav>
+            <button data-show-target="werkvoorraad" selected>werkvoorraad</button>
+            <button data-show-target="datamodel">datamodel</button>
+            <button data-show-target="bouwstenen">bouwstenen</button>
+        </nav>
     </header>
     <main>
+        <section data-component="werkvoorraad">
+            <div>
+                <button id="toonalles">Toon alles</button>
+                <button id="verbergalles">Verberg alles</button>
+                <input type="checkbox" name="toonleeg" id="toonleeg"><label for="toonleeg">queries zonder resultaten</label>
+            </div>
+            <div></div>
+        </section>
+        <section data-component="datamodel" class="empty">
+            <div>
+                <label for="searchdatamodel">Zoek in datamodel</label>
+                <input id="searchdatamodel" type="text">
+                <button>&#215;</button>
+            </div>
+            <div></div>
+        </section>
+        <section data-component="bouwstenen" class="empty">
+        </section>
     </main>
     <footer>
         <a href="https://github.com/uu-asc/csa-werkvoorraad">github.com/uu-asc/csa-werkvoorraad</a>
     </footer>
 </body>
 <script>
-    function renderChapter(chapter, items) {
+// DATA
+function renderChapter(chapter, items) {
     let rendered = []
     let total = {stu: 0, sin: 0}
     for (let [idx, item] of items.entries()) {
@@ -246,14 +326,101 @@ function copyData(event) {
     )
 }
 
-let data = {"bekostiging": [{"instructie": "Controleer of regel bekostigd kan worden en pas eventueel aan. Schrijf student in (negeer waarschuwing).", "oms": "Inschrijfbaar verzoek en geen bekostigde regel", "query": ["\u003cinschrijfregel|verzoek\u003e", "aantal_bekostigde_regels == 0 and stoplicht_groen"], "sin": [], "stu": []}, {"instructie": "Pas bekostigingsindicatie aan naar \u0027J\u0027 bij betreffende sinh_id.", "oms": "Inschrijving en geen bekostigde regel", "query": "inschrijvingstatus == \u0027I\u0027 and aantal_bekostigde_regels == 0 and bekostiging == \u0027T\u0027", "sin": [], "stu": []}, {"instructie": "Zet de laagst bekostigde regel op \u0027T\u0027 en schrijf student in.", "oms": "Inschrijfbaar verzoek en meer dan \u00e9\u00e9n bekostigde regel", "query": ["\u003cinschrijfregel|verzoek\u003e", "aantal_bekostigde_regels \u003e 1 and stoplicht_groen"], "sin": [], "stu": []}, {"instructie": "Wijzig bekostigingsindicatie van betreffende sinh_id naar \u0027A\u0027.", "oms": "Premaster maar bekostigingsindicatie is niet A, B of X", "query": "examentype == \u0027PM\u0027 and bekostiging not in [\u0027A\u0027, \u0027B\u0027, \u0027X\u0027]", "sin": [], "stu": []}, {"instructie": "Stel reden vasts van verlate inschrijving, codeer en vul bij opmerkingveld van betreffende sinh_id.", "oms": "Inschrijving na 30 september maar geen opmerking", "query": "datum_ac4 \u003e 2021-10-01 and ingangsmaand in [9, 10] and opmerking is null", "sin": [], "stu": []}], "betaling": [{"oms": "VBC | Verklaring maar geen betaling", "query": "vbc == \u0027V\u0027", "sin": ["KBV83940", "DEX43509", "CGD99184"], "stu": ["027764", "276073", "564768"]}, {"oms": "VBC | Geld maar geen verklaring", "query": "vbc == \u0027G\u0027", "sin": [], "stu": []}, {"instructie": "Zoek document en upload in OSIRIS Document (indien niet aanwezig, vraag document op bij student).", "oms": "VBC | Verklaring maar geen document", "query": "\u0027V\u0027 in vbc and not doc_vbc", "sin": [], "stu": []}], "hogerejaars": [{"oms": "Hogerejaarsverzoek ingediend bij fixus", "query": ["\u003cinschrijfregel|hogerejaars\u003e", "soort == \u0027fixus\u0027"], "sin": ["SPY53900", "OGY04645"], "stu": ["755048", "909933"]}, {"oms": "Hogerejaarsverzoek ingediend bij bachelor", "query": ["\u003cinschrijfregel|hogerejaars\u003e", "soort != \u0027fixus\u0027 and examentype == \u0027BA\u0027"], "sin": ["CRL69270", "CAC23800", "WMN61613", "QHG08289", "DKZ69841", "CTD32068", "LIR48938", "VOG64857", "XDI56905"], "stu": ["667735", "815869", "673752", "178864", "220615", "327479", "165772", "299789", "302525"]}, {"oms": "Hogerejaarsverzoek ingediend bij master", "query": ["\u003cinschrijfregel|hogerejaars\u003e", "examentype == \u0027MA\u0027"], "sin": [], "stu": []}], "inschrijving": [{"instructie": "Trek inschrijving in en verstuur \u0027graad_behaald\u0027 mail.", "oms": "Graad behaald", "query": "actiefcode == \u00274\u0027 and examen_behaald and examendatum \u003c 2021-09-01", "sin": [], "stu": []}], "matching": [{"instructie": "Verwijder oude matchingsproces en start nieuw proces.", "oms": "Reanimatie (nog geen besluit)", "query": ["\u003cheeft_proces|matching\u003e", "statusbesluit_ooa in [\u0027G\u0027] and inschrijvingstatus == \u0027V\u0027 and adres_nl_aanwezig == \u0027BRP\u0027"], "sin": [], "stu": []}, {"instructie": "Informeer student dat inschrijfverzoek wordt ingetrokken wegens eerdere afwijzing, trek betreffende sinh_id in.", "oms": "Reanimatie (afgewezen)", "query": ["\u003cheeft_proces|matching\u003e", "statusbesluit_ooa in [\u0027A\u0027] and inschrijvingstatus == \u0027V\u0027 and adres_nl_aanwezig == \u0027BRP\u0027"], "sin": [], "stu": []}, {"instructie": "Trek verzoek in en verstuur afwijzing.", "oms": "Te laat", "query": "soort == \u0027matching\u0027 and proces_ooa is null and adres_nl_aanwezig == \u0027BRP\u0027 and datum_eerste_vti_ho \u003e 2022-05-01", "sin": [], "stu": []}], "persoonsgegevens": [{"instructie": "Controleer of idb aanwezig is in OSIRIS Document; zo ja, verwerk, zo nee, start proces CSA_IDB.", "oms": "CSA_IDB | Geen proces, wel in aanmerking", "query": ["\u003ckansrijk\u003e", "\u003cisa|bachelor\u003e", "statusbesluit_idb is null and not b_identiteit_status and not doc_idb"], "sin": ["BPI21294"], "stu": ["962458"]}, {"instructie": "Rappelleer bij geen reactie na twee weken.", "oms": "CSA_IDB | Uitvraag gedaan", "query": ["\u003cinschrijfregel|verzoek\u003e", "statusbesluit_idb == \u0027N\u0027"], "sin": [], "stu": []}, {"instructie": "Controleer ge\u00c3\u00bcpload document (let ook op geldigheid op ingangsdatum sinh_id); indien correct, verifieer en handel proces af, indien niet correct, zet terug naar student.", "oms": "CSA_IDB | Ingediend", "query": ["\u003cinschrijfregel|verzoek\u003e", "statusbesluit_idb == \u0027I\u0027 and not heeft_afkeur_idb"], "sin": [], "stu": []}, {"instructie": "Rappelleer bij geen reactie na twee weken.", "oms": "CSA_IDB | Open afkeur vragen", "query": ["\u003cinschrijfregel|verzoek\u003e", "statusbesluit_idb in [\u0027I\u0027, \u0027B\u0027] and heeft_afkeur_idb"], "sin": [], "stu": []}, {"instructie": "Sluit proces af.", "oms": "CSA_IDB | Proces open, maar persoonsgegevens geverifieerd", "query": "statusbesluit_idb in [\u0027I\u0027, \u0027B\u0027] and b_identiteit_status", "sin": [], "stu": []}, {"oms": "Kansrijk verzoek, identiteit nog niet geverifieerd (EU)", "query": ["\u003ckansrijk\u003e", "\u003cisa|bachelor\u003e", "herkomst_nationaliteit != \u0027Non-EU/EER\u0027", "k_identiteit_status == \u0027GEEL\u0027 and statusbesluit_idb is null"], "sin": [], "stu": []}, {"oms": "Kansrijk verzoek, identiteit nog niet geverifieerd (non-EU)", "query": ["\u003ckansrijk\u003e", "\u003cisa|bachelor\u003e", "herkomst_nationaliteit == \u0027Non-EU/EER\u0027", "k_identiteit_status == \u0027GEEL\u0027 and statusbesluit_idb is null"], "sin": ["FZM68010"], "stu": ["549099"]}, {"instructie": "Controleer of idb aanwezig is in OSIRIS Document; zo ja, verwerk, zo nee, start proces CSA_IDB.", "oms": "Kansrijk verzoek, identiteit nog niet geverifieerd (alleen status OOA == toegelaten)", "query": ["\u003ckansrijk\u003e", "\u003cisa|bachelor\u003e", "statusbesluit_ooa == \u0027T\u0027", "k_identiteit_status == \u0027GEEL\u0027 and statusbesluit_idb is null"], "sin": ["FIA46901", "XZQ45618"], "stu": ["381320", "849937"]}], "roosevelt": [{"instructie": "Voeg korting toe en schrijf student in.", "oms": "UCR eerstejaars toegelaten", "query": ["\u003cinschrijfregel|verzoek\u003e", "opleiding == \u0027LASB-RA\u0027 and statusbesluit_ooa in [\u0027T\u0027]"], "sin": [], "stu": []}], "toelatingsbeschikking": [{"instructie": "Vraag GS om situatie op te lossen.", "oms": "Toelatingsbeschikking vorm (vt/dt) ongelijk aan inschrijfregel vorm", "query": "tb_vorm_niet_gelijk.fillna(False)", "sin": [], "stu": []}, {"instructie": "Vraag GS om situatie op te lossen.", "oms": "Toelatingsbeschikking croho ongelijk aan inschrijfregel croho", "query": "tb_croho_niet_gelijk.fillna(False)", "sin": ["GSZ74398", "VOI20421"], "stu": ["097826", "066854"]}, {"oms": "Toelatingsbeschikking aanvangsdatum kleiner dan inschrijfregel ingangsdatum", "query": "tb_aanvang_kleiner.fillna(False)", "sin": [], "stu": []}], "verblijfsvergunning": [{"instructie": "Controleer of verblijfsvergunning aanwezig is; zo ja, controleer en verwerk indien mogelijk, zo nee, doe uitvraag.", "oms": "CSA_I_VVR | Eerste controle nog niet uitgevoerd", "query": ["\u003cinschrijfregel|verzoek\u003e", "statusbesluit_vvr_csa == \u0027C\u0027"], "sin": [], "stu": []}, {"instructie": "Rappelleer bij geen reactie na twee weken.", "oms": "CSA_I_VVR | Uitvraag gedaan", "query": ["\u003cinschrijfregel|verzoek\u003e", "statusbesluit_vvr_csa == \u0027U\u0027"], "sin": [], "stu": []}, {"instructie": "Controleer of verblijfsvergunning juist is; zo nee, zet terug aan student, zo ja, verwerk document en handel proces af.", "oms": "CSA_I_VVR | Ingediend", "query": ["\u003cinschrijfregel|verzoek\u003e", "statusbesluit_vvr_csa == \u0027I\u0027 and not heeft_afkeur_vvr_csa"], "sin": [], "stu": []}, {"instructie": "Rappelleer bij geen reactie na twee weken.", "oms": "CSA_I_VVR | Open afkeur vragen", "query": ["\u003cinschrijfregel|verzoek\u003e", "statusbesluit_vvr_csa in [\u0027I]\u0027, \u0027B\u0027] and heeft_afkeur_vvr_csa"], "sin": [], "stu": []}, {"instructie": "Sluit proces af.", "oms": "CSA_I_VVR | Proces open, maar VVR reeds verwerkt", "query": "statusbesluit_vvr_csa is not null and statusbesluit_vvr_csa not in [\u0027G\u0027, \u0027F\u0027, \u0027X\u0027, \u0027S\u0027, \u0027T\u0027] and k_verblijfsdocument == \u0027GROEN\u0027", "sin": ["HGC04799", "WON11719"], "stu": ["741415", "435851"]}, {"instructie": "Rappelleer bij geen reactie na twee weken.", "oms": "CSA_I_VVR | Voorwaardelijk afgehandelde VVR", "query": "statusbesluit_vvr_csa == \u0027S\u0027", "sin": [], "stu": []}, {"instructie": "Stel vast of student vvr studie zou moeten krijgen; zo ja, geef door aan ISA, zo nee, doe uitvraag.", "oms": "Kansrijk verzoek, vvr nodig maar geen vvr proces (isa of csa) (alleen toegelaten)", "query": ["\u003ckansrijk\u003e", "\u003cisa|bachelor\u003e", "\u003cinschrijfregel|utrecht\u003e", "k_verblijfsdocument == \u0027GEEL\u0027 and statusbesluit_ooa == \u0027T\u0027 and not heeft_proces_vvr_csa and not heeft_proces_vvr_isa"], "sin": ["QIL34810", "NUP15330", "SSM42247"], "stu": ["559263", "328546", "420364"]}, {"oms": "Kansrijk verzoek, vvr nodig maar geen vvr proces (isa of csa)", "query": ["\u003ckansrijk\u003e", "\u003cisa|bachelor\u003e", "\u003cinschrijfregel|utrecht\u003e", "k_verblijfsdocument == \u0027GEEL\u0027 and not heeft_proces_vvr_csa and not heeft_proces_vvr_isa"], "sin": [], "stu": []}, {"instructie": "Stem met ISA af, wie de uitvraag doet; sluit indien nodig CSA_I_VVR af.", "oms": "Open CSa VVR-proces \u00c3\u00a9n open ISA VVR-proces", "query": "heeft_proces_vvr_csa and heeft_proces_vvr_isa and statusbesluit_vvr_csa not in [\u0027G\u0027, \u0027F\u0027, \u0027X\u0027, \u0027T\u0027] and statusbesluit_vvr_isa not in [\u0027G\u0027, \u0027F\u0027]", "sin": [], "stu": []}], "verblijfsvergunning_aanvullende_stukken": [{"instructie": "Rappelleer bij geen reactie na twee weken.", "oms": "CSA_I_VVR | Uitvraag gedaan na inschrijving", "query": "inschrijvingstatus == \u0027I\u0027 and statusbesluit_vvr_csa == \u0027U\u0027", "sin": [], "stu": []}, {"instructie": "Controleer of verblijfsvergunning juist is; zo nee, zet terug aan student, zo ja, verwerk document en handel proces af.", "oms": "CSA_I_VVR | Ingediend na inschrijving", "query": "inschrijvingstatus == \u0027I\u0027 and statusbesluit_vvr_csa == \u0027I\u0027 and not heeft_afkeur_vvr_csa", "sin": ["ANC23193", "VVX35402"], "stu": ["357996", "899405"]}, {"instructie": "Rappelleer bij geen reactie na twee weken.", "oms": "CSA_I_VVR | Open afkeur vragen na inschrijving", "query": "inschrijvingstatus == \u0027I\u0027 and statusbesluit_vvr_csa in [\u0027I\u0027, \u0027B\u0027] and heeft_afkeur_vvr_csa", "sin": [], "stu": []}], "vooropleiding": [{"instructie": "Start CSA_I_DIPLOMA proces op bij betreffende sinh_id.", "oms": "CSA_I_DIPLOMA | Geen proces, wel in aanmerking", "query": ["\u003ckansrijk|bachelor\u003e", "opleiding not in [\u0027LASB-UC\u0027, \u0027LASB-RA\u0027]", "k_vooropleiding_geverifieerd == \u0027GEEL\u0027 and statusbesluit_dipw_csa is null and statusbesluit_dipw_isa is null and not heeft_cd_proces and datum_aangevraagd_zachte_knip is null and not fsw_wiskunde_toets"], "sin": [], "stu": []}, {"instructie": "Rappelleer bij geen reactie na twee weken.", "oms": "CSA_I_DIPLOMA | Nog niet ingediend", "query": ["\u003cheeft_proces|csa_dip\u003e", "statusbesluit_dipw_csa == \u0027B\u0027"], "sin": [], "stu": []}, {"instructie": "Controleer of vooropleiding juist is; zo nee, zet terug aan student, zo ja, verwerk document en handel proces af.", "oms": "CSA_I_DIPLOMA | Ingediend", "query": ["\u003cheeft_proces|csa_dip\u003e", "statusbesluit_dipw_csa in [\u0027I\u0027] and statusbesluit_zachte_knip not in [\u0027S\u0027, \u0027T\u0027] and not heeft_afkeur_dipw_csa"], "sin": [], "stu": []}, {"instructie": "Rappelleer bij geen reactie na twee weken.", "oms": "CSA_I_DIPLOMA | Open afkeur vragen", "query": ["\u003cheeft_proces|csa_dip\u003e", "statusbesluit_dipw_csa in [\u0027I\u0027, \u0027B\u0027] and statusbesluit_zachte_knip not in [\u0027S\u0027, \u0027T\u0027] and heeft_afkeur_dipw_csa"], "sin": [], "stu": []}, {"instructie": "Sluit proces af.", "oms": "CSA_I_DIPLOMA | Proces open, maar diploma geverifieerd", "query": ["\u003cheeft_proces|csa_dip\u003e", "statusbesluit_dipw_csa not in [\u0027F\u0027, \u0027G\u0027, \u0027T\u0027] and b_vooropleiding_geverifieerd"], "sin": [], "stu": []}, {"instructie": "Rappelleer bij geen reactie na twee weken.", "oms": "CSA-CERTIFICAAT | Nog niet ingediend", "query": ["\u003cheeft_proces|csa_cert\u003e", "statusbesluit_dipw_csa == \u0027B\u0027"], "sin": [], "stu": []}, {"instructie": "Controleer of certificaat juist is; zo nee, zet terug aan student, zo ja, verwerk document en handel proces af.", "oms": "CSA-CERTIFICAAT | Ingediend", "query": ["\u003cheeft_proces|csa_cert\u003e", "statusbesluit_dipw_csa in [\u0027I\u0027] and statusbesluit_zachte_knip not in [\u0027S\u0027, \u0027T\u0027] and not heeft_afkeur_dipw_csa"], "sin": [], "stu": []}, {"instructie": "Rappelleer bij geen reactie na twee weken.", "oms": "CSA-CERTIFICAAT | Open afkeur vragen", "query": ["\u003cheeft_proces|csa_cert\u003e", "statusbesluit_dipw_csa in [\u0027I\u0027, \u0027B\u0027] and statusbesluit_zachte_knip not in [\u0027S\u0027, \u0027T\u0027] and heeft_afkeur_dipw_csa"], "sin": [], "stu": []}, {"instructie": "Sluit proces af.", "oms": "CSA-CERTIFICAAT | Proces open, maar diploma geverifieerd", "query": ["\u003cheeft_proces|csa_cert\u003e", "statusbesluit_dipw_csa not in [\u0027F\u0027, \u0027G\u0027, \u0027T\u0027] and b_vooropleiding_geverifieerd"], "sin": [], "stu": []}, {"instructie": "Verwerk suffici\u00c3\u00abntieverklaring.", "oms": "Suffici\u00c3\u00abntieverklaring", "query": "examentype in [\u0027BA\u0027, \u0027PM\u0027] and proces_dipw_isa is null and k_vooropleiding_geverifieerd == \u0027GEEL\u0027 and status_sufficientie == \u0027OPL-SUFFVERKL\u0027", "sin": [], "stu": []}, {"instructie": "Controller colloquium doctum in OSIRIS Document; verwerk indien correct en voor betreffende sinh_id.", "oms": "Colloquium doctum in document, vooropleiding == GEEL", "query": "doc_cd and k_vooropleiding_geverifieerd == \u0027GEEL\u0027", "sin": [], "stu": []}, {"oms": "In behandeling voor colloquium doctum maar geen document", "query": "heeft_cd_proces and not doc_cd", "sin": [], "stu": []}, {"oms": "Vwo uit Carribische gebieden", "query": ["\u003ckansrijk|bachelor\u003e", "examentype == \u0027BA\u0027 and k_vooropleiding_geverifieerd == \u0027GEEL\u0027 and statusbesluit_dipw_isa is null and datum_aangevraagd_zachte_knip is null", "vooropleiding_extensie_land in [\u00275106\u0027, \u00275107\u0027, \u0027AW\u0027]"], "sin": [], "stu": []}, {"oms": "Colegio Arubano", "query": "vooropleiding_school.str.contains(\u0027arubano\u0027, case=False, na=False) and k_vooropleiding_geverifieerd == \u0027GEEL\u0027", "sin": [], "stu": []}, {"oms": "FSW nog niet afgeronde wiskunde toets", "query": "fsw_wiskunde_toets and k_vooropleiding_geverifieerd == \u0027GEEL\u0027", "sin": [], "stu": []}], "zachteknip": [{"oms": "BA | Uitvraag", "query": ["\u003cheeft_proces|zachteknip|bachelor\u003e", "statusbesluit_zachte_knip == \u0027N\u0027"], "sin": ["MQQ86674", "HRF24105"], "stu": ["088208", "776519"]}, {"oms": "BA | Ingediend", "query": ["\u003cheeft_proces|zachteknip|bachelor\u003e", "statusbesluit_zachte_knip == \u0027I\u0027"], "sin": [], "stu": []}, {"oms": "MA | Uitvraag", "query": ["\u003cheeft_proces|zachteknip|master\u003e", "statusbesluit_zachte_knip == \u0027N\u0027"], "sin": [], "stu": []}, {"oms": "MA | Ingediend", "query": ["\u003cheeft_proces|zachteknip|master\u003e", "statusbesluit_zachte_knip == \u0027I\u0027"], "sin": [], "stu": []}, {"oms": "PM | Uitvraag", "query": ["\u003cheeft_proces|zachteknip|premaster\u003e", "statusbesluit_zachte_knip == \u0027N\u0027"], "sin": [], "stu": []}, {"oms": "PM | Ingediend", "query": ["\u003cheeft_proces|zachteknip|premaster\u003e", "statusbesluit_zachte_knip == \u0027I\u0027"], "sin": [], "stu": []}]}
+// METADATA
+function renderMetaData(metadata) {
+    let blocks = []
+    for (let [label, fields] of Object.entries(metadata)) {
+        let block = renderLabelData(label, fields)
+        blocks.push(block)
+    }
+    return `<table>
+        <thead>
+            <th>thema</th>
+            <th>veld</th>
+            <th>oms</th>
+            <th>dtype</th>
+            <th>null</th>
+            <th>cats</th>
+        </thead>
+        <tbody>${blocks.join("")}</tbody>
+    </table>`
+}
+
+function renderLabelData(label, fields) {
+    let rows = []
+    let length = 0
+    for (let [field, info] of Object.entries(fields)) {
+        let s = filterDatamodel.value.trim().toLowerCase()
+        if (s) {
+            if (!(field.toLowerCase().includes(s) || info.oms.toLowerCase().includes(s))) {
+                continue
+            }
+        }
+        length++
+        let cells = renderField(info)
+        cells.unshift(`<td>${field}</td>`)
+        rows.push(cells)
+    }
+    if (length === 0) { return "" }
+    th = `<th rowspan=${length}>${label.split("__").join(" ")}</th>`
+    rows[0].unshift(th)
+    return rows.map(row => `<tr>${row.join("")}</tr>`).join("")
+}
+
+function renderField(field) {
+    let render = i => `<td>${i}</td>`
+    return [field.oms, field.dtype, field.hasnans, renderCats(field?.cats)].map(render)
+}
+
+function renderCats(cats) {
+    if (!cats) { return "" }
+    return cats.map(i => `[${i}]`).join("\n")
+}
+
+// ABSTRACTIONS
+function renderAbstractions(abstractions) {
+    let output = []
+    for (let [key, val] of Object.entries(abstractions)) {
+        if (typeof val === 'string') {
+            output.push(`<details><summary>${key}</summary><blockquote>${val}</blockquote></details>`)
+        } else {
+            output.push(`<details open><summary>${key}</summary>${renderAbstractions(val)}</details>`)
+        }
+    }
+    return output.join("")
+}
+
+// DATA
+let data = {"bekostiging": [{"instructie": "Controleer of regel bekostigd kan worden en pas eventueel aan. Schrijf student in (negeer waarschuwing).", "oms": "Inschrijfbaar verzoek en geen bekostigde regel", "query": ["\u003cinschrijfregel|verzoek\u003e", "aantal_bekostigde_regels == 0 and stoplicht_groen"], "sin": ["WZZ19563", "ZDH25492"], "stu": ["006026", "995453"]}, {"instructie": "Pas bekostigingsindicatie aan naar \u0027J\u0027 bij betreffende sinh_id.", "oms": "Inschrijving en geen bekostigde regel", "query": "inschrijvingstatus == \u0027I\u0027 and aantal_bekostigde_regels == 0 and bekostiging == \u0027T\u0027", "sin": [], "stu": []}, {"instructie": "Zet de laagst bekostigde regel op \u0027T\u0027 en schrijf student in.", "oms": "Inschrijfbaar verzoek en meer dan \u00e9\u00e9n bekostigde regel", "query": ["\u003cinschrijfregel|verzoek\u003e", "aantal_bekostigde_regels \u003e 1 and stoplicht_groen"], "sin": [], "stu": []}, {"instructie": "Wijzig bekostigingsindicatie van betreffende sinh_id naar \u0027A\u0027.", "oms": "Premaster maar bekostigingsindicatie is niet A, B of X", "query": "examentype == \u0027PM\u0027 and bekostiging not in [\u0027A\u0027, \u0027B\u0027, \u0027X\u0027]", "sin": [], "stu": []}, {"instructie": "Stel reden vasts van verlate inschrijving, codeer en vul bij opmerkingveld van betreffende sinh_id.", "oms": "Inschrijving na 30 september maar geen opmerking", "query": "datum_ac4 \u003e 2021-10-01 and ingangsmaand in [9, 10] and opmerking is null", "sin": ["LVA92828", "YVE42012", "DXP27282", "XQV37679", "OJA74298", "HIH55225", "XDL97355", "UTP19785", "NRV91931", "ABQ25569", "DFB36438", "IJP98444", "ITO85512", "NNN82663"], "stu": ["948768", "701486", "964535", "409997", "343365", "377952", "458496", "480312", "981618", "860736", "065132", "794173", "810626", "359888"]}], "betaling": [{"oms": "VBC | Verklaring maar geen betaling", "query": "vbc == \u0027V\u0027", "sin": [], "stu": []}, {"oms": "VBC | Geld maar geen verklaring", "query": "vbc == \u0027G\u0027", "sin": [], "stu": []}, {"instructie": "Zoek document en upload in OSIRIS Document (indien niet aanwezig, vraag document op bij student).", "oms": "VBC | Verklaring maar geen document", "query": "\u0027V\u0027 in vbc and not doc_vbc", "sin": [], "stu": []}], "hogerejaars": [{"oms": "Hogerejaarsverzoek ingediend bij fixus", "query": ["\u003cinschrijfregel|hogerejaars\u003e", "soort == \u0027fixus\u0027"], "sin": [], "stu": []}, {"oms": "Hogerejaarsverzoek ingediend bij bachelor", "query": ["\u003cinschrijfregel|hogerejaars\u003e", "soort != \u0027fixus\u0027 and examentype == \u0027BA\u0027"], "sin": ["AHA33820", "SFK71723"], "stu": ["165391", "120011"]}, {"oms": "Hogerejaarsverzoek ingediend bij master", "query": ["\u003cinschrijfregel|hogerejaars\u003e", "examentype == \u0027MA\u0027"], "sin": [], "stu": []}], "inschrijving": [{"instructie": "Trek inschrijving in en verstuur \u0027graad_behaald\u0027 mail.", "oms": "Graad behaald", "query": "actiefcode == \u00274\u0027 and examen_behaald and examendatum \u003c 2021-09-01", "sin": [], "stu": []}], "matching": [{"instructie": "Verwijder oude matchingsproces en start nieuw proces.", "oms": "Reanimatie (nog geen besluit)", "query": ["\u003cheeft_proces|matching\u003e", "statusbesluit_ooa in [\u0027G\u0027] and inschrijvingstatus == \u0027V\u0027 and adres_nl_aanwezig == \u0027BRP\u0027"], "sin": [], "stu": []}, {"instructie": "Informeer student dat inschrijfverzoek wordt ingetrokken wegens eerdere afwijzing, trek betreffende sinh_id in.", "oms": "Reanimatie (afgewezen)", "query": ["\u003cheeft_proces|matching\u003e", "statusbesluit_ooa in [\u0027A\u0027] and inschrijvingstatus == \u0027V\u0027 and adres_nl_aanwezig == \u0027BRP\u0027"], "sin": [], "stu": []}, {"instructie": "Trek verzoek in en verstuur afwijzing.", "oms": "Te laat", "query": "soort == \u0027matching\u0027 and proces_ooa is null and adres_nl_aanwezig == \u0027BRP\u0027 and datum_eerste_vti_ho \u003e 2022-05-01", "sin": [], "stu": []}], "persoonsgegevens": [{"instructie": "Controleer of idb aanwezig is in OSIRIS Document; zo ja, verwerk, zo nee, start proces CSA_IDB.", "oms": "CSA_IDB | Geen proces, wel in aanmerking", "query": ["\u003ckansrijk\u003e", "\u003cuitsluiten|bachelor|isa|niet_toegelaten\u003e", "statusbesluit_idb is null and not b_identiteit_status and not doc_idb"], "sin": [], "stu": []}, {"instructie": "Rappelleer bij geen reactie na twee weken.", "oms": "CSA_IDB | Uitvraag gedaan", "query": ["\u003cinschrijfregel|verzoek\u003e", "statusbesluit_idb == \u0027N\u0027"], "sin": ["NYD11089", "YRI31114", "QNE05379", "DQM56626", "OHD77416"], "stu": ["289487", "788040", "225877", "624339", "206811"]}, {"instructie": "Controleer ge\u00c3\u00bcpload document (let ook op geldigheid op ingangsdatum sinh_id); indien correct, verifieer en handel proces af, indien niet correct, zet terug naar student.", "oms": "CSA_IDB | Ingediend", "query": ["\u003cinschrijfregel|verzoek\u003e", "statusbesluit_idb == \u0027I\u0027 and not heeft_afkeur_idb"], "sin": [], "stu": []}, {"instructie": "Rappelleer bij geen reactie na twee weken.", "oms": "CSA_IDB | Open afkeur vragen", "query": ["\u003cinschrijfregel|verzoek\u003e", "statusbesluit_idb in [\u0027I\u0027, \u0027B\u0027] and heeft_afkeur_idb"], "sin": [], "stu": []}, {"instructie": "Sluit proces af.", "oms": "CSA_IDB | Proces open, maar persoonsgegevens geverifieerd", "query": "statusbesluit_idb in [\u0027I\u0027, \u0027B\u0027] and b_identiteit_status", "sin": [], "stu": []}, {"instructie": "Controleer of idb aanwezig is in OSIRIS Document; zo ja, verwerk, zo nee, start proces CSA_IDB.", "oms": "Kansrijk verzoek, identiteit nog niet geverifieerd (EU)", "query": ["\u003ckansrijk\u003e", "\u003cnationaliteit|eu\u003e", "\u003cuitsluiten|bachelor|isa|niet_toegelaten\u003e", "\u003cuitsluiten|master|niet_toegelaten\u003e", "k_identiteit_status == \u0027GEEL\u0027 and statusbesluit_idb is null"], "sin": [], "stu": []}, {"instructie": "Controleer of idb aanwezig is in OSIRIS Document; zo ja, verwerk, zo nee, start proces CSA_IDB.", "oms": "Kansrijk verzoek, identiteit nog niet geverifieerd (non-EU)", "query": ["\u003ckansrijk\u003e", "\u003cnationaliteit|non-eu\u003e", "\u003cuitsluiten|bachelor|isa|niet_toegelaten\u003e", "\u003cuitsluiten|master|niet_toegelaten\u003e", "k_identiteit_status == \u0027GEEL\u0027 and statusbesluit_idb is null"], "sin": [], "stu": []}], "roosevelt": [{"instructie": "Voeg korting toe en schrijf student in.", "oms": "UCR eerstejaars toegelaten", "query": ["\u003cinschrijfregel|verzoek\u003e", "opleiding == \u0027LASB-RA\u0027 and statusbesluit_ooa in [\u0027T\u0027]"], "sin": [], "stu": []}], "toelatingsbeschikking": [{"instructie": "Vraag GS om situatie op te lossen.", "oms": "Toelatingsbeschikking vorm (vt/dt) ongelijk aan inschrijfregel vorm", "query": "tb_vorm_niet_gelijk.fillna(False)", "sin": [], "stu": []}, {"instructie": "Vraag GS om situatie op te lossen.", "oms": "Toelatingsbeschikking croho ongelijk aan inschrijfregel croho", "query": "tb_croho_niet_gelijk.fillna(False)", "sin": [], "stu": []}, {"oms": "Toelatingsbeschikking aanvangsdatum kleiner dan inschrijfregel ingangsdatum", "query": "tb_aanvang_kleiner.fillna(False)", "sin": [], "stu": []}], "verblijfsvergunning": [{"instructie": "Controleer of verblijfsvergunning aanwezig is; zo ja, controleer en verwerk indien mogelijk, zo nee, doe uitvraag.", "oms": "CSA_I_VVR | Eerste controle nog niet uitgevoerd", "query": ["\u003cinschrijfregel|verzoek\u003e", "statusbesluit_vvr_csa == \u0027C\u0027"], "sin": ["LWY73523", "XZQ03203"], "stu": ["693004", "901832"]}, {"instructie": "Rappelleer bij geen reactie na twee weken.", "oms": "CSA_I_VVR | Uitvraag gedaan", "query": ["\u003cinschrijfregel|verzoek\u003e", "statusbesluit_vvr_csa == \u0027U\u0027"], "sin": [], "stu": []}, {"instructie": "Controleer of verblijfsvergunning juist is; zo nee, zet terug aan student, zo ja, verwerk document en handel proces af.", "oms": "CSA_I_VVR | Ingediend", "query": ["\u003cinschrijfregel|verzoek\u003e", "statusbesluit_vvr_csa == \u0027I\u0027 and not heeft_afkeur_vvr_csa"], "sin": ["TBB32097", "GXT89944", "VKQ79899", "RBF95266", "VXJ96837"], "stu": ["305811", "727844", "639891", "952980", "224418"]}, {"instructie": "Rappelleer bij geen reactie na twee weken.", "oms": "CSA_I_VVR | Open afkeur vragen", "query": ["\u003cinschrijfregel|verzoek\u003e", "statusbesluit_vvr_csa in [\u0027I]\u0027, \u0027B\u0027] and heeft_afkeur_vvr_csa"], "sin": ["CNY02156", "FYJ89612", "HIB91596", "DJU74850", "QOZ46699", "ZHL66902", "RRY22388"], "stu": ["483931", "584776", "776530", "514240", "865683", "466668", "304609"]}, {"instructie": "Sluit proces af.", "oms": "CSA_I_VVR | Proces open, maar VVR reeds verwerkt", "query": "statusbesluit_vvr_csa is not null and statusbesluit_vvr_csa not in [\u0027G\u0027, \u0027F\u0027, \u0027X\u0027, \u0027S\u0027, \u0027T\u0027] and k_verblijfsdocument == \u0027GROEN\u0027", "sin": ["DRD14146", "DLT11316", "BBS78060", "UXW90919", "KCI18772", "WSZ86632", "EHM45322", "BZV26929", "DFG40574", "MAW99261", "LBJ88647", "BJE43763", "SKK30911", "LFP87672", "KXU37644", "POY09150", "RCM06458", "ZLH33370", "ZTG33285", "KLG83710", "FWA93342", "TPX75689", "SCH61608", "BVA82000"], "stu": ["328682", "655608", "803483", "873417", "236823", "738227", "016555", "096627", "964829", "956893", "679131", "754393", "411852", "430307", "106746", "013345", "398188", "702547", "068780", "901937", "415128", "323681", "040133", "648504"]}, {"instructie": "Rappelleer bij geen reactie na twee weken.", "oms": "CSA_I_VVR | Voorwaardelijk afgehandelde VVR", "query": "statusbesluit_vvr_csa == \u0027S\u0027", "sin": [], "stu": []}, {"instructie": "Stel vast of student vvr studie zou moeten krijgen; zo ja, geef door aan ISA, zo nee, doe uitvraag.", "oms": "Kansrijk verzoek, vvr nodig maar geen vvr proces (isa of csa) (alleen toegelaten)", "query": ["\u003ckansrijk\u003e", "\u003cuitsluiten|bachelor|isa|niet_toegelaten\u003e", "\u003cuitsluiten|bachelor|ucr\u003e", "k_verblijfsdocument == \u0027GEEL\u0027 and statusbesluit_ooa == \u0027T\u0027 and not heeft_proces_vvr_csa and not heeft_proces_vvr_isa"], "sin": ["HLP82160", "HVW40182", "QKR74888"], "stu": ["890889", "478814", "616847"]}, {"oms": "Kansrijk verzoek, vvr nodig maar geen vvr proces (isa of csa)", "query": ["\u003ckansrijk\u003e", "\u003cuitsluiten|bachelor|isa|niet_toegelaten\u003e", "\u003cuitsluiten|bachelor|ucr\u003e", "k_verblijfsdocument == \u0027GEEL\u0027 and not heeft_proces_vvr_csa and not heeft_proces_vvr_isa"], "sin": ["ORQ36145", "IZA74396", "KDM81824", "DRJ28675", "IHJ46465"], "stu": ["257327", "898599", "098133", "843405", "065111"]}, {"instructie": "Stem met ISA af, wie de uitvraag doet; sluit indien nodig CSA_I_VVR af.", "oms": "Open CSa VVR-proces \u00c3\u00a9n open ISA VVR-proces", "query": "heeft_proces_vvr_csa and heeft_proces_vvr_isa and statusbesluit_vvr_csa not in [\u0027G\u0027, \u0027F\u0027, \u0027X\u0027, \u0027T\u0027] and statusbesluit_vvr_isa not in [\u0027G\u0027, \u0027F\u0027]", "sin": [], "stu": []}], "verblijfsvergunning_aanvullende_stukken": [{"instructie": "Rappelleer bij geen reactie na twee weken.", "oms": "CSA_I_VVR | Uitvraag gedaan na inschrijving", "query": "inschrijvingstatus == \u0027I\u0027 and statusbesluit_vvr_csa == \u0027U\u0027", "sin": [], "stu": []}, {"instructie": "Controleer of verblijfsvergunning juist is; zo nee, zet terug aan student, zo ja, verwerk document en handel proces af.", "oms": "CSA_I_VVR | Ingediend na inschrijving", "query": "inschrijvingstatus == \u0027I\u0027 and statusbesluit_vvr_csa == \u0027I\u0027 and not heeft_afkeur_vvr_csa", "sin": [], "stu": []}, {"instructie": "Rappelleer bij geen reactie na twee weken.", "oms": "CSA_I_VVR | Open afkeur vragen na inschrijving", "query": "inschrijvingstatus == \u0027I\u0027 and statusbesluit_vvr_csa in [\u0027I\u0027, \u0027B\u0027] and heeft_afkeur_vvr_csa", "sin": [], "stu": []}], "vooropleiding": [{"instructie": "Start CSA_I_DIPLOMA proces op bij betreffende sinh_id.", "oms": "CSA_I_DIPLOMA | Geen proces, wel in aanmerking", "query": ["\u003ckansrijk|bachelor\u003e", "opleiding not in [\u0027LASB-UC\u0027, \u0027LASB-RA\u0027]", "k_vooropleiding_geverifieerd == \u0027GEEL\u0027 and statusbesluit_dipw_csa is null and statusbesluit_dipw_isa is null and not heeft_cd_proces and datum_aangevraagd_zachte_knip is null and not fsw_wiskunde_toets"], "sin": [], "stu": []}, {"instructie": "Rappelleer bij geen reactie na twee weken.", "oms": "CSA_I_DIPLOMA | Nog niet ingediend", "query": ["\u003cheeft_proces|csa_dip\u003e", "statusbesluit_dipw_csa == \u0027B\u0027"], "sin": [], "stu": []}, {"instructie": "Controleer of vooropleiding juist is; zo nee, zet terug aan student, zo ja, verwerk document en handel proces af.", "oms": "CSA_I_DIPLOMA | Ingediend", "query": ["\u003cheeft_proces|csa_dip\u003e", "statusbesluit_dipw_csa in [\u0027I\u0027] and statusbesluit_zachte_knip not in [\u0027S\u0027, \u0027T\u0027] and not heeft_afkeur_dipw_csa"], "sin": [], "stu": []}, {"instructie": "Rappelleer bij geen reactie na twee weken.", "oms": "CSA_I_DIPLOMA | Open afkeur vragen", "query": ["\u003cheeft_proces|csa_dip\u003e", "statusbesluit_dipw_csa in [\u0027I\u0027, \u0027B\u0027] and statusbesluit_zachte_knip not in [\u0027S\u0027, \u0027T\u0027] and heeft_afkeur_dipw_csa"], "sin": [], "stu": []}, {"instructie": "Sluit proces af.", "oms": "CSA_I_DIPLOMA | Proces open, maar diploma geverifieerd", "query": ["\u003cheeft_proces|csa_dip\u003e", "statusbesluit_dipw_csa not in [\u0027F\u0027, \u0027G\u0027, \u0027T\u0027] and b_vooropleiding_geverifieerd"], "sin": ["BCF48118", "ZHR74323", "BMY26428", "RJZ43092", "XLP11333", "FEX25115", "OGC50181"], "stu": ["925409", "604133", "503931", "995394", "694340", "355052", "617058"]}, {"instructie": "Rappelleer bij geen reactie na twee weken.", "oms": "CSA-CERTIFICAAT | Nog niet ingediend", "query": ["\u003cheeft_proces|csa_cert\u003e", "statusbesluit_dipw_csa == \u0027B\u0027"], "sin": [], "stu": []}, {"instructie": "Controleer of certificaat juist is; zo nee, zet terug aan student, zo ja, verwerk document en handel proces af.", "oms": "CSA-CERTIFICAAT | Ingediend", "query": ["\u003cheeft_proces|csa_cert\u003e", "statusbesluit_dipw_csa in [\u0027I\u0027] and statusbesluit_zachte_knip not in [\u0027S\u0027, \u0027T\u0027] and not heeft_afkeur_dipw_csa"], "sin": ["DCE50814", "LTZ19300", "GRD46922", "NQL05061", "HLD44295", "GAW54046", "VAJ79402", "MEH30784", "SCA35789", "JJP05717", "WZZ50448", "ING25771", "RKL85596", "BUS62095", "RIV93597", "YBP48395", "VUU38393", "ZNU21621", "NAD83234", "NEA08329", "PBK33728", "JBW87384", "GUN78055", "ATC40976", "WEK04960", "AMU24966", "KDQ59500", "PRM76200", "IYW16214", "QEQ78428"], "stu": ["830725", "995060", "679225", "461036", "572891", "031813", "857373", "338205", "209379", "324549", "526719", "092155", "355850", "251194", "584673", "594095", "766921", "625021", "226288", "596705", "890966", "548665", "658382", "723683", "486209", "616555", "888505", "282852", "263617", "603624"]}, {"instructie": "Rappelleer bij geen reactie na twee weken.", "oms": "CSA-CERTIFICAAT | Open afkeur vragen", "query": ["\u003cheeft_proces|csa_cert\u003e", "statusbesluit_dipw_csa in [\u0027I\u0027, \u0027B\u0027] and statusbesluit_zachte_knip not in [\u0027S\u0027, \u0027T\u0027] and heeft_afkeur_dipw_csa"], "sin": [], "stu": []}, {"instructie": "Sluit proces af.", "oms": "CSA-CERTIFICAAT | Proces open, maar diploma geverifieerd", "query": ["\u003cheeft_proces|csa_cert\u003e", "statusbesluit_dipw_csa not in [\u0027F\u0027, \u0027G\u0027, \u0027T\u0027] and b_vooropleiding_geverifieerd"], "sin": [], "stu": []}, {"instructie": "Verwerk suffici\u00c3\u00abntieverklaring.", "oms": "Suffici\u00c3\u00abntieverklaring", "query": "examentype in [\u0027BA\u0027, \u0027PM\u0027] and proces_dipw_isa is null and k_vooropleiding_geverifieerd == \u0027GEEL\u0027 and status_sufficientie == \u0027OPL-SUFFVERKL\u0027", "sin": [], "stu": []}, {"instructie": "Controller colloquium doctum in OSIRIS Document; verwerk indien correct en voor betreffende sinh_id.", "oms": "Colloquium doctum in document, vooropleiding == GEEL", "query": "doc_cd and k_vooropleiding_geverifieerd == \u0027GEEL\u0027", "sin": [], "stu": []}, {"oms": "In behandeling voor colloquium doctum maar geen document", "query": "heeft_cd_proces and not doc_cd", "sin": [], "stu": []}, {"oms": "Vwo uit Carribische gebieden", "query": ["\u003ckansrijk|bachelor\u003e", "examentype == \u0027BA\u0027 and k_vooropleiding_geverifieerd == \u0027GEEL\u0027 and statusbesluit_dipw_isa is null and datum_aangevraagd_zachte_knip is null", "vooropleiding_extensie_land in [\u00275106\u0027, \u00275107\u0027, \u0027AW\u0027]"], "sin": [], "stu": []}, {"oms": "Colegio Arubano", "query": "vooropleiding_school.str.contains(\u0027arubano\u0027, case=False, na=False) and k_vooropleiding_geverifieerd == \u0027GEEL\u0027", "sin": ["MFQ08439"], "stu": ["067871"]}, {"oms": "FSW nog niet afgeronde wiskunde toets", "query": "fsw_wiskunde_toets and k_vooropleiding_geverifieerd == \u0027GEEL\u0027", "sin": [], "stu": []}], "zachteknip": [{"oms": "BA | Uitvraag", "query": ["\u003cheeft_proces|zachteknip|bachelor\u003e", "statusbesluit_zachte_knip == \u0027N\u0027"], "sin": ["WVE69247", "SLZ81888", "CME48045", "KAL73468", "AOG80559", "YMK41383"], "stu": ["067893", "438656", "144689", "765113", "983706", "866744"]}, {"oms": "BA | Ingediend", "query": ["\u003cheeft_proces|zachteknip|bachelor\u003e", "statusbesluit_zachte_knip == \u0027I\u0027"], "sin": [], "stu": []}, {"oms": "MA | Uitvraag", "query": ["\u003cheeft_proces|zachteknip|master\u003e", "statusbesluit_zachte_knip == \u0027N\u0027"], "sin": [], "stu": []}, {"oms": "MA | Ingediend", "query": ["\u003cheeft_proces|zachteknip|master\u003e", "statusbesluit_zachte_knip == \u0027I\u0027"], "sin": ["CBY97091", "AOF16263"], "stu": ["366117", "094121"]}, {"oms": "PM | Uitvraag", "query": ["\u003cheeft_proces|zachteknip|premaster\u003e", "statusbesluit_zachte_knip == \u0027N\u0027"], "sin": [], "stu": []}, {"oms": "PM | Ingediend", "query": ["\u003cheeft_proces|zachteknip|premaster\u003e", "statusbesluit_zachte_knip == \u0027I\u0027"], "sin": ["JYX52112", "HDV65999"], "stu": ["457109", "650966"]}]}
+let metadata = {"aanmelding__acceptatieformulier": {"acceptatieform": {"cats": [], "dtype": "cat", "hasnans": true, "oms": "Status van het acceptatieformulier"}, "datum_indienen_acc_form": {"dtype": "date", "hasnans": true, "oms": "Datum waarop het acceptatieformulier is ingediend"}, "datum_ontstaan_acc_form": {"dtype": "date", "hasnans": true, "oms": "Datum waarop het acceptatieformulier actief werd"}}, "aanmelding__isa": {"datum_aangevraagd_ooa_isa": {"dtype": "date", "hasnans": true, "oms": "Datum waarop het aanmeldproces is ingediend."}, "datum_besluit_ooa_isa": {"dtype": "date", "hasnans": true, "oms": "Datum waarop het besluit is genomen."}, "datum_status_ooa_isa": {"dtype": "date", "hasnans": true, "oms": "Datum waarop de laatste status tot stand is gekomen."}, "heeft_proces_isa": {"dtype": "bool", "hasnans": false, "oms": "Of ISA proces met inschrijfregel geassocieerd is."}, "proces_ooa_isa": {"cats": ["BA2223_INT", "MA2223_INT", "MA2223_INT_DGK"], "dtype": "cat", "hasnans": true, "oms": "Naam van het aanmeldproces."}, "statusbesluit_ooa_isa": {"dtype": "string", "hasnans": true, "oms": "Besluit indien aanwezig en anders status van aanmelding."}}, "aanmelding__proces": {"datum_aangevraagd_ooa": {"dtype": "date", "hasnans": true, "oms": "Datum waarop het aanmeldproces is ingediend."}, "datum_besluit_ooa": {"dtype": "date", "hasnans": true, "oms": "Datum waarop het besluit is genomen."}, "datum_status_ooa": {"dtype": "date", "hasnans": true, "oms": "Datum waarop de laatste status tot stand is gekomen."}, "proces_ooa": {"cats": ["BA2223_FIXUS", "BA2223_MATCHING", "BA2223_PPE", "MA2223_INT", "MA2223_INT_DGK", "MA2223_NL", "MA2223_NL_DGK", "PM2223_KORT", "UCR_FALL_22_BA", "UCU_FALL_22-23_BA"], "dtype": "cat", "hasnans": true, "oms": "Naam van het aanmeldproces."}, "statusbesluit_ooa": {"dtype": "string", "hasnans": true, "oms": "Besluit indien aanwezig en anders status van aanmelding."}}, "adres__nl_aanwezig": {"adres_nl_aanwezig": {"cats": ["BRP", "student", "geen"], "dtype": "cat", "hasnans": false, "oms": "Nederlands adrestype: BRP, student of geen."}}, "document__cd": {"doc_cd": {"dtype": "bool", "hasnans": false, "oms": "Of colloquium doctum doc aanwezig is."}}, "document__idb": {"doc_idb": {"dtype": "bool", "hasnans": false, "oms": "Of doc aanwezig is."}}, "document__vbc": {"doc_vbc": {"dtype": "bool", "hasnans": false, "oms": "Of vbc doc aanwezig is."}}, "examen__details": {"bron_id_grd": {"dtype": "float", "hasnans": true, "oms": "Bron id voor de graad"}, "eerste_graad": {"cats": ["J"], "dtype": "cat", "hasnans": true, "oms": "Of het examen de eerste graad betreft"}, "examen_behaald": {"dtype": "bool", "hasnans": false, "oms": "Of de student voor opleiding examen heeft behaald"}, "examendatum": {"dtype": "date", "hasnans": true, "oms": "Examendatum"}, "examenprogramma": {"dtype": "str", "hasnans": true, "oms": "Welk examenprogramma de student heeft bij opleiding"}, "uitstel_diploma_tot": {"dtype": "str", "hasnans": true, "oms": "Datum tot wanneer student utistelf van afstuderen heeft"}, "verzonden_naar_duo": {"cats": ["J", "N"], "dtype": "cat", "hasnans": true, "oms": "Of het examen is verzonden naar duo"}}, "financieel__vbc": {"vbc": {"cats": [], "dtype": "cat", "hasnans": true, "oms": "Code vbc (indien aanwezig)."}}, "inschrijfregel__actiefcode": {"actiefcode": {"cats": ["0", "2", "3", "7"], "dtype": "cat", "hasnans": false, "oms": "Actiefcode van de inschrijfregel."}, "datum_actiefcode": {"dtype": "date", "hasnans": false, "oms": "Datum waarop inschrijfregel huidige actiefcode heeft gekregen."}, "datum_intrekking": {"dtype": "date", "hasnans": true, "oms": "Datum waarop de inschrijfregel is ingetrokken."}, "datum_vti": {"dtype": "date", "hasnans": false, "oms": "Datum waarop het verzoek is gedaan."}, "inschrijvingstatus": {"dtype": "str", "hasnans": false, "oms": "Inschrijvingstatus van de inschrijfregel:\nG = geannuleerd\nV = verzoek\nI = ingeschreven\nU = uitgeschreven\n(Berekende status, dus niet hetzelfde als inschrijvingstatus SL)"}}, "inschrijfregel__datum_actief": {"datum_ac4": {"dtype": "date", "hasnans": true, "oms": "Datum waarop inschrijfregel actiefcode 4 bereikt."}}, "inschrijfregel__details": {"bekostiging": {"cats": ["A", "J", "T"], "dtype": "cat", "hasnans": false, "oms": "Bekostigingstatus van de inschrijfregel."}, "betaalvorm": {"cats": [], "dtype": "cat", "hasnans": true, "oms": "Eventueel geregistreerde betaalvorm."}, "mutatie_datum": {"dtype": "date", "hasnans": false, "oms": "Laatste mutatiedatum van de inschrijfregel."}, "opmerking": {"dtype": "str", "hasnans": true, "oms": "Inhoud van het opmerkingenveld bij de inschrijfregel."}, "toelatinggevende_vooropl": {"dtype": "str", "hasnans": true, "oms": "Eventueel geregistreerde toelatinggevende vooropleiding."}, "vrijst_collegegeld_bestuursf": {"dtype": "str", "hasnans": false, "oms": "Of student deelneemt aan jaar collegegeldvrij bestuur."}}, "inschrijfregel__hogerejaars": {"hogerejaars_geaccepteerd": {"dtype": "bool", "hasnans": true, "oms": "Of het hogerejaarsverzoek geaccepteerd is."}, "hogerejaars_verzoek": {"dtype": "bool", "hasnans": false, "oms": "Of het een hogerejaarsverzoek betreft."}}, "inschrijfregel__ingangsmaand": {"ingangsmaand": {"dtype": "int", "hasnans": false, "oms": "Maand van de ingangsdatum van de inschrijfregel."}}, "inschrijfregel__instroom": {"instroom": {"dtype": "bool", "hasnans": false, "oms": "Inschrijfregel betreft instroom (eerstejaars)."}}, "inschrijfregel__soort": {"soort": {"cats": ["bachelor", "fixus", "selectie", "master", "selma", "premaster", "educatief", "herinschrijving"], "dtype": "cat", "hasnans": false, "oms": "categorie inschrijfregel:\n- master\n- premaster\n- educatief\n- fixus\n- selectie\n- bachelor\n- herinschrijving"}}, "personalia__herkomst": {"herkomst_nationaliteit": {"cats": ["NL", "EU/EER", "Non-EU/EER"], "dtype": "cat", "hasnans": false, "oms": "Herkomst van de student naar nationaliteitstype:\n- NL\n- EU/EER\n- Non-EU/EER"}}, "personalia__idb": {"datum_aangevraagd_idb": {"dtype": "date", "hasnans": true, "oms": "Datum waarop proces is aangevraagd."}, "datum_besluit_idb": {"dtype": "date", "hasnans": true, "oms": "Datum waarop besluit proces is vastgelegd."}, "datum_status_idb": {"dtype": "date", "hasnans": true, "oms": "Datum waarop laatste status proces is vastgelegd."}, "statusbesluit_idb": {"dtype": "string", "hasnans": true, "oms": "Status/besluit van het proces."}}, "stoplicht__alles_groen": {"stoplicht_groen": {"dtype": "bool", "hasnans": false, "oms": "Of alle waarden bij inschrijfregel groen of grijs zijn."}}, "stoplicht__betaling_ok": {"stoplicht_betaling_ok": {"dtype": "bool", "hasnans": false, "oms": "Of betaling voldaan is volgens stoplicht."}}, "stoplicht__bool": {"b_aanmelddeadline": {"dtype": "bool", "hasnans": false, "oms": "Of voorwaarde stoplicht voor aanmelddeadline is voldaan"}, "b_betaalwijze_bekend": {"dtype": "bool", "hasnans": false, "oms": "Of voorwaarde stoplicht voor betaalwijze is voldaan"}, "b_blokkade": {"dtype": "bool", "hasnans": false, "oms": "Of voorwaarde stoplicht voor blokkade is voldaan"}, "b_bsa": {"dtype": "bool", "hasnans": false, "oms": "Of voorwaarde stoplicht voor bsa is voldaan"}, "b_collegegeld_ineens_ontvangen": {"dtype": "bool", "hasnans": false, "oms": "Of voorwaarde stoplicht voor collegegeld ineens ontvangen is voldaan"}, "b_hogerejaars_geaccepteerd": {"dtype": "bool", "hasnans": false, "oms": "Of voorwaarde stoplicht voor hogerejaarsverzoek is voldaan"}, "b_identiteit_status": {"dtype": "bool", "hasnans": false, "oms": "Of voorwaarde stoplicht voor identiteitstatus is voldaan"}, "b_machtiging": {"dtype": "bool", "hasnans": false, "oms": "Of voorwaarde stoplicht voor machtiging is voldaan"}, "b_plaatsingsbewijs": {"dtype": "bool", "hasnans": false, "oms": "Of voorwaarde stoplicht voor plaatsingsbewijs is voldaan"}, "b_studiekeuzecheck": {"dtype": "bool", "hasnans": false, "oms": "Of voorwaarde stoplicht voor studiekeuzecheck is voldaan"}, "b_toelatingsbeschikking": {"dtype": "bool", "hasnans": false, "oms": "Of voorwaarde stoplicht voor toelatingsbeschikking is voldaan"}, "b_verblijfsdocument": {"dtype": "bool", "hasnans": false, "oms": "Of voorwaarde stoplicht voor verblijfsdocument is voldaan"}, "b_verzilvering": {"dtype": "bool", "hasnans": false, "oms": "Of voorwaarde stoplicht voor verzilvering is voldaan"}, "b_vooropleiding_geverifieerd": {"dtype": "bool", "hasnans": false, "oms": "Of voorwaarde stoplicht voor vooropleiding is voldaan"}, "b_vooropleiding_toelatinggevend": {"dtype": "bool", "hasnans": false, "oms": "Of voorwaarde stoplicht voor vooropleiding toelatinggevend is voldaan"}}, "stoplicht__matrix": {"aanmelddeadline": {"cats": ["Aangemeld voor aanmelddeadline."], "dtype": "cat", "hasnans": true, "oms": "Toelichting stoplicht voor aanmelddeadline"}, "betaalwijze_bekend": {"cats": ["Aantal te betalen ECTS Pre-Master onbekend.", "Onbekend, betaalwijze financ.regel is default", "Onbekend."], "dtype": "cat", "hasnans": true, "oms": "Toelichting stoplicht voor betaalwijze"}, "blokkade": {"cats": ["Blokkade: 3X GESTORNEERD, INCASSOBUREAU.", "Blokkade: 3X GESTORNEERD.", "Blokkade: INCASSOBUREAU.", "Blokkade: VERBL DOC CONTR.", "Blokkade: ZACHTE KNIP."], "dtype": "cat", "hasnans": true, "oms": "Toelichting stoplicht voor blokkade"}, "bsa": {"cats": ["Aangehouden advies.", "Er is nog geen definitief advies uitgebracht.", "Geen advies nodig.", "Negatief advies.", "Positief advies."], "dtype": "cat", "hasnans": true, "oms": "Toelichting stoplicht voor bsa"}, "collegegeld_ineens_ontvangen": {"dtype": "str", "hasnans": true, "oms": "Toelichting stoplicht voor collegegeld ineens ontvangen"}, "hogerejaars_geaccepteerd": {"dtype": "bool", "hasnans": true, "oms": "Toelichting stoplicht voor hogerejaarsverzoek"}, "identiteit_status": {"cats": ["Centraal geverifieerd via DVP.", "Decentraal (instelling) geverifieerd.", "IBG: Centraal geverifieerd.", "Niet geverifieerd instelling.", "Niet geverifieerd."], "dtype": "cat", "hasnans": true, "oms": "Toelichting stoplicht voor identiteitstatus"}, "k_aanmelddeadline": {"cats": ["GROEN"], "dtype": "cat", "hasnans": true, "oms": "Kleur stoplicht voor aanmelddeadline"}, "k_betaalwijze_bekend": {"cats": ["GEEL"], "dtype": "cat", "hasnans": true, "oms": "Kleur stoplicht voor betaalwijze"}, "k_blokkade": {"cats": ["ROOD"], "dtype": "cat", "hasnans": true, "oms": "Kleur stoplicht voor blokkade"}, "k_bsa": {"cats": ["GEEL", "GROEN", "ROOD"], "dtype": "cat", "hasnans": true, "oms": "Kleur stoplicht voor bsa"}, "k_collegegeld_ineens_ontvangen": {"dtype": "str", "hasnans": true, "oms": "Kleur stoplicht voor collegegeld ineens ontvangen"}, "k_hogerejaars_geaccepteerd": {"cats": ["GEEL", "GROEN"], "dtype": "cat", "hasnans": true, "oms": "Kleur stoplicht voor hogerejaarsverzoek"}, "k_identiteit_status": {"cats": ["GEEL", "GROEN"], "dtype": "cat", "hasnans": true, "oms": "Kleur stoplicht voor identiteitstatus"}, "k_machtiging": {"dtype": "str", "hasnans": true, "oms": "Kleur stoplicht voor machtiging"}, "k_plaatsingsbewijs": {"cats": ["GEEL"], "dtype": "cat", "hasnans": true, "oms": "Kleur stoplicht voor plaatsingsbewijs"}, "k_studiekeuzecheck": {"cats": ["GEEL", "GROEN", "ROOD"], "dtype": "cat", "hasnans": true, "oms": "Kleur stoplicht voor studiekeuzecheck"}, "k_toelatingsbeschikking": {"cats": ["GEEL", "GROEN", "ROOD"], "dtype": "cat", "hasnans": true, "oms": "Kleur stoplicht voor toelatingsbeschikking"}, "k_verblijfsdocument": {"cats": ["GEEL", "GROEN"], "dtype": "cat", "hasnans": true, "oms": "Kleur stoplicht voor verblijfsdocument"}, "k_verzilvering": {"cats": ["GEEL"], "dtype": "cat", "hasnans": true, "oms": "Kleur stoplicht voor verzilvering"}, "k_vooropleiding_geverifieerd": {"cats": ["GEEL", "GROEN"], "dtype": "cat", "hasnans": true, "oms": "Kleur stoplicht voor vooropleiding"}, "k_vooropleiding_toelatinggevend": {"cats": ["GEEL", "GROEN"], "dtype": "cat", "hasnans": true, "oms": "Kleur stoplicht voor vooropleiding toelatinggevend"}, "machtiging": {"dtype": "str", "hasnans": true, "oms": "Toelichting stoplicht voor machtiging"}, "plaatsingsbewijs": {"cats": ["Niet in tabel deelname selectie.", "Status plaatsing is nog niet bepaald."], "dtype": "cat", "hasnans": true, "oms": "Toelichting stoplicht voor plaatsingsbewijs"}, "studiekeuzecheck": {"cats": ["Ja, SKC niet verplicht.", "Ja, positief advies.", "Ja, vrijstelling, eerder positief resultaat.", "Ja, vrijstelling.", "Nee, geen deelname verplichte SKC.", "Studiekeuzecheck is nog niet uitgevoerd."], "dtype": "cat", "hasnans": true, "oms": "Toelichting stoplicht voor studiekeuzecheck"}, "toelatingsbeschikking": {"cats": ["Ja, maar periode sluit niet aan.", "Ja.", "Nee.", "Nog geen beschikking aanwezig.", "Voorwaardelijk."], "dtype": "cat", "hasnans": true, "oms": "Toelichting stoplicht voor toelatingsbeschikking"}, "verblijfsdocument": {"cats": ["Afloopdatum verblijfsdocument te vroeg.", "Geen verblijfsdocument bekend.", "Verblijfsdocument: IA.", "Verblijfsdocument: IB.", "Verblijfsdocument: III.", "Verblijfsdocument: IN.", "Verblijfsdocument: IO.", "Verblijfsdocument: V.", "Verblijfsdocument: VS."], "dtype": "cat", "hasnans": true, "oms": "Toelichting stoplicht voor verblijfsdocument"}, "verzilvering": {"cats": ["Niet in tabel deelname selectie.", "Status plaatsing is nog niet bepaald."], "dtype": "cat", "hasnans": true, "oms": "Toelichting stoplicht voor verzilvering"}}, "stoplicht__scores": {"stoplicht_ngeel": {"dtype": "int", "hasnans": false, "oms": "Aantal stoplichtcriteria op GEEL."}, "stoplicht_nrood": {"dtype": "int", "hasnans": false, "oms": "Aantal stoplichtcriteria op ROOD."}}, "toelatingsbeschikking__issues": {"tb_aanvang_kleiner": {"dtype": "str", "hasnans": true, "oms": "Of aanvangsdatum toelatingsbeschikking kleiner is dan ingangsdatum\ninschrijfregel."}, "tb_croho_niet_gelijk": {"dtype": "str", "hasnans": true, "oms": "Of croho inschrijfregel niet overeenkomt met croho\ntoelatingsbeschikking."}, "tb_vorm_niet_gelijk": {"dtype": "str", "hasnans": true, "oms": "Of vorm (voltijd/deeltijd) inschrijfregel niet overeenkomt met vorm\ntoelatingsbeschikking."}}, "vooropleiding__fsw_wiskunde_toets": {"fsw_wiskunde_toets": {"dtype": "bool", "hasnans": false, "oms": "Of de student deelneemt aan de wiskunde toets maar nog geen uitslag\nheeft."}}, "vooropleiding__heeft_cd_proces": {"heeft_cd_proces": {"dtype": "bool", "hasnans": false, "oms": "Of de student een colloquium doctum proces heeft."}}, "vooropleiding__hoogst_aanwezig": {"vooropleiding": {"dtype": "str", "hasnans": true, "oms": "Hoogst aanwezige vooropleiding."}, "vooropleiding_behaald": {"dtype": "bool", "hasnans": true, "oms": "Of aanwezig vooropleiding behaald is."}, "vooropleiding_extensie_code": {"dtype": "str", "hasnans": true, "oms": ""}, "vooropleiding_extensie_land": {"cats": ["AE", "AF", "AL", "AM", "AO", "AR", "AT", "AU", "AW", "AZ", "BA", "BB", "BD", "BE", "BF", "BG", "BH", "BI", "BJ", "BN", "BO", "BR", "BS", "BT", "BW", "BY", "CA", "CH", "CI", "CL", "CM", "CN", "CO", "CU", "CY", "CZ", "DE", "DK", "DO", "DZ", "EC", "EE", "EG", "ER", "ES", "ET", "FI", "FJ", "FR", "GE", "GH", "GM", "GN", "GR", "GT", "HK", "HN", "HR", "HT", "HU", "ID", "IE", "IL", "IN", "IQ", "IR", "IS", "IT", "JM", "JO", "JP", "KE", "KG", "KR", "KW", "KZ", "LA", "LB", "LK", "LR", "LS", "LT", "LU", "LV", "LY", "MA", "MD", "MK", "ML", "MN", "MR", "MT", "MU", "MV", "MW", "MX", "MY", "MZ", "NA", "NG", "NI", "NL", "NO", "NP", "NZ", "OM", "PA", "PE", "PG", "PH", "PK", "PL", "PT", "PY", "QA", "RE", "RO", "RU", "RW", "SA", "SD", "SE", "SG", "SI", "SK", "SL", "SN", "SO", "SR", "SV", "SY", "SZ", "TD", "TG", "TH", "TJ", "TN", "TR", "TT", "TW", "TZ", "UA", "UG", "UK", "UY", "UZ", "VE", "VI", "VN", "VS", "YE", "ZA", "ZM", "ZW"], "dtype": "cat", "hasnans": true, "oms": ""}, "vooropleiding_extensie_naam": {"dtype": "str", "hasnans": true, "oms": ""}, "vooropleiding_school": {"dtype": "str", "hasnans": true, "oms": "School waar hoogst aanwezige vooropleiding is behaald."}, "vooropleiding_type": {"dtype": "str", "hasnans": true, "oms": "Hoogst aanwezige type vooropleiding."}}, "vooropleiding__isa": {"datum_aangevraagd_dipw_isa": {"dtype": "date", "hasnans": true, "oms": "Datum waarop proces is ingediend"}, "datum_besluit_dipw_isa": {"dtype": "date", "hasnans": true, "oms": "Datum van besluit indien aanwezig"}, "datum_status_dipw_isa": {"dtype": "date", "hasnans": true, "oms": "Datum van huidige status"}, "proces_dipw_isa": {"cats": ["BA2223_INT"], "dtype": "cat", "hasnans": true, "oms": "Naam van proces"}, "statusbesluit_dipw_isa": {"dtype": "string", "hasnans": true, "oms": "Besluit indien aanwezig, anders status"}}, "vooropleiding__matrix": {"beschikking": {"cats": ["DD", "N"], "dtype": "cat", "hasnans": true, "oms": "Verificatiestatus bij type vooropleiding \"beschikking\"."}, "buitenlands": {"cats": ["DD", "N"], "dtype": "cat", "hasnans": true, "oms": "Verificatiestatus bij type vooropleiding \"buitenlands\"."}, "havo": {"cats": ["GD", "GV", "N"], "dtype": "cat", "hasnans": true, "oms": "Verificatiestatus bij type vooropleiding \"havo\"."}, "hbo": {"cats": ["GD", "DD", "N"], "dtype": "cat", "hasnans": true, "oms": "Verificatiestatus bij type vooropleiding \"hbo\"."}, "hbo_ba": {"cats": ["GD", "DD", "GV", "N"], "dtype": "cat", "hasnans": true, "oms": "Verificatiestatus bij type vooropleiding \"hbo_ba\"."}, "hbo_ma": {"cats": ["GD", "GV", "N"], "dtype": "cat", "hasnans": true, "oms": "Verificatiestatus bij type vooropleiding \"hbo_ma\"."}, "hbo_p": {"cats": ["GD", "DD", "N"], "dtype": "cat", "hasnans": true, "oms": "Verificatiestatus bij type vooropleiding \"hbo_p\"."}, "mbo": {"cats": ["GD", "N"], "dtype": "cat", "hasnans": true, "oms": "Verificatiestatus bij type vooropleiding \"mbo\"."}, "overig": {"cats": ["GD", "DD", "GV", "N"], "dtype": "cat", "hasnans": true, "oms": "Verificatiestatus bij type vooropleiding \"overig\"."}, "vwo": {"cats": ["GD", "DD", "GV", "N"], "dtype": "cat", "hasnans": true, "oms": "Verificatiestatus bij type vooropleiding \"vwo\"."}, "wo": {"cats": ["GD", "DD", "N"], "dtype": "cat", "hasnans": true, "oms": "Verificatiestatus bij type vooropleiding \"wo\"."}, "wo_ba": {"cats": ["GD", "GV", "N"], "dtype": "cat", "hasnans": true, "oms": "Verificatiestatus bij type vooropleiding \"wo_ba\"."}, "wo_ma": {"cats": ["GD", "GV", "N"], "dtype": "cat", "hasnans": true, "oms": "Verificatiestatus bij type vooropleiding \"wo_ma\"."}, "wo_p": {"cats": ["GD", "N"], "dtype": "cat", "hasnans": true, "oms": "Verificatiestatus bij type vooropleiding \"wo_p\"."}}, "vooropleiding__suffverkl": {"status_sufficientie": {"cats": ["OPL-SUFFVERKL"], "dtype": "cat", "hasnans": true, "oms": "Status van de suffici\u00ebntieverklaring geregistreerd onder\ninstellingstatus."}}, "vooropleiding__vwo_profiel": {"vwo_profiel": {"dtype": "str", "hasnans": true, "oms": "Profielcode bij vwo-diploma."}}, "vvr__csa": {"datum_aangevraagd_vvr_csa": {"dtype": "date", "hasnans": true, "oms": "Datum waarop proces is aangevraagd."}, "datum_besluit_vvr_csa": {"dtype": "date", "hasnans": true, "oms": "Datum waarop besluit proces is vastgelegd."}, "datum_status_vvr_csa": {"dtype": "date", "hasnans": true, "oms": "Datum waarop laatste status proces is vastgelegd."}, "heeft_afkeur_vvr_csa": {"dtype": "bool", "hasnans": false, "oms": "Proces heeft afgekeurde vragen."}, "heeft_proces_vvr_csa": {"dtype": "bool", "hasnans": false, "oms": "Student heeft vvr proces van csa."}, "statusbesluit_vvr_csa": {"dtype": "str", "hasnans": true, "oms": "Status/besluit van het proces:\n- G: geannuleerd\n- B: nog niet gestart\n- C: eerste controle\n- U: uitvraag\n- I: ingediend\n- X: doorgezet naar ISA\n- F: afgehandeld zonder besluit\n- S: voorwaardelijk afgehandeld\n- T: afgehandeld"}}, "vvr__isa": {"datum_aangevraagd_vvr_isa": {"dtype": "date", "hasnans": true, "oms": "Datum waarop proces is aangevraagd."}, "datum_besluit_vvr_isa": {"dtype": "date", "hasnans": true, "oms": "Datum waarop besluit proces is vastgelegd."}, "datum_status_vvr_isa": {"dtype": "date", "hasnans": true, "oms": "Datum waarop laatste status proces is vastgelegd."}, "heeft_proces_vvr_isa": {"dtype": "bool", "hasnans": false, "oms": "Student heeft vvr proces van isa."}, "statusbesluit_vvr_isa": {"dtype": "string", "hasnans": true, "oms": "Status/besluit van het proces."}}}
+let abstractions = {"heeft_proces": {"csa_cert": "proces_dipw_csa == \u0027CSA-CERTIFICAAT\u0027", "csa_dip": "proces_dipw_csa == \u0027CSA_I_DIPLOMA\u0027", "matching": "proces_ooa == \u0027BA2223_MATCHING\u0027", "zachteknip": {"bachelor": "proces_zachte_knip == \u0027BA2223_ZACHTE_KNIP\u0027", "master": "proces_zachte_knip == \u0027MA2122_ZACHTE_KNIP\u0027", "premaster": "proces_zachte_knip == \u0027PM2122_ZACHTE_KNIP\u0027"}}, "inschrijfregel": {"hogerejaars": "hogerejaars_verzoek.fillna(False) and not hogerejaars_geaccepteerd.fillna(False)", "verzoek": "inschrijvingstatus == \u0027V\u0027"}, "kansrijk": {"bachelor": {"fixus": "soort == \u0027fixus\u0027 and plaatsingsbewijs == \u0027Status plaatsing is Geaccepteerd.\u0027", "matching": {"geen_skc": "soort == \u0027bachelor\u0027 and statusbesluit_ooa is null", "regulier": "soort == \u0027bachelor\u0027 and k_studiekeuzecheck == \u0027GROEN\u0027"}, "selectie": {"b\u0026ob": "soort == \u0027selectie\u0027 and opleiding == \u0027B\u0026OB\u0027 and k_toelatingsbeschikking == \u0027GROEN\u0027", "ppeb": "soort == \u0027selectie\u0027 and opleiding == \u0027PPEB\u0027 and statusbesluit_ooa == \u0027T\u0027", "ucu": "soort == \u0027selectie\u0027 and opleiding == \u0027LASB-UC\u0027 and statusbesluit_ooa in [\u0027S\u0027, \u0027T\u0027]"}}, "herinschrijving": "soort == \u0027herinschrijving\u0027", "master": {"toegelaten": "soort in [\u0027master\u0027, \u0027selma\u0027] and toelatingsbeschikking == \u0027Ja.\u0027", "voorwaardelijk": "soort in [\u0027master\u0027, \u0027selma\u0027] and toelatingsbeschikking == \u0027Voorwaardelijk.\u0027 and acceptatieform == \u0027A\u0027"}, "premaster": "soort in [\u0027premaster\u0027, \u0027educatief\u0027] and toelatingsbeschikking == \u0027Ja.\u0027"}, "nationaliteit": {"eu": {"NL": "herkomst_nationaliteit == \u0027NL\u0027", "non-NL": "herkomst_nationaliteit == \u0027EU/EER\u0027"}, "non-eu": "herkomst_nationaliteit == \u0027Non-EU/EER\u0027"}, "uitsluiten": {"bachelor": {"isa": {"niet_toegelaten": "not (statusbesluit_dipw_isa is null or statusbesluit_dipw_isa in [\u0027S\u0027, \u0027T\u0027])"}, "ucr": "opleiding != \u0027LASB-RA\u0027"}, "master": {"niet_toegelaten": "not (soort in [\u0027master\u0027, \u0027selma\u0027] and statusbesluit_ooa != \u0027T\u0027)"}}}
+
+// DATAMODEL
+let datamodel = document.querySelector(`section[data-component="datamodel"] div:last-child`)
+let filterDatamodel = document.querySelector(`section[data-component="datamodel"] input`)
+let clearFilter = document.querySelector(`section[data-component="datamodel"] button`)
+datamodel.innerHTML = renderMetaData(metadata)
+filterDatamodel.addEventListener("keyup", ({key}) => {
+    if (key === 'Enter') { datamodel.innerHTML = renderMetaData(metadata) }
+})
+clearFilter.addEventListener("click", () => {
+    filterDatamodel.value = ""
+    datamodel.innerHTML = renderMetaData(metadata)
+})
+
+// BOUWSTENEN
+let bouwstenen = document.querySelector(`section[data-component="bouwstenen"]`)
+// bouwstenen.innerHTML = '<pre>' + JSON.stringify(abstractions, null, 2) + '</pre>'
+bouwstenen.innerHTML = renderAbstractions(abstractions)
+
+// WERKVOORRAAD
 let output = []
 for (let [chapter, items] of Object.entries(data)) {
     output.push(renderChapter(chapter, items))
 }
-let main = document.querySelector("main")
-main.innerHTML = output.join("")
-main.addEventListener("click", copyData)
+let werkvoorraad = document.querySelector(`section[data-component="werkvoorraad"] div:last-child`)
+werkvoorraad.innerHTML = output.join("")
+werkvoorraad.addEventListener("click", copyData)
 document.getElementById("toonalles").addEventListener("click", function() {
     document.querySelectorAll("section > details").forEach(node => node.setAttribute("open", ""))
 })
@@ -262,9 +429,35 @@ document.getElementById("verbergalles").addEventListener("click", function() {
 })
 document.getElementById("toonleeg").addEventListener("click", function() {
     if (this.checked) {
-        document.querySelectorAll(".empty").forEach(node => node.classList.add("show"))
+        werkvoorraad.querySelectorAll(".empty").forEach(node => node.classList.add("show"))
     } else {
-        document.querySelectorAll(".empty").forEach(node => node.classList.remove("show"))
+        werkvoorraad.querySelectorAll(".empty").forEach(node => node.classList.remove("show"))
+    }
+})
+
+// NAVIGATION
+let navigation = document.querySelector("nav")
+navigation.addEventListener("click", function(event) {
+    let target = event.target.dataset.showTarget
+    if (target != undefined) {
+        let sections = document.querySelectorAll("section[data-component]")
+        sections.forEach(node => {
+            let component = node.dataset.component
+            if (component === target) {
+                node.classList.remove("empty")
+            } else {
+                node.classList.add("empty")
+            }
+        })
+        let buttons = navigation.querySelectorAll("button")
+        buttons.forEach(node => {
+            let component = node.dataset.showTarget
+            if (component === target) {
+                node.setAttribute("selected", "")
+            } else {
+                node.removeAttribute("selected", "")
+            }
+        })
     }
 })
 </script>

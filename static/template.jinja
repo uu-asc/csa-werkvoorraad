@@ -6,26 +6,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>csa werkvoorraad inschrijfcampagne</title>
     <style>
-        {% include 'stylesheet.css' %}
+{% include 'stylesheet.css' %}
     </style>
 </head>
 <body>
     <header>
         <h1>csa | collegejaar {{ collegejaar }} | werkvoorraad</h1>
-        <div>
-            <span>Laatste update: {{ updated }}</span>
-            <button id="toonalles">Toon alles</button>
-            <button id="verbergalles">Verberg alles</button>
-            <input type="checkbox" name="toonleeg" id="toonleeg"><label for="toonleeg">queries zonder resultaten</label>
-        </div>
+        <div>Laatste update: {{ updated }}</div>
+        <nav>
+            <button data-show-target="werkvoorraad" selected>werkvoorraad</button>
+            <button data-show-target="datamodel">datamodel</button>
+            <button data-show-target="bouwstenen">bouwstenen</button>
+        </nav>
     </header>
     <main>
+        <section data-component="werkvoorraad">
+            <div>
+                <button id="toonalles">Toon alles</button>
+                <button id="verbergalles">Verberg alles</button>
+                <input type="checkbox" name="toonleeg" id="toonleeg"><label for="toonleeg">queries zonder resultaten</label>
+            </div>
+            <div></div>
+        </section>
+        <section data-component="datamodel" class="empty">
+            <div>
+                <label for="searchdatamodel">Zoek in datamodel</label>
+                <input id="searchdatamodel" type="text">
+                <button>&#215;</button>
+            </div>
+            <div></div>
+        </section>
+        <section data-component="bouwstenen" class="empty">
+        </section>
     </main>
     <footer>
         <a href="https://github.com/uu-asc/csa-werkvoorraad">github.com/uu-asc/csa-werkvoorraad</a>
     </footer>
 </body>
 <script>
-    {% include 'script.js' %}
+{% include 'script.js' %}
 </script>
 </html>
