@@ -111,13 +111,15 @@ section[data-component="datamodel"] th, td {
     padding: .25rem;
 }
 
+section[data-component="bouwstenen"] details {
+    border-top: 1px solid var(--brand);
+}
 section[data-component="bouwstenen"] details details {
-    margin-left: .75rem;
+    padding-left: .75rem;
     border-left: 3px solid var(--brand);
-    margin-bottom: 0;
 }
 section[data-component="bouwstenen"] summary {
-    padding-left: .75rem
+    border-top: none;
 }
 
 footer {
@@ -157,6 +159,8 @@ details[open] > summary:after {
 summary h2 {
     font-variant: small-caps;
     font-weight: 300;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
 }
 section > details > summary {
     display: flex;
