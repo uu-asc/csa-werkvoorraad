@@ -39,7 +39,7 @@ function renderQuery(item) {
 function copyData(event) {
     if (!event.target.matches("[data-copy]")) { return }
     let [chapter, idx, kind] = event.target.dataset.copy.split("-")
-    let clip = data[chapter][idx][kind]
+    let clip = data[chapter][idx][kind].join(";")
     navigator.clipboard.writeText(clip).then(
         function() {
             let el = event.target.closest("section").querySelector(".display")
