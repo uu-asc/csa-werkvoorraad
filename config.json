@@ -233,7 +233,7 @@
             {
                 "oms": "Open CSa VVR-proces én open ISA VVR-proces",
                 "instructie": "Stem met ISA af, wie de uitvraag doet; sluit indien nodig CSA_I_VVR af.",
-                "query": "heeft_proces_vvr_csa and heeft_proces_vvr_isa and statusbesluit_vvr_csa not in ['G', 'F', 'X', 'T'] and statusbesluit_vvr_isa not in ['G', 'F']"
+                "query": "heeft_proces_vvr_csa and heeft_proces_vvr_isa and statusbesluit_oms_vvr_csa not in ['Geannuleerd', 'Ingediend', 'Afgehandeld', 'Afgehandeld zonder besluit', 'Doorgezet naar ISA', @pd.NA] and statusbesluit_oms_vvr_isa not in ['Geannuleerd', 'Afgehandeld', 'Toegelaten', @pd.NA]"
             }
         ],
         "verblijfsvergunning_aanvullende_stukken": [
