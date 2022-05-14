@@ -86,7 +86,7 @@ class MaakRapportage:
     ENV = Environment(loader=LOADER)
 
     def __init__(self, collegejaar=None, outfile=None):
-        self.config = json.loads(self.CONFIGFILE.read_text())
+        self.config = json.loads(self.CONFIGFILE.read_text(encoding='utf8'))
         self.collegejaar = collegejaar or self.config['collegejaar']
         self.outfile = Path(outfile or self.config['output'])
         self.queries = self.config['queries']
