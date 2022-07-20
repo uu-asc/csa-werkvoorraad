@@ -6,13 +6,14 @@
             {
                 "oms": "Graad behaald",
                 "instructie": "Trek inschrijving in en verstuur 'graad_behaald' mail.",
-                "query": "actiefcode == '4' and examen_behaald and examendatum < 2021-09-01"
+                "query": "actiefcode == '4' and examen_behaald and examendatum < 2022-09-01"
             }
         ],
         "hogerejaars": [
             {
                 "oms": "Hogerejaarsverzoek ingediend bij fixus",
                 "query": [
+                    "<inschrijfregel|verzoek>",
                     "<inschrijfregel|hogerejaars>",
                     "soort == 'fixus'"
                 ]
@@ -20,6 +21,7 @@
             {
                 "oms": "Hogerejaarsverzoek ingediend bij bachelor",
                 "query": [
+                    "<inschrijfregel|verzoek>",
                     "<inschrijfregel|hogerejaars>",
                     "soort != 'fixus' and examentype == 'BA'"
                 ]
@@ -27,8 +29,9 @@
             {
                 "oms": "Hogerejaarsverzoek ingediend bij master",
                 "query": [
+                    "<inschrijfregel|verzoek>",
                     "<inschrijfregel|hogerejaars>",
-                    "examentype == 'MA'"
+                    "soort in ['master', 'selma']"
                 ]
             }
         ],
@@ -78,7 +81,7 @@
             {
                 "oms": "Inschrijving na 30 september maar geen opmerking",
                 "instructie": "Stel reden vasts van verlate inschrijving, codeer en vul bij opmerkingveld van betreffende sinh_id.",
-                "query": "datum_ac4 > 2021-10-01 and ingangsmaand in [9, 10] and opmerking is null"
+                "query": "datum_ac4 > 2022-10-01 and ingangsmaand in [9, 10] and opmerking is null"
             }
         ],
         "roosevelt": [
@@ -166,14 +169,33 @@
                     "<uitsluiten|master|niet_toegelaten>",
                     "k_identiteit_status == 'GEEL' and statusbesluit_idb is null"
                 ]
+            },
+            {
+                "oms": "ID doc aanwezig maar identiteit nog niet geverifieerd bij kansrijkverzoek",
+                "instructie": "Verifieer identiteit obv document",
+                "query": [
+                    "<kansrijk>",
+                    "<uitsluiten|bachelor|isa|niet_toegelaten>",
+                    "<uitsluiten|master|niet_toegelaten>",
+                    "k_identiteit_status == 'GEEL' and doc_idb"
+                ]
             }
         ],
-        "verblijfsvergunning": [
+        "verblijfsvergunning_uitvraag": [
+            {
+                "oms": "CSA_I_VVR | Proces open, maar VVR reeds verwerkt",
+                "instructie": "Sluit proces af. Neem evt. collegegeldbesluit.",
+                "query": [
+                    "<uitsluiten|bachelor|fixus>",
+                    "statusbesluit_vvr_csa is not null and statusbesluit_vvr_csa not in ['G', 'F', 'X', 'S', 'T'] and k_verblijfsdocument == 'GROEN'"
+                ]
+            },
             {
                 "oms": "CSA_I_VVR | Eerste controle nog niet uitgevoerd",
                 "instructie": "Controleer of verblijfsvergunning aanwezig is; zo ja, controleer en verwerk indien mogelijk, zo nee, doe uitvraag.",
                 "query": [
                     "<inschrijfregel|verzoek>",
+                    "<uitsluiten|bachelor|fixus>",
                     "statusbesluit_vvr_csa == 'C'"
                 ]
             },
@@ -182,6 +204,7 @@
                 "instructie": "Rappelleer bij geen reactie na twee weken.",
                 "query": [
                     "<inschrijfregel|verzoek>",
+                    "<uitsluiten|bachelor|fixus>",
                     "statusbesluit_vvr_csa == 'U'"
                 ]
             },
@@ -190,6 +213,7 @@
                 "instructie": "Controleer of verblijfsvergunning juist is; zo nee, zet terug aan student, zo ja, verwerk document en handel proces af.",
                 "query": [
                     "<inschrijfregel|verzoek>",
+                    "<uitsluiten|bachelor|fixus>",
                     "statusbesluit_vvr_csa == 'I' and not heeft_afkeur_vvr_csa"
                 ]
             },
@@ -198,13 +222,9 @@
                 "instructie": "Rappelleer bij geen reactie na twee weken.",
                 "query": [
                     "<inschrijfregel|verzoek>",
-                    "statusbesluit_vvr_csa in ['I]', 'B'] and heeft_afkeur_vvr_csa"
+                    "<uitsluiten|bachelor|fixus>",
+                    "statusbesluit_vvr_csa in ['I', 'B'] and heeft_afkeur_vvr_csa"
                 ]
-            },
-            {
-                "oms": "CSA_I_VVR | Proces open, maar VVR reeds verwerkt",
-                "instructie": "Sluit proces af.",
-                "query": "statusbesluit_vvr_csa is not null and statusbesluit_vvr_csa not in ['G', 'F', 'X', 'S', 'T'] and k_verblijfsdocument == 'GROEN'"
             },
             {
                 "oms": "CSA_I_VVR | Voorwaardelijk afgehandelde VVR",
@@ -229,7 +249,74 @@
                     "<uitsluiten|bachelor|ucr>",
                     "k_verblijfsdocument == 'GEEL' and not heeft_proces_vvr_csa and not heeft_proces_vvr_isa"
                 ]
+            }
+        ],
+        "verblijfsvergunning_uitvraag_fixus": [
+            {
+                "oms": "CSA_I_VVR | Proces open, maar VVR reeds verwerkt",
+                "instructie": "Sluit proces af.",
+                "query": [
+                    "<kansrijk|bachelor|fixus>",
+                    "statusbesluit_vvr_csa is not null and statusbesluit_vvr_csa not in ['G', 'F', 'X', 'S', 'T'] and k_verblijfsdocument == 'GROEN'"
+                ]
             },
+            {
+                "oms": "CSA_I_VVR | Eerste controle nog niet uitgevoerd",
+                "instructie": "Controleer of verblijfsvergunning aanwezig is; zo ja, controleer en verwerk indien mogelijk, zo nee, doe uitvraag.",
+                "query": [
+                    "<inschrijfregel|verzoek>",
+                    "<kansrijk|bachelor|fixus>",
+                    "statusbesluit_vvr_csa == 'C'"
+                ]
+            },
+            {
+                "oms": "CSA_I_VVR | Uitvraag gedaan",
+                "instructie": "Rappelleer bij geen reactie na twee weken.",
+                "query": [
+                    "<inschrijfregel|verzoek>",
+                    "<kansrijk|bachelor|fixus>",
+                    "statusbesluit_vvr_csa == 'U'"
+                ]
+            },
+            {
+                "oms": "CSA_I_VVR | Ingediend",
+                "instructie": "Controleer of verblijfsvergunning juist is; zo nee, zet terug aan student, zo ja, verwerk document en handel proces af.",
+                "query": [
+                    "<inschrijfregel|verzoek>",
+                    "<kansrijk|bachelor|fixus>",
+                    "statusbesluit_vvr_csa == 'I' and not heeft_afkeur_vvr_csa"
+                ]
+            },
+            {
+                "oms": "CSA_I_VVR | Open afkeur vragen",
+                "instructie": "Rappelleer bij geen reactie na twee weken.",
+                "query": [
+                    "<inschrijfregel|verzoek>",
+                    "<kansrijk|bachelor|fixus>",
+                    "statusbesluit_vvr_csa in ['I', 'B'] and heeft_afkeur_vvr_csa"
+                ]
+            },
+            {
+                "oms": "Kansrijk verzoek, vvr nodig maar geen vvr proces (isa of csa) (alleen toegelaten)",
+                "instructie": "Stel vast of student vvr studie zou moeten krijgen; zo ja, geef door aan ISA, zo nee, doe uitvraag.",
+                "query": [
+                    "<kansrijk|bachelor|fixus>",
+                    "<uitsluiten|bachelor|isa|niet_toegelaten>",
+                    "<uitsluiten|bachelor|ucr>",
+                    "k_verblijfsdocument == 'GEEL' and statusbesluit_ooa == 'T' and not heeft_proces_vvr_csa and not heeft_proces_vvr_isa"
+                ]
+            },
+            {
+                "oms": "Kansrijk verzoek, vvr nodig maar geen vvr proces (isa of csa)",
+                "query": [
+                    "<kansrijk|bachelor|fixus>",
+                    "<uitsluiten|bachelor|isa|niet_toegelaten>",
+                    "<uitsluiten|bachelor|ucr>",
+                    "k_verblijfsdocument == 'GEEL' and not heeft_proces_vvr_csa and not heeft_proces_vvr_isa"
+                ]
+            }
+        ],
+        "verblijfsvergunning_algemeen": [
             {
                 "oms": "Open CSa VVR-proces én open ISA VVR-proces",
                 "instructie": "Stem met ISA af, wie de uitvraag doet; sluit indien nodig CSA_I_VVR af.",
@@ -253,16 +340,29 @@
                 "query": "inschrijvingstatus == 'I' and statusbesluit_vvr_csa in ['I', 'B'] and heeft_afkeur_vvr_csa"
             }
         ],
-        "vooropleiding": [
+        "vooropleiding_proces_opstarten": [
             {
                 "oms": "CSA_I_DIPLOMA | Geen proces, wel in aanmerking",
                 "instructie": "Start CSA_I_DIPLOMA proces op bij betreffende sinh_id.",
                 "query": [
                     "<kansrijk|bachelor>",
                     "opleiding not in ['LASB-UC', 'LASB-RA']",
-                    "k_vooropleiding_geverifieerd == 'GEEL' and statusbesluit_dipw_csa is null and statusbesluit_dipw_isa is null and not heeft_cd_proces and datum_aangevraagd_zachte_knip is null and not fsw_wiskunde_toets"
+                    "<heeft_geen_proces|vooropleiding>",
+                    "k_vooropleiding_geverifieerd == 'GEEL' and not verificatiestatus_vwo == 'diploma' and not verificatiestatus_hbo startswith 'diploma'"
                 ]
             },
+            {
+                "oms": "CSA_CERTIFICAAT | Geen proces, wel in aanmerking",
+                "instructie": "Start CSA_CERTIFICAAT proces op bij betreffende sinh_id.",
+                "query": [
+                    "<kansrijk|bachelor>",
+                    "opleiding not in ['LASB-UC', 'LASB-RA']",
+                    "<heeft_geen_proces|vooropleiding>",
+                    "k_vooropleiding_geverifieerd == 'GEEL' and (verificatiestatus_vwo == 'diploma' or verificatiestatus_hbo startswith 'diploma')"
+                ]
+            }
+        ],
+        "vooropleiding_diploma_proces": [
             {
                 "oms": "CSA_I_DIPLOMA | Nog niet ingediend",
                 "instructie": "Rappelleer bij geen reactie na twee weken.",
@@ -276,6 +376,7 @@
                 "instructie": "Controleer of vooropleiding juist is; zo nee, zet terug aan student, zo ja, verwerk document en handel proces af.",
                 "query": [
                     "<heeft_proces|csa_dip>",
+                    "k_vooropleiding_geverifieerd == 'GEEL'",
                     "statusbesluit_dipw_csa in ['I'] and statusbesluit_zachte_knip not in ['S', 'T'] and not heeft_afkeur_dipw_csa"
                 ]
             },
@@ -294,7 +395,9 @@
                     "<heeft_proces|csa_dip>",
                     "statusbesluit_dipw_csa not in ['F', 'G', 'T'] and b_vooropleiding_geverifieerd"
                 ]
-            },
+            }
+        ],
+        "vooropleiding_certificaat_proces": [
             {
                 "oms": "CSA-CERTIFICAAT | Nog niet ingediend",
                 "instructie": "Rappelleer bij geen reactie na twee weken.",
@@ -326,7 +429,9 @@
                     "<heeft_proces|csa_cert>",
                     "statusbesluit_dipw_csa not in ['F', 'G', 'T'] and b_vooropleiding_geverifieerd"
                 ]
-            },
+            }
+        ],
+        "vooropleiding_controles": [
             {
                 "oms": "Sufficiëntieverklaring",
                 "instructie": "Verwerk sufficiëntieverklaring.",
@@ -356,6 +461,11 @@
             {
                 "oms": "FSW nog niet afgeronde wiskunde toets",
                 "query": "fsw_wiskunde_toets and k_vooropleiding_geverifieerd == 'GEEL'"
+            },
+            {
+                "oms": "vwo-diploma aanwezig maar vakken nog niet geverifieerd",
+                "instructie": "Verifieer cijferlijst.",
+                "query": "verificatiestatus_vwo == 'diploma' and vwo == 'DD' and n_vakken_vwo == 0"
             }
         ],
         "matching": [
@@ -379,9 +489,47 @@
                 "oms": "Te laat",
                 "instructie": "Trek verzoek in en verstuur afwijzing.",
                 "query": "soort == 'matching' and proces_ooa is null and adres_nl_aanwezig == 'BRP' and datum_eerste_vti_ho > 2022-05-01"
+            },
+            {
+                "oms": "Geen GV-adres en geen ontheffing",
+                "instructie": "Verleen ontheffing voor matching",
+                "query": [
+                    "<heeft_proces|matching>",
+                    "not heeft_adres_gv and matching_ontheffing is null"
+                ]
+            }
+        ],
+        "matching_bezwaren": [
+            {
+                "oms": "Niet verwerkte schikking ACT",
+                "instructie": "Stel vast of student aanwezig was of niet. Indien (ja), corrigeer afwijzing -> student heeft wel voldaan. Indien (nee), herstel matchingsproces -> student moet uitgenodigd worden voor volgende activiteit.",
+                "query": "matching_niet_verwerkte_schikking_act"
+            },
+            {
+                "oms": "Niet verwerkte schikking AMD",
+                "instructie": "Start matchingsproces op bij student.",
+                "query": "matching_niet_verwerkte_schikking_amd"
+            },
+            {
+                "oms": "Niet verwerkte schikking FOR",
+                "instructie": "Start matchingsproces op bij student.",
+                "query": "matching_niet_verwerkte_schikking_for"
             }
         ],
         "zachteknip": [
+            {
+                "oms": "BA | In aanmerking zachte knip, nog geen proces",
+                "instructie": "Start zachte knip proces bachelor.",
+                "query": [
+                    "<inschrijfregel|verzoek>",
+                    "instroom and examentype == 'BA'",
+                    "<uitsluiten|bachelor|ucr>",
+                    "<uitsluiten|bachelor|ucu>",
+                    "soort != 'fixus' or plaatsingsbewijs in ['Status plaatsing is Geaccepteerd.', 'Status plaatsing is Aangeboden.']",
+                    "k_vooropleiding_geverifieerd == 'GEEL'",
+                    "verificatiestatus_hbo != 'nvt' and not verificatiestatus_hbo startswith 'diploma' and verificatiestatus_vwo != 'diploma'"
+                ]
+            },
             {
                 "oms": "BA | Uitvraag",
                 "query": [
@@ -448,9 +596,15 @@
         "vooropleiding__suffverkl",
         "vooropleiding__fsw_wiskunde_toets",
         "vooropleiding__heeft_cd_proces",
+        "vooropleiding__verificatiestatus_vwo",
+        "vooropleiding__verificatiestatus_hbo",
+        "vak__n_vakken_vwo",
         "examen__details",
         "matching__inschrijfregel",
+        "matching__kenmerken",
+        "matching__schikking_niet_verwerkt",
         "adres__nl_aanwezig",
+        "adres__gv",
         "ad_hoc__zachte_knip",
         "financieel__vbc",
         "personalia__herkomst",
@@ -479,7 +633,7 @@
             "bachelor": {
                 "matching": {
                     "regulier": "soort == 'bachelor' and k_studiekeuzecheck == 'GROEN'",
-                    "geen_skc": "soort == 'bachelor' and statusbesluit_ooa is null"
+                    "geen_skc": "soort == 'bachelor' and statusbesluit_ooa is null and acceptatieform == 'A'"
                 },
                 "fixus": "soort == 'fixus' and plaatsingsbewijs == 'Status plaatsing is Geaccepteerd.'",
                 "selectie": {
@@ -490,11 +644,13 @@
             }
         },
         "uitsluiten": {
+            "herinschrijving": "soort != 'herinschrijving'",
             "bachelor": {
+                "fixus": "soort != 'fixus'",
+                "ucu": "opleiding != 'LASB-UC'",
                 "ucr": "opleiding != 'LASB-RA'",
                 "isa": {
-                    "niet_toegelaten":
-                        "not (statusbesluit_dipw_isa is null or statusbesluit_dipw_isa in ['S', 'T'])"
+                    "niet_toegelaten": "statusbesluit_dipw_isa is null or statusbesluit_dipw_isa == 'T'"
                 }
             },
             "master": {
@@ -510,6 +666,9 @@
                 "master": "proces_zachte_knip == 'MA2122_ZACHTE_KNIP'",
                 "premaster": "proces_zachte_knip == 'PM2122_ZACHTE_KNIP'"
             }
+        },
+        "heeft_geen_proces": {
+            "vooropleiding": "statusbesluit_dipw_csa is null and statusbesluit_dipw_isa is null and not heeft_cd_proces and datum_aangevraagd_zachte_knip is null and not fsw_wiskunde_toets"
         }
     }
 }
