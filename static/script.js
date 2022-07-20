@@ -21,12 +21,32 @@ function renderRecord(item) {
     return `<details class="item${item.stu.length < 1 ? " empty" : ""}">
         <summary>
             <div>${item.oms}</div>
-            <label>studentnummers</label><button data-copy="${item.chapter}-${item.idx}-stu">${item?.stu.length}</button>
-            <label>sinh_ids</label><button data-copy="${item.chapter}-${item.idx}-sin">${item?.sin.length}</button>
+            <label>studentnummers</label><button data-copy="${item.chapter}-${item.idx}-0-${item?.stu.length}-stu">${item?.stu.length}</button>
+            <label>sinh_ids</label><button data-copy="${item.chapter}-${item.idx}-0-${item?.stu.length}-sin">${item?.sin.length}</button>
         </summary>
+        ${item?.stu.length > 500 ? `${renderBatches(item, "stu")}` : ""}
+        ${item?.sin.length > 500 ? `${renderBatches(item, "sin")}` : ""}
         ${item.instructie ? `<div class="instructie"><span>Instructie</span> ${item.instructie}</div>` : ""}
         ${renderQuery(item)}
     </details>`
+}
+
+function renderBatches(item, target) {
+    let chunks = getChunks(item[target], 500)
+    let buttons = chunks.map(chunk => `<button data-copy="${item.chapter}-${item.idx}-${chunk[0]}-${chunk[1]}-${target}">${chunk}</button>`)
+    return `<div class="batches"><div>${target === 'stu' ? "studentnummers" : "sinh_ids"}</div>${buttons.join("")}</div>`
+}
+
+function getChunks(arr, chunkSize) {
+    let res = []
+    let n = 0
+    while (n < arr.length) {
+        let next = n + chunkSize < arr.length ? n + chunkSize - 1 : arr.length
+        let chunk = [n, next]
+        res.push(chunk)
+        n = next + 1
+    }
+    return res;
 }
 
 function renderQuery(item) {
@@ -38,8 +58,8 @@ function renderQuery(item) {
 // COPY DATA
 function copyData(event) {
     if (!event.target.matches("[data-copy]")) { return }
-    let [chapter, idx, kind] = event.target.dataset.copy.split("-")
-    let clip = data[chapter][idx][kind].join(";")
+    let [chapter, idx, start, end, kind] = event.target.dataset.copy.split("-")
+    let clip = data[chapter][idx][kind].slice(start, end).join(";")
     navigator.clipboard.writeText(clip).then(
         function() {
             let el = event.target.closest("section").querySelector(".display")
