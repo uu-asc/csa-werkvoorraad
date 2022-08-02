@@ -116,6 +116,7 @@
                 "query": [
                     "<kansrijk>",
                     "<uitsluiten|bachelor|isa|niet_toegelaten>",
+                    "<uitsluiten|master|niet_toegelaten>",
                     "statusbesluit_idb is null and not b_identiteit_status and not doc_idb"
                 ]
             },
@@ -149,39 +150,50 @@
                 "query": "statusbesluit_idb in ['I', 'B'] and b_identiteit_status"
             },
             {
-                "oms": "Kansrijk verzoek, identiteit nog niet geverifieerd (EU)",
-                "instructie": "Controleer of idb aanwezig is in OSIRIS Document; zo ja, verwerk, zo nee, start proces CSA_IDB.",
+                "oms": "EU | ID doc aanwezig maar identiteit nog niet geverifieerd bij kansrijkverzoek",
+                "instructie": "Verifieer identiteit obv document",
                 "query": [
                     "<kansrijk>",
                     "<nationaliteit|eu>",
                     "<uitsluiten|bachelor|isa|niet_toegelaten>",
                     "<uitsluiten|master|niet_toegelaten>",
-                    "k_identiteit_status == 'GEEL' and statusbesluit_idb is null"
+                    "k_identiteit_status == 'GEEL' and doc_idb"
                 ]
             },
             {
-                "oms": "Kansrijk verzoek, identiteit nog niet geverifieerd (non-EU)",
-                "instructie": "Controleer of idb aanwezig is in OSIRIS Document; zo ja, verwerk, zo nee, start proces CSA_IDB.",
-                "query": [
-                    "<kansrijk>",
-                    "<nationaliteit|non-eu>",
-                    "<uitsluiten|bachelor|isa|niet_toegelaten>",
-                    "<uitsluiten|master|niet_toegelaten>",
-                    "k_identiteit_status == 'GEEL' and statusbesluit_idb is null"
-                ]
-            },
-            {
-                "oms": "ID doc aanwezig maar identiteit nog niet geverifieerd bij kansrijkverzoek",
+                "oms": "Non-EU | ID doc aanwezig maar identiteit nog niet geverifieerd bij kansrijkverzoek",
                 "instructie": "Verifieer identiteit obv document",
                 "query": [
                     "<kansrijk>",
+                    "<nationaliteit|non-eu>",
                     "<uitsluiten|bachelor|isa|niet_toegelaten>",
                     "<uitsluiten|master|niet_toegelaten>",
                     "k_identiteit_status == 'GEEL' and doc_idb"
                 ]
             }
         ],
-        "verblijfsvergunning_uitvraag": [
+        "verblijfsvergunning_proces_opstarten": [
+            {
+                "oms": "Kansrijk verzoek, vvr nodig maar geen vvr proces (isa of csa) (alleen toegelaten)",
+                "instructie": "Stel vast of student vvr studie zou moeten krijgen; zo ja, geef door aan ISA, zo nee, doe uitvraag.",
+                "query": [
+                    "<kansrijk>",
+                    "<uitsluiten|isa>",
+                    "<uitsluiten|bachelor|ucr>",
+                    "k_verblijfsdocument == 'GEEL' and statusbesluit_ooa == 'T' and not heeft_proces_vvr_csa and not heeft_proces_vvr_isa"
+                ]
+            },
+            {
+                "oms": "Kansrijk verzoek, vvr nodig maar geen vvr proces (isa of csa)",
+                "query": [
+                    "<kansrijk>",
+                    "<uitsluiten|isa>",
+                    "<uitsluiten|bachelor|ucr>",
+                    "k_verblijfsdocument == 'GEEL' and not heeft_proces_vvr_csa and not heeft_proces_vvr_isa"
+                ]
+            }
+        ],
+        "verblijfsvergunning_proces": [
             {
                 "oms": "CSA_I_VVR | Proces open, maar VVR reeds verwerkt",
                 "instructie": "Sluit proces af. Neem evt. collegegeldbesluit.",
@@ -230,28 +242,9 @@
                 "oms": "CSA_I_VVR | Voorwaardelijk afgehandelde VVR",
                 "instructie": "Rappelleer bij geen reactie na twee weken.",
                 "query": "statusbesluit_vvr_csa == 'S'"
-            },
-            {
-                "oms": "Kansrijk verzoek, vvr nodig maar geen vvr proces (isa of csa) (alleen toegelaten)",
-                "instructie": "Stel vast of student vvr studie zou moeten krijgen; zo ja, geef door aan ISA, zo nee, doe uitvraag.",
-                "query": [
-                    "<kansrijk>",
-                    "<uitsluiten|bachelor|isa|niet_toegelaten>",
-                    "<uitsluiten|bachelor|ucr>",
-                    "k_verblijfsdocument == 'GEEL' and statusbesluit_ooa == 'T' and not heeft_proces_vvr_csa and not heeft_proces_vvr_isa"
-                ]
-            },
-            {
-                "oms": "Kansrijk verzoek, vvr nodig maar geen vvr proces (isa of csa)",
-                "query": [
-                    "<kansrijk>",
-                    "<uitsluiten|bachelor|isa|niet_toegelaten>",
-                    "<uitsluiten|bachelor|ucr>",
-                    "k_verblijfsdocument == 'GEEL' and not heeft_proces_vvr_csa and not heeft_proces_vvr_isa"
-                ]
             }
         ],
-        "verblijfsvergunning_uitvraag_fixus": [
+        "verblijfsvergunning_proces_fixus": [
             {
                 "oms": "CSA_I_VVR | Proces open, maar VVR reeds verwerkt",
                 "instructie": "Sluit proces af.",
@@ -316,7 +309,7 @@
                 ]
             }
         ],
-        "verblijfsvergunning_algemeen": [
+        "verblijfsvergunning_controles": [
             {
                 "oms": "Open CSa VVR-proces én open ISA VVR-proces",
                 "instructie": "Stem met ISA af, wie de uitvraag doet; sluit indien nodig CSA_I_VVR af.",
@@ -362,7 +355,7 @@
                 ]
             }
         ],
-        "vooropleiding_diploma_proces": [
+        "vooropleiding_proces_diploma": [
             {
                 "oms": "CSA_I_DIPLOMA | Nog niet ingediend",
                 "instructie": "Rappelleer bij geen reactie na twee weken.",
@@ -397,7 +390,7 @@
                 ]
             }
         ],
-        "vooropleiding_certificaat_proces": [
+        "vooropleiding_proces_certificaat": [
             {
                 "oms": "CSA-CERTIFICAAT | Nog niet ingediend",
                 "instructie": "Rappelleer bij geen reactie na twee weken.",
@@ -466,6 +459,11 @@
                 "oms": "vwo-diploma aanwezig maar vakken nog niet geverifieerd",
                 "instructie": "Verifieer cijferlijst.",
                 "query": "verificatiestatus_vwo == 'diploma' and vwo == 'DD' and n_vakken_vwo == 0"
+            },
+            {
+                "oms": "toegelaten tot premaster maar nog geen sufficiëntieverklaring",
+                "instructie": "Vraag sufficiëntieverklaring op bij opleiding.",
+                "query": "examentype == 'PM' and k_toelatingsbeschikking == 'GROEN' and k_vooropleiding_geverifieerd == 'GEEL' and status_sufficientie is null"
             }
         ],
         "matching": [
@@ -655,7 +653,8 @@
             },
             "master": {
                 "niet_toegelaten": "not (soort in ['master', 'selma'] and statusbesluit_ooa != 'T')"
-            }
+            },
+            "isa": "proces_ooa_isa is null"
         },
         "heeft_proces": {
             "csa_dip": "proces_dipw_csa == 'CSA_I_DIPLOMA'",
