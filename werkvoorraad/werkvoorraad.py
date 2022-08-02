@@ -177,7 +177,7 @@ class FromMoedertabel(MaakRapportage):
         item['stu'] = data.snr(output='series').to_list()
         item['sin'] = data.snr(output='series', uniek=False).index.to_list()
 
-    def laad_moedertabel(self):
+    def laad_moedertabel(self, collapse=True):
         path_to_moeder = str(PATH.parent / 'moedertabel')
         sys.path.insert(0, path_to_moeder)
         from moedertabel import Moedertabel
@@ -187,7 +187,7 @@ class FromMoedertabel(MaakRapportage):
             collegejaar=self.collegejaar,
             flush_cache=False,
         )
-        moedertabel(*self.ops, query=query)
+        moedertabel(*self.ops, query=query, collapse=collapse)
         return moedertabel
 
     def laad_metadata(self):
