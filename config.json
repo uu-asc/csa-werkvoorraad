@@ -6,7 +6,7 @@
             {
                 "oms": "Graad behaald",
                 "instructie": "Trek inschrijving in en verstuur 'graad_behaald' mail.",
-                "query": "actiefcode == '4' and examen_behaald and examendatum < 2022-09-01"
+                "query": "actiefcode == '4' and examen_behaald and examendatum < 2022-09-01 and opmerking is null"
             }
         ],
         "hogerejaars": [
@@ -39,16 +39,25 @@
             {
                 "oms": "Toelatingsbeschikking vorm (vt/dt) ongelijk aan inschrijfregel vorm",
                 "instructie": "Vraag GS om situatie op te lossen.",
-                "query": "tb_vorm_niet_gelijk.fillna(False)"
+                "query": [
+                    "<inschrijfregel|verzoek>",
+                    "tb_issue_vtdt.fillna(False)"
+                ]
             },
             {
                 "oms": "Toelatingsbeschikking croho ongelijk aan inschrijfregel croho",
                 "instructie": "Vraag GS om situatie op te lossen.",
-                "query": "tb_croho_niet_gelijk.fillna(False)"
+                "query": [
+                    "<inschrijfregel|verzoek>",
+                    "tb_issue_croho.fillna(False)"
+                ]
             },
             {
-                "oms": "Toelatingsbeschikking aanvangsdatum kleiner dan inschrijfregel ingangsdatum",
-                "query": "tb_aanvang_kleiner.fillna(False)"
+                "oms": "Toelatingsbeschikking niet meer geldig",
+                "query": [
+                    "<inschrijfregel|verzoek>",
+                    "tb_issue_geldigheid.fillna(False) and instroom"
+                ]
             }
         ],
         "bekostiging": [
