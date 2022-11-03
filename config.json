@@ -106,16 +106,25 @@
         "betaling": [
             {
                 "oms": "VBC | Verklaring maar geen betaling",
-                "query": "vbc == 'V'"
+                "query": [
+                    "<uitsluiten|inschrijfregel|ingetrokken>",
+                    "vbc == 'V'"
+                ]
             },
             {
                 "oms": "VBC | Geld maar geen verklaring",
-                "query": "vbc == 'G'"
+                "query": [
+                    "<uitsluiten|inschrijfregel|ingetrokken>",
+                    "vbc == 'G'"
+                ]
             },
             {
                 "oms": "VBC | Verklaring maar geen document",
                 "instructie": "Zoek document en upload in OSIRIS Document (indien niet aanwezig, vraag document op bij student).",
-                "query": "'V' in vbc and not doc_vbc"
+                "query":[
+                    "<uitsluiten|inschrijfregel|ingetrokken>",
+                    "'V' in vbc and not doc_vbc"
+                ]
             }
         ],
         "persoonsgegevens": [
@@ -446,7 +455,10 @@
             },
             {
                 "oms": "In behandeling voor colloquium doctum maar geen document",
-                "query": "heeft_cd_proces and not doc_cd"
+                "query": [
+                    "<uitsluiten|inschrijfregel|ingetrokken>",
+                    "heeft_cd_proces and not doc_cd"
+                ]
             },
             {
                 "oms": "Vwo uit Carribische gebieden",
@@ -467,7 +479,10 @@
             {
                 "oms": "vwo-diploma aanwezig maar vakken nog niet geverifieerd",
                 "instructie": "Verifieer cijferlijst.",
-                "query": "verificatiestatus_vwo == 'diploma' and vwo == 'DD' and n_vakken_vwo == 0"
+                "query": [
+                    "<uitsluiten|inschrijfregel|ingetrokken>",
+                    "verificatiestatus_vwo == 'diploma' and vwo == 'DD' and n_vakken_vwo == 0"
+                ]
             },
             {
                 "oms": "toegelaten tot premaster maar nog geen sufficiëntieverklaring",
@@ -502,7 +517,7 @@
                 "instructie": "Verleen ontheffing voor matching",
                 "query": [
                     "<heeft_proces|matching>",
-                    "not heeft_adres_gv and matching_ontheffing is null"
+                    "not heeft_adres_gv and adres_nl_aanwezig == 'geen' and matching_ontheffing is null"
                 ]
             }
         ],
@@ -628,6 +643,7 @@
         },
         "inschrijfregel": {
             "verzoek": "inschrijvingstatus == 'V'",
+            "inschrijving": "actiefcode == '4'",
             "hogerejaars": "hogerejaars_verzoek.fillna(False) and not hogerejaars_geaccepteerd.fillna(False)"
         },
         "kansrijk": {
@@ -651,6 +667,9 @@
             }
         },
         "uitsluiten": {
+            "inschrijfregel": {
+                "ingetrokken": "inschrijvingstatus == 'G'"
+            },
             "herinschrijving": "soort != 'herinschrijving'",
             "bachelor": {
                 "fixus": "soort != 'fixus'",
