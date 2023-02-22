@@ -4,20 +4,29 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>csa werkvoorraad inschrijfcampagne</title>
+    <title>visa werkvoorraad</title>
     <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/uu-asc/csa-werkvoorraad/master/static/favicon.ico">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm//vega@5"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm//vega-lite@4.17.0"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm//vega-embed@6"></script>
     <style>
 {% include 'stylesheet.css' %}
     </style>
 </head>
 <body>
     <header>
-        <h1>csa | collegejaar {{ collegejaar }} | werkvoorraad</h1>
-        <div>Laatste update: {{ updated }}</div>
+        <div>
+            <h1>visa | werkvoorraad</h1>
+            <button data-action="toggle-color-scheme" title="click to switch themes">
+                <span id="sun">☀️</span>
+                <span id="moon">🌒</span>
+            </button>
+            <div>Laatste update: {{ updated }}</div>
+        </div>
         <nav>
             <button data-show-target="werkvoorraad" selected>werkvoorraad</button>
             <button data-show-target="datamodel">datamodel</button>
-            <button data-show-target="bouwstenen">bouwstenen</button>
+            <button data-show-target="bouwstenen">queries</button>
         </nav>
     </header>
     <main>
@@ -30,14 +39,53 @@
             <div></div>
         </section>
         <section data-component="datamodel" class="empty">
+            <h3>Kalender</h3>
+            <div id="vis"></div>
+            <script>
+                const container = document.getElementById('vis')
+                const spec = {{ spec }}
+                function render() {
+                    container.innerHTML = ""
+                    const background = window.getComputedStyle(document.body).getPropertyValue("background-color")
+                    const color = window.getComputedStyle(document.body).getPropertyValue("color")
+                    const options = {
+                        config: {
+                            background: background,
+                            title: {
+                                color: color,
+                            },
+                            style: {
+                                'guide-label': {
+                                    fill: color,
+                                },
+                                'guide-title': {
+                                    fill: color,
+                                },
+                            },
+                            axis: {
+                                domainColor: color,
+                                tickColor: color,
+                            },
+                        }
+                    }
+                    vegaEmbed("#vis", spec, options)
+                        .catch(error => console.log(error))
+                }
+                render()
+            </script>
+            <h3>Datavelden</h3>
             <div>
-                <label for="searchdatamodel">Zoek in datamodel</label>
-                <input id="searchdatamodel" type="text">
-                <button>&#215;</button>
+            {{ datamodel.to_html(index=False) }}
             </div>
-            <div></div>
         </section>
         <section data-component="bouwstenen" class="empty">
+        {% for qr in queryresults %}
+        <details>
+            <summary>{{ qr.name }}</summary>
+            <div>{{ qr.qd.description }}</div>
+            <pre><code>{{ qr.qd.sql }}</code></pre>
+        </details>
+        {% endfor %}
         </section>
     </main>
     <footer>
@@ -45,6 +93,27 @@
     </footer>
 </body>
 <script>
-{% include 'script.js' %}
+{% include "script.js" %}
+</script>
+<script>
+    let colorSchemeToggler = document.querySelector(`[data-action="toggle-color-scheme"]`)
+    let darkModeLocalStorage = localStorage.getItem("darkMode")
+    console.log(darkModeLocalStorage)
+    let darkModeMediaQuery = window.matchMedia("(prefers-color-scheme: dark)")
+    if (darkModeMediaQuery.matches && darkModeLocalStorage === "enabled") {
+        toggleColorScheme()
+    }
+    colorSchemeToggler.addEventListener("click", toggleColorScheme)
+    function toggleColorScheme() {
+        document.body.classList.toggle("dark-theme")
+        localStorage.setItem(
+            "darkMode",
+            document.body.classList.contains("dark-theme")
+            ? "enabled"
+            : "disabled"
+        )
+        console.log(localStorage.getItem("darkMode"))
+        render()
+    }
 </script>
 </html>

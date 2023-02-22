@@ -85,9 +85,8 @@ class MaakRapportage:
     TEMPLATE = 'template.jinja'
     ENV = Environment(loader=LOADER)
 
-    def __init__(self, collegejaar=None, outfile=None):
+    def __init__(self, outfile=None):
         self.config = json.loads(self.CONFIGFILE.read_text(encoding='utf8'))
-        self.collegejaar = collegejaar or self.config['collegejaar']
         self.outfile = Path(outfile or self.config['output'])
         self.queries = self.config['queries']
         self.abstractions = self.config['abstractions']
@@ -110,19 +109,19 @@ class MaakRapportage:
             for item in items:
                 self.add_results_to_item(item)
 
-    def render(self):
+    def render(self, **kwargs):
         template = self.ENV.get_template(self.TEMPLATE)
         updated = datetime.now().strftime('%H:%M %d-%m-%Y')
         return template.render(
             updated=updated,
-            collegejaar=self.collegejaar,
             data=self.queries,
             metadata=self.metadata,
             abstractions=self.abstractions,
+            **kwargs
         )
 
-    def write(self):
-        html = self.render()
+    def write(self, **kwargs):
+        html = self.render(**kwargs)
         self.outfile.write_text(html, encoding='utf8')
 
 
@@ -165,8 +164,9 @@ class WithRandomData(MaakRapportage):
 
 
 class FromMoedertabel(MaakRapportage):
-    def __init__(self, **kwargs):
+    def __init__(self, collegejaar, **kwargs):
         super().__init__(**kwargs)
+        self.collegejaar = collegejaar or self.config['collegejaar']
         self.ops = self.config['ops']
         self.data = self.laad_moedertabel()
         self.metadata = self.laad_metadata()
@@ -189,6 +189,9 @@ class FromMoedertabel(MaakRapportage):
         )
         moedertabel(*self.ops, query=query, collapse=collapse)
         return moedertabel
+
+    def render(self):
+        super().render(collegejaar=self.collegejaar)
 
     def laad_metadata(self):
         datamodel = defaultdict(dict)
@@ -223,10 +226,26 @@ class FromMoedertabel(MaakRapportage):
         return datamodel
 
 
+class FromFeather(MaakRapportage):
+    def __init__(self, path, **kwargs):
+        super().__init__(**kwargs)
+        self.data = self.laad_feather(path)
+
+    def add_results_to_item(self, item):
+        queries = translate_queries(item['query'], self.abstractions)
+        combined = ' and '.join([f"({q})" for q in queries])
+        data = self.data.query(combined)
+        item['stu'] = data.studentnummer.to_list()
+
+    def laad_feather(self, path):
+        import pandas as pd
+        return pd.read_feather(path)
+
+
 if __name__ == '__main__':
     os.chdir(PATH)
     parser = ArgumentParser(description='Maak werkvoorraad')
-    parser.add_argument('--collegejaar', type=int)
+    parser.add_argument('--path')
     parser.add_argument('--random', action='store_true')
     parser.add_argument('--outfile', '-f')
     args = vars(parser.parse_args())
@@ -235,6 +254,6 @@ if __name__ == '__main__':
     if args['random']:
         werkvoorraad = WithRandomData(**kwargs)
     else:
-        werkvoorraad = FromMoedertabel(**kwargs)
+        werkvoorraad = FromFeather(**kwargs)
     werkvoorraad.process_queries()
     werkvoorraad.write()

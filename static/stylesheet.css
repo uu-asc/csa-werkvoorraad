@@ -2,25 +2,41 @@
 @import "https://unpkg.com/open-props";
 
 :root {
-    --surface-1: var(--gray-0);
-    --surface-2: var(--gray-3);
-    --surface-3: var(--gray-4);
-    --surface-4: var(--gray-5);
-    --brand: var(--gray-8);
-    --text-1: var(--gray-9);
-    --text-2: var(--gray-7);
+    --background: var(--sand-0);
+    --surface-1: var(--sand-1);
+    --surface-2: var(--sand-2);
+    --surface-3: var(--sand-3);
+    --surface-4: var(--sand-5);
+    --brand: var(--sand-8);
+    --text-1: var(--sand-9);
+    --text-2: var(--sand-7);
+    --link: var(--lime-10);
 }
 
-@media (prefers-color-scheme: dark) {
-    :root {
-        --surface-1: var(--gray-9);
-        --surface-2: var(--gray-8);
-        --surface-3: var(--gray-7);
-        --surface-4: var(--gray-6);
-        --brand: var(--gray-4);
-        --text-1: var(--gray-3);
-        --text-2: var(--gray-4);
-    }
+.dark-theme {
+    --background: var(--sand-11);
+    --surface-1: var(--sand-9);
+    --surface-2: var(--sand-8);
+    --surface-3: var(--sand-7);
+    --surface-4: var(--sand-6);
+    --brand: var(--sand-4);
+    --text-1: var(--sand-3);
+    --text-2: var(--sand-4);
+    --link: var(--lime-4);
+}
+
+#sun {
+    display: block;
+}
+#moon {
+    display: none;
+}
+
+.dark-theme #sun {
+    display: none;
+}
+.dark-theme #moon {
+    display: block;
 }
 
 *,
@@ -40,7 +56,7 @@ body {
     margin: auto;
     width: clamp(320px, 80vw, 900px);
     height: 100%;
-    background-color: var(--surface-1);
+    background-color: var(--background);
     font-family: Calibri;
     color: var(--text-1);
 }
@@ -49,13 +65,22 @@ header {
     margin-bottom: .25rem;
 }
 
-header h1 {
-    font-family: 'Bungee Hairline', cursive;
-    line-height: 1em;
-    margin-block: 1.5rem;
+header > div {
+    display: grid;
+    grid-template-columns: 1fr auto;
 }
 
-header h1+div {
+header > div > h1 {
+    font-family: 'Bungee Hairline', cursive;
+}
+
+header > div > button[data-action="toggle-color-scheme"] {
+    background-color: transparent;
+    border: none;
+    font-size: 1.2em;
+}
+
+header > div > div {
     font-family: var(--font-mono);
     font-size: .8rem;
 }
@@ -65,7 +90,7 @@ header nav {
     margin-block: 1rem;
 }
 
-header nav>button {
+header nav > button {
     flex-grow: 1;
     font-size: .9em;
     background-color: var(--surface-2);
@@ -75,19 +100,19 @@ header nav>button {
     padding: .5rem;
 }
 
-header nav>button:first-child {
+header nav > button:first-child {
     border-left: none;
 }
 
-header nav>button:last-child {
+header nav > button:last-child {
     border-right: none
 }
 
-header nav>button:hover {
+header nav > button:hover {
     background-color: var(--surface-3);
 }
 
-header nav>button[selected] {
+header nav > button[selected] {
     background-color: var(--surface-1);
     border-bottom: none;
     font-weight: bold;
@@ -97,7 +122,7 @@ main {
     margin-bottom: 5rem;
 }
 
-section[data-component="werkvoorraad"]>div:first-child {
+section[data-component="werkvoorraad"] > div:first-child {
     display: flex;
     align-items: center;
     gap: .5rem;
@@ -106,10 +131,8 @@ section[data-component="werkvoorraad"]>div:first-child {
     font-size: .9em;
 }
 
-section[data-component="datamodel"] div:first-child {
-    display: flex;
-    gap: .5rem;
-    margin-bottom: .75rem;
+section[data-component="datamodel"] > * + * {
+    margin-bottom: 1rem;
 }
 
 section[data-component="datamodel"] table {
@@ -118,10 +141,14 @@ section[data-component="datamodel"] table {
     font-family: var(--font-mono);
 }
 
-section[data-component="datamodel"] th,
-td {
+section[data-component="datamodel"] :where(th, td) {
+    border: none;
     border-bottom: 1px solid var(--surface-4);
     padding: .25rem;
+}
+
+section[data-component="datamodel"] th {
+    text-align: left;
 }
 
 section[data-component="bouwstenen"] details {
@@ -135,11 +162,23 @@ section[data-component="bouwstenen"] details details {
 
 section[data-component="bouwstenen"] summary {
     border-top: none;
+    font-variant: small-caps;
+    font-weight: bold;
+}
+
+section[data-component="bouwstenen"] pre {
+    overflow-x: auto;
+    padding: 1rem;
+    margin-block: 1rem;
+    background-color: var(--surface-1);
 }
 
 footer {
     margin-top: auto;
     padding-block: 1.5rem;
+}
+footer a {
+    color: var(--link);
 }
 
 summary {
@@ -168,7 +207,7 @@ summary:after {
     transition: 100ms linear;
 }
 
-details[open]>summary:after {
+details[open] > summary:after {
     transform: rotate(45deg);
     font-size: 2em;
 }
@@ -180,7 +219,7 @@ summary h2 {
     text-overflow: ellipsis;
 }
 
-section>details>summary {
+section > details > summary {
     display: flex;
     border-top: 4px solid var(--brand);
 }
@@ -194,12 +233,12 @@ details details {
     font-size: 0.9em;
 }
 
-.item[open]>summary {
+.item[open] > summary {
     border-bottom: 1px dotted var(--brand);
     margin-bottom: .5rem;
 }
 
-.item>summary {
+.item > summary {
     display: grid;
     width: 100%;
     font-size: 1.2em;
@@ -207,21 +246,21 @@ details details {
     gap: 0.5em;
 }
 
-.item>* {
+.item > * {
     padding-left: .75rem;
 }
 
-.item>summary>label {
+.item > summary > label {
     justify-self: end;
     font-family: var(--font-mono);
     font-size: .8em;
 }
 
-.item>summary>div:first-child {
+.item > summary > div:first-child {
     grid-row: span 2;
 }
 
-.item>summary>button {
+.item > summary > button {
     margin-right: 1.5rem;
 }
 
@@ -231,7 +270,7 @@ details details {
     margin-bottom: .5rem;
 }
 
-.batches>div:first-of-type {
+.batches > div:first-of-type {
     grid-column: 1 / -1;
     font-family: var(--font-mono);
     font-size: .8em;
@@ -278,5 +317,5 @@ button:hover {
 }
 
 button:active {
-    background-color: var(--surface-4);
+    background-color: var(--surface-1);
 }

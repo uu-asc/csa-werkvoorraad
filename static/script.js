@@ -6,12 +6,11 @@ function renderChapter(chapter, items) {
         item.idx = idx
         item.chapter = chapter
         total.stu += item.stu.length
-        total.sin += item.sin.length
         rendered.push(renderRecord(item))
     }
     return `<section${total.stu < 1 ? ' class="empty"' : ""}>
-        <details>
-            <summary><h2>${chapter}</h2><code>(${total.stu}/${total.sin})</code><div class="display"></div></summary>
+        <details open>
+            <summary><h2>${chapter}</h2><code>(${total.stu})</code><div class="display"></div></summary>
             ${rendered.join("")}
         </details>
     </section>`
@@ -22,10 +21,8 @@ function renderRecord(item) {
         <summary>
             <div>${item.oms}</div>
             <label>studentnummers</label><button data-copy="${item.chapter}-${item.idx}-0-${item?.stu.length}-stu">${item?.stu.length}</button>
-            <label>sinh_ids</label><button data-copy="${item.chapter}-${item.idx}-0-${item?.stu.length}-sin">${item?.sin.length}</button>
         </summary>
         ${item?.stu.length > 500 ? `${renderBatches(item, "stu")}` : ""}
-        ${item?.sin.length > 500 ? `${renderBatches(item, "sin")}` : ""}
         ${item.instructie ? `<div class="instructie"><span>Instructie</span> ${item.instructie}</div>` : ""}
         ${renderQuery(item)}
     </details>`
@@ -69,92 +66,8 @@ function copyData(event) {
     )
 }
 
-// METADATA
-function renderMetaData(metadata) {
-    let blocks = []
-    for (let [label, fields] of Object.entries(metadata)) {
-        let block = renderLabelData(label, fields)
-        blocks.push(block)
-    }
-    return `<table>
-        <thead>
-            <th>thema</th>
-            <th>veld</th>
-            <th>oms</th>
-            <th>dtype</th>
-            <th>null</th>
-            <th>cats</th>
-        </thead>
-        <tbody>${blocks.join("")}</tbody>
-    </table>`
-}
-
-function renderLabelData(label, fields) {
-    let rows = []
-    let length = 0
-    for (let [field, info] of Object.entries(fields)) {
-        let s = filterDatamodel.value.trim().toLowerCase()
-        if (s) {
-            if (!(field.toLowerCase().includes(s) || info.oms.toLowerCase().includes(s))) {
-                continue
-            }
-        }
-        length++
-        let cells = renderField(info)
-        cells.unshift(`<td>${field}</td>`)
-        rows.push(cells)
-    }
-    if (length === 0) { return "" }
-    th = `<th rowspan=${length}>${label.split("__").join(" ")}</th>`
-    rows[0].unshift(th)
-    return rows.map(row => `<tr>${row.join("")}</tr>`).join("")
-}
-
-function renderField(field) {
-    let render = i => `<td>${i}</td>`
-    return [field.oms, field.dtype, field.hasnans, renderCats(field?.cats)].map(render)
-}
-
-function renderCats(cats) {
-    if (!cats) { return "" }
-    return cats.map(i => `[${i}]`).join("\n")
-}
-
-// ABSTRACTIONS
-function renderAbstractions(abstractions) {
-    let output = []
-    for (let [key, val] of Object.entries(abstractions)) {
-        if (typeof val === 'string') {
-            output.push(`<details><summary>${key}</summary><blockquote>${val}</blockquote></details>`)
-        } else {
-            output.push(`<details open><summary>${key}</summary>${renderAbstractions(val)}</details>`)
-        }
-    }
-    return output.join("")
-}
-
 // DATA
 let data = {{ data|tojson }}
-let metadata = {{ metadata|tojson }}
-let abstractions = {{ abstractions|tojson }}
-
-// DATAMODEL
-let datamodel = document.querySelector(`section[data-component="datamodel"] div:last-child`)
-let filterDatamodel = document.querySelector(`section[data-component="datamodel"] input`)
-let clearFilter = document.querySelector(`section[data-component="datamodel"] button`)
-datamodel.innerHTML = renderMetaData(metadata)
-filterDatamodel.addEventListener("keyup", ({key}) => {
-    if (key === 'Enter') { datamodel.innerHTML = renderMetaData(metadata) }
-})
-clearFilter.addEventListener("click", () => {
-    filterDatamodel.value = ""
-    datamodel.innerHTML = renderMetaData(metadata)
-})
-
-// BOUWSTENEN
-let bouwstenen = document.querySelector(`section[data-component="bouwstenen"]`)
-// bouwstenen.innerHTML = '<pre>' + JSON.stringify(abstractions, null, 2) + '</pre>'
-bouwstenen.innerHTML = renderAbstractions(abstractions)
 
 // WERKVOORRAAD
 let output = []
