@@ -87,12 +87,6 @@ export class WerkvoorraadItem extends HTMLElement {
                 gap: .125em;
                 margin-bottom: .5rem;
             }
-
-            .batches>div:first-of-type {
-                grid-column: 1 / -1;
-                font-family: var(--font-mono);
-                font-size: .8em;
-            }
         </style>
         <details class="item${data.studentnummer.length < 1 ? " empty" : ""}">
             <summary>
@@ -112,9 +106,9 @@ export class WerkvoorraadItem extends HTMLElement {
     renderBatches(target, arr) {
         const batches = this.getBatches(arr, this.batchSize)
         const buttons = batches.map(batch => this.renderButton(target, batch.start, batch.end, true))
-        return `<div class="batches">
+        return `<div>
             <div>${target}</div>
-            ${buttons.join("")}
+            <div class="batches">${buttons.join("")}</div>
         </div>`
     }
 
