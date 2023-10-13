@@ -100,7 +100,7 @@ export class WerkvoorraadItem extends HTMLElement {
                 <div>${buttons.join("")}</div>
             </summary>
             ${batches.join("")}
-            ${instructie ? `<div class="instructie"><span>Instructie</span> ${instructie}</div>` : ""}
+            ${instructie ? `<div class="instructie"><strong>Instructie</strong> ${instructie}</div>` : ""}
         </details>`
     }
 
