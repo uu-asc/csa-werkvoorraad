@@ -37,14 +37,14 @@ export class WerkvoorraadItem extends HTMLElement {
         return `<style>
             summary {
                 border-top: 1px solid var(--brand, black);
-                width: 100%;
-                padding: 0.5rem 0;
+                min-width: 200px;
+                padding: 0.5em 0;
                 position: relative;
                 cursor: pointer;
-                list-style: none;
                 display: flex;
+                flex-wrap: wrap;
                 align-items: center;
-                gap: .5rem;
+                gap: .5em;
             }
 
             summary:after {
@@ -57,12 +57,40 @@ export class WerkvoorraadItem extends HTMLElement {
                 top: 25%;
                 font-weight: 200;
                 transform-origin: center;
-                transition: 50ms linear;
+                transition: 40ms linear;
             }
 
             details[open] > summary:after {
                 transform: rotate(45deg);
                 font-size: 2em;
+            }
+
+            details[open] > summary {
+                border-bottom: 1px dotted var(--brand, black);
+                margin-bottom: .5em;
+            }
+
+            summary div:last-child {
+                display: grid;
+                grid-template-columns: 1fr auto;
+                margin-inline: auto 2em;
+                gap: .25em;
+            }
+
+            label, button {
+                font-family: monospace;
+            }
+
+            .batches {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(15ch, 1fr));
+                gap: .125em;
+                margin-bottom: .5rem;
+            }
+            .batches>div:first-of-type {
+                grid-column: 1 / -1;
+                font-family: var(--font-mono);
+                font-size: .8em;
             }
         </style>
         <details class="item${data.studentnummer.length < 1 ? " empty" : ""}">
