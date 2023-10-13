@@ -29,7 +29,7 @@ export class WerkvoorraadItem extends HTMLElement {
     render() {
         const {oms, data, instructie} = this.item
         const buttons = Object.entries(data)
-            .map(([key, arr]) => `<div><label>${key}</label>${this.renderButton(key, 0, arr.length)}</div>`)
+            .map(([key, arr]) => `<label>${key}</label>${this.renderButton(key, 0, arr.length)}`)
         const batches = Object.entries(data)
             .filter(([key, arr]) => arr.length > this.batchSize)
             .map(([key, arr]) => this.renderBatches(key, arr))
@@ -87,6 +87,7 @@ export class WerkvoorraadItem extends HTMLElement {
                 gap: .125em;
                 margin-bottom: .5rem;
             }
+
             .batches>div:first-of-type {
                 grid-column: 1 / -1;
                 font-family: var(--font-mono);
@@ -96,7 +97,7 @@ export class WerkvoorraadItem extends HTMLElement {
         <details class="item${data.studentnummer.length < 1 ? " empty" : ""}">
             <summary>
                 <div>${oms}</div>
-                ${buttons.join("")}
+                <div>${buttons.join("")}</div>
             </summary>
             ${batches.join("")}
             ${instructie ? `<div class="instructie"><span>Instructie</span> ${instructie}</div>` : ""}
