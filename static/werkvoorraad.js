@@ -28,6 +28,7 @@ export class WerkvoorraadItem extends HTMLElement {
 
     render() {
         const {oms, data, instructie} = this.item
+        const n = Object.values(data).reduce((sum, arr) => sum + arr.length, 0)
         const buttons = Object.entries(data)
             .map(([key, arr]) => `<label>${key}</label>${this.renderButton(key, 0, arr.length)}`)
         const batches = Object.entries(data)
@@ -88,7 +89,7 @@ export class WerkvoorraadItem extends HTMLElement {
                 margin-bottom: .5rem;
             }
         </style>
-        <details class="item${data.studentnummer.length < 1 ? " empty" : ""}">
+        <details${n < 1 ? ' class="empty"' : ""}>
             <summary>
                 <div>${oms}</div>
                 <div>${buttons.join("")}</div>
@@ -124,3 +125,5 @@ export class WerkvoorraadItem extends HTMLElement {
         return batches
     }
 }
+
+customElements.define("werkvoorraad-item", WerkvoorraadItem)
