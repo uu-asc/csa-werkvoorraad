@@ -81,7 +81,7 @@ export class WerkvoorraadItem extends HTMLElement {
     connectedCallback() {
         this.shadow.innerHTML = this.render()
         const details = this.shadow.querySelector("details")
-        details.addEventListener("toggle", () => { details.open ? this.handleOpen : this.handleClose })
+        details.addEventListener("toggle", () => { details.open ? this.handleOpen() : this.handleClose() })
         this.shadow.addEventListener("click", this.handleClick)
     }
 
