@@ -29,13 +29,20 @@ export class WerkvoorraadItem extends HTMLElement {
     render() {
         const {oms, data, instructie} = this.item
         const n = Object.values(data).reduce((sum, arr) => sum + arr.length, 0)
-        const buttons = Object.entries(data)
+        const buttons =
+            Object.entries(data)
             .map(([key, arr]) => `<label>${key}</label>${this.renderButton(key, 0, arr.length)}`)
-        const batches = Object.entries(data)
+        const batches =
+            Object.entries(data)
             .filter(([key, arr]) => arr.length > this.batchSize)
             .map(([key, arr]) => this.renderBatches(key, arr))
 
         return `<style>
+            *, *::before, *::after {
+                box-sizing: border-box;
+                margin: 0;
+            }
+
             summary {
                 border-top: 1px solid var(--brand, black);
                 min-width: 200px;
@@ -88,14 +95,22 @@ export class WerkvoorraadItem extends HTMLElement {
                 gap: .125em;
                 margin-bottom: .5rem;
             }
+
+            .empty {
+                dipslay: none;
+            }
+
+            :host([show_hidden]) .empty {
+                dipslay: block;
+            }
         </style>
         <details${n < 1 ? ' class="empty"' : ""}>
             <summary>
                 <div>${oms}</div>
                 <div>${buttons.join("")}</div>
             </summary>
-            ${batches.join("")}
             ${instructie ? `<div class="instructie"><strong>Instructie</strong> ${instructie}</div>` : ""}
+            ${batches.join("")}
         </details>`
     }
 
