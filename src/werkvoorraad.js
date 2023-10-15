@@ -110,7 +110,7 @@ export class WerkvoorraadItem extends HTMLElement {
     }
 
     handleOpen() {
-        this.setAttribute("open")
+        this.setAttribute("open", "")
     }
 
     handleClose() {
