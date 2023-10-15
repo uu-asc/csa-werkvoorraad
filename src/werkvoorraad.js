@@ -15,12 +15,12 @@ const style =
         gap: .5em;
     }
 
-    .has-details {
+    summary.has-details {
         position: relative;
         cursor: pointer;
     }
 
-    .has-details:after {
+    summary.has-details:after {
         content: "+";
         position: absolute;
         font-size: 1.25em;
@@ -32,11 +32,11 @@ const style =
         transition: 40ms linear;
     }
 
-    details[open] > .has-details:after {
+    details[open] > summary.has-details:after {
         transform: rotate(45deg);
     }
 
-    details[open] > .has-details {
+    details[open] > summary.has-details {
         border-bottom: 1px dotted var(--brand, black);
         margin-bottom: .5em;
     }
@@ -48,8 +48,9 @@ const style =
         gap: .25em;
     }
 
-    label, button {
-        font-family: monospace;
+    details > div {
+        display: grid;
+        gap: .25em;
     }
 
     .batches {
@@ -57,6 +58,10 @@ const style =
         grid-template-columns: repeat(auto-fit, minmax(15ch, 1fr));
         gap: .125em;
         margin-bottom: .5rem;
+    }
+
+    label, button {
+        font-family: monospace;
     }
 
     .empty {
@@ -145,8 +150,10 @@ export class WerkvoorraadItem extends HTMLElement {
                 <div>${label}</div>
                 <div>${buttons.join("")}</div>
             </summary>
+            <div>
             ${details.join("")}
             ${batches.join("")}
+            </div>
         </details>`
     }
 
@@ -159,7 +166,7 @@ export class WerkvoorraadItem extends HTMLElement {
         const batches = this.getBatches(arr, this.batchSize)
         const buttons = batches.map(batch => this.renderButton(target, batch.start, batch.end, true))
         return `<div>
-            <div>${target}</div>
+            <div><code>${target}</code></div>
             <div class="batches">${buttons.join("")}</div>
         </div>`
     }
