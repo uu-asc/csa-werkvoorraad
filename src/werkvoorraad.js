@@ -1,16 +1,97 @@
+const style =
+`<style>
+    *, *::before, *::after {
+        box-sizing: border-box;
+        margin: 0;
+    }
+
+    summary {
+        border-top: 1px solid var(--brand, black);
+        min-width: 200px;
+        padding: 0.5em 0;
+        position: relative;
+        cursor: pointer;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: .5em;
+    }
+
+    summary:after {
+        content: "+";
+        position: absolute;
+        font-size: 1.25em;
+        line-height: 0;
+        margin-top: 0.75rem;
+        right: 0;
+        top: 25%;
+        transform-origin: center;
+        transition: 40ms linear;
+    }
+
+    details[open] > summary:after {
+        transform: rotate(45deg);
+    }
+
+    details[open] > summary {
+        border-bottom: 1px dotted var(--brand, black);
+        margin-bottom: .5em;
+    }
+
+    summary div:last-child {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        margin-inline: auto 2em;
+        gap: .25em;
+    }
+
+    label, button {
+        font-family: monospace;
+    }
+
+    .batches {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(15ch, 1fr));
+        gap: .125em;
+        margin-bottom: .5rem;
+    }
+
+    .empty {
+        display: none;
+    }
+
+    :host([show-empty]) .empty {
+        display: block;
+    }
+</style>`
+
 export class WerkvoorraadItem extends HTMLElement {
+    static observedAttributes = ["open"]
     batchSize = 500
 
     constructor(item) {
         super()
         this.item = item
         this.shadow = this.attachShadow({ mode: 'open' })
-        this.handleClick= this.handleClick.bind(this)
+        this.handleClick = this.handleClick.bind(this)
+        this.handleOpen = this.handleOpen.bind(this)
+        this.handleClose = this.handleClose.bind(this)
     }
 
     connectedCallback() {
         this.shadow.innerHTML = this.render()
+        const details = this.shadow.querySelector("details")
+        details.addEventListener("toggle", () => { details.open ? this.handleOpen : this.handleClose })
         this.shadow.addEventListener("click", this.handleClick)
+    }
+
+    attributeChangedCallback(name, oldValue, newValue) {
+        if (name === 'open') {
+            const details = this.shadow.querySelector("details")
+            this.hasAttribute("open")
+            ? details.setAttribute("open", "")
+            : details.removeAttribute("open")
+        }
     }
 
     async handleClick(event) {
@@ -19,11 +100,21 @@ export class WerkvoorraadItem extends HTMLElement {
         const start = event.target.dataset.start
         const end = event.target.dataset.end
 
-        const clip = this.item.data[target].slice(start, end).join(";")
-        await navigator.clipboard.writeText(clip)
-        const el = event.target.closest("section").querySelector(".display")
-        el.innerHTML = "gekopieerd naar klembord!"
-        setTimeout(() => { el.innerHTML = "" }, 1000)
+        const data = this.item.data[target].slice(start, end).join(";")
+        await navigator.clipboard.writeText(data)
+        const clipboardWriteEvent = new CustomEvent("clipboardWriteEvent", {
+            bubbles: true,
+            composed: true,
+        })
+        this.dispatchEvent(clipboardWriteEvent)
+    }
+
+    handleOpen() {
+        this.setAttribute("open")
+    }
+
+    handleClose() {
+        this.removeAttribute("open")
     }
 
     render() {
@@ -37,71 +128,7 @@ export class WerkvoorraadItem extends HTMLElement {
             .filter(([key, arr]) => arr.length > this.batchSize)
             .map(([key, arr]) => this.renderBatches(key, arr))
 
-        return `<style>
-            *, *::before, *::after {
-                box-sizing: border-box;
-                margin: 0;
-            }
-
-            summary {
-                border-top: 1px solid var(--brand, black);
-                min-width: 200px;
-                padding: 0.5em 0;
-                position: relative;
-                cursor: pointer;
-                display: flex;
-                flex-wrap: wrap;
-                align-items: center;
-                gap: .5em;
-            }
-
-            summary:after {
-                content: "+";
-                position: absolute;
-                font-size: 1.25em;
-                line-height: 0;
-                margin-top: 0.75rem;
-                right: 0;
-                top: 25%;
-                transform-origin: center;
-                transition: 40ms linear;
-            }
-
-            details[open] > summary:after {
-                transform: rotate(45deg);
-            }
-
-            details[open] > summary {
-                border-bottom: 1px dotted var(--brand, black);
-                margin-bottom: .5em;
-            }
-
-            summary div:last-child {
-                display: grid;
-                grid-template-columns: 1fr auto;
-                margin-inline: auto 2em;
-                gap: .25em;
-            }
-
-            label, button {
-                font-family: monospace;
-            }
-
-            .batches {
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(15ch, 1fr));
-                gap: .125em;
-                margin-bottom: .5rem;
-            }
-
-            .empty {
-                display: none;
-            }
-
-            :host([show-empty]) .empty {
-                display: block;
-            }
-        </style>
+        return `${style}
         <details${n < 1 ? ' class="empty"' : ""}>
             <summary>
                 <div>${oms}</div>
