@@ -50,7 +50,7 @@ const style =
 
     details > div {
         display: grid;
-        gap: .25em;
+        gap: .5em;
     }
 
     .batches {
