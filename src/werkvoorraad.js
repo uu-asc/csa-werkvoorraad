@@ -9,15 +9,18 @@ const style =
         border-top: 1px solid var(--brand, black);
         min-width: 200px;
         padding: 0.5em 0;
-        position: relative;
-        cursor: pointer;
         display: flex;
         flex-wrap: wrap;
         align-items: center;
         gap: .5em;
     }
 
-    summary:after {
+    .has-details {
+        position: relative;
+        cursor: pointer;
+    }
+
+    .has-details:after {
         content: "+";
         position: absolute;
         font-size: 1.25em;
@@ -29,16 +32,16 @@ const style =
         transition: 40ms linear;
     }
 
-    details[open] > summary:after {
+    details[open] > .has-details:after {
         transform: rotate(45deg);
     }
 
-    details[open] > summary {
+    details[open] > .has-details {
         border-bottom: 1px dotted var(--brand, black);
         margin-bottom: .5em;
     }
 
-    summary div:last-child {
+    summary > div:last-child {
         display: grid;
         grid-template-columns: 1fr auto;
         margin-inline: auto 2em;
@@ -118,23 +121,31 @@ export class WerkvoorraadItem extends HTMLElement {
     }
 
     render() {
-        const {oms, data, instructie} = this.item
-        const n = Object.values(data).reduce((sum, arr) => sum + arr.length, 0)
+        const { label, data, ...rest } = this.item
+
         const buttons =
             Object.entries(data)
             .map(([key, arr]) => `<label>${key}</label>${this.renderButton(key, 0, arr.length)}`)
+
         const batches =
             Object.entries(data)
             .filter(([key, arr]) => arr.length > this.batchSize)
             .map(([key, arr]) => this.renderBatches(key, arr))
 
+        const details =
+            Object.entries(rest)
+            .map(([key, val]) => `<div><strong>${key}</strong> ${val}</div>`)
+
+        const n = Object.values(data).reduce((sum, arr) => sum + arr.length, 0)
+        const hasDetails = batches.length > 0 || details.length > 0
+
         return `${style}
         <details${n < 1 ? ' class="empty"' : ""}>
-            <summary>
-                <div>${oms}</div>
+            <summary${hasDetails ? ' class="has-details"' : ""}>
+                <div>${label}</div>
                 <div>${buttons.join("")}</div>
             </summary>
-            ${instructie ? `<div class="instructie"><strong>Instructie</strong> ${instructie}</div>` : ""}
+            ${details.join("")}
             ${batches.join("")}
         </details>`
     }
