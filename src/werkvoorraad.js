@@ -95,11 +95,11 @@ export class WerkvoorraadItem extends HTMLElement {
             }
 
             .empty {
-                dipslay: none;
+                display: none;
             }
 
-            :host([show_hidden]) .empty {
-                dipslay: block;
+            :host([show-empty]) .empty {
+                display: block;
             }
         </style>
         <details${n < 1 ? ' class="empty"' : ""}>
