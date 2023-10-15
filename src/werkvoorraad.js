@@ -58,19 +58,17 @@ export class WerkvoorraadItem extends HTMLElement {
             summary:after {
                 content: "+";
                 position: absolute;
-                font-size: 1.75em;
+                font-size: 1.25em;
                 line-height: 0;
                 margin-top: 0.75rem;
                 right: 0;
                 top: 25%;
-                font-weight: 200;
                 transform-origin: center;
                 transition: 40ms linear;
             }
 
             details[open] > summary:after {
                 transform: rotate(45deg);
-                font-size: 2em;
             }
 
             details[open] > summary {
