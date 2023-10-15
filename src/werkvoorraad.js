@@ -44,7 +44,7 @@ const style =
     summary > div:last-child {
         display: grid;
         grid-template-columns: 1fr auto;
-        margin-inline: auto 2em;
+        margin-inline: auto 2ch;
         gap: .25em;
     }
 
