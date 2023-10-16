@@ -6,7 +6,7 @@ const style =
     }
 
     summary {
-        border-top: 1px solid var(--brand, black);
+        border-top: 1px solid;
         min-width: 200px;
         padding: 0.5em 0;
         display: flex;
@@ -37,7 +37,7 @@ const style =
     }
 
     details[open] > summary.has-details {
-        border-bottom: 1px dotted var(--brand, black);
+        border-bottom: 1px dotted;
         margin-bottom: .5em;
     }
 
