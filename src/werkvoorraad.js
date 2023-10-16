@@ -48,6 +48,10 @@ const style =
         gap: .25em;
     }
 
+    summary button {
+        min-width: 5ch
+    }
+
     details > div {
         display: grid;
         gap: .5em;
