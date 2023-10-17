@@ -4,6 +4,10 @@ const style =
     margin: 0;
 }
 
+details {
+    padding-bottom: .75em;
+}
+
 summary {
     border-top: 1px solid;
     min-width: 200px;
