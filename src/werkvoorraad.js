@@ -4,10 +4,6 @@ const style =
     margin: 0;
 }
 
-details[open] {
-    padding-bottom: .75em;
-}
-
 summary {
     border-top: 1px solid;
     min-width: 200px;
@@ -72,6 +68,7 @@ summary button:active {
 details > div {
     display: grid;
     gap: .5em;
+    padding-bottom: .75em;
 }
 
 .batches {
