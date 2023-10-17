@@ -114,8 +114,8 @@ export class WerkvoorraadItem extends HTMLElement {
     attributeChangedCallback(name, oldValue, newValue) {
         if (name === 'open') {
             this.hasAttribute("open")
-            ? _details.setAttribute("open", "")
-            : _details.removeAttribute("open")
+            ? this._details.setAttribute("open", "")
+            : this._details.removeAttribute("open")
         }
     }
 
