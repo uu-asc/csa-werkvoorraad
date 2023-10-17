@@ -1,81 +1,93 @@
 const style =
-`<style>
-    *, *::before, *::after {
-        box-sizing: border-box;
-        margin: 0;
-    }
+`*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+}
 
-    summary {
-        border-top: 1px solid;
-        min-width: 200px;
-        padding: 0.5em 0;
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        gap: .5em;
-    }
+summary {
+    border-top: 1px solid;
+    min-width: 200px;
+    padding: 0.5em 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .5em;
+}
 
-    summary.has-details {
-        position: relative;
-        cursor: pointer;
-    }
+summary.has-details {
+    position: relative;
+    cursor: pointer;
+}
 
-    summary.has-details:after {
-        content: "+";
-        position: absolute;
-        font-size: 1.25em;
-        line-height: 0;
-        margin-top: 0.75rem;
-        right: 0;
-        top: 25%;
-        transform-origin: center;
-        transition: 40ms linear;
-    }
+summary.has-details:after {
+    content: "+";
+    position: absolute;
+    font-size: 1.25em;
+    line-height: 0;
+    margin-top: 0.75rem;
+    right: 0;
+    top: 25%;
+    transform-origin: center;
+    transition: 40ms linear;
+}
 
-    details[open] > summary.has-details:after {
-        transform: rotate(45deg);
-    }
+details[open] > summary.has-details:after {
+    transform: rotate(45deg);
+}
 
-    details[open] > summary.has-details {
-        border-bottom: 1px dotted;
-        margin-bottom: .5em;
-    }
+details[open] > summary.has-details {
+    border-bottom: 1px dotted;
+    margin-bottom: .5em;
+}
 
-    summary > div:last-child {
-        display: grid;
-        grid-template-columns: 1fr auto;
-        margin-inline: auto 2ch;
-        gap: .25em;
-    }
+summary > div:last-child {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    margin-inline: auto 2ch;
+    gap: .25em;
+}
 
-    summary button {
-        min-width: 5ch
-    }
+summary button {
+    min-width: 5ch;
+    background-color: var(--color-shade-1);
+    color: inherit;
+    cursor: pointer;
+    font-family: monospace;
+    border: 1px solid;
+    border-radius: 4px;
+}
 
-    details > div {
-        display: grid;
-        gap: .5em;
-    }
+summary button:hover {
+    background-color: var(--color-shade-2);
+}
 
-    .batches {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(15ch, 1fr));
-        gap: .125em;
-        margin-bottom: .5rem;
-    }
+summary button:active {
+    background-color: var(--color-shade-3);
+}
 
-    label, button {
-        font-family: monospace;
-    }
+details > div {
+    display: grid;
+    gap: .5em;
+}
 
-    .empty {
-        display: none;
-    }
+.batches {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15ch, 1fr));
+    gap: .125em;
+    margin-bottom: .5rem;
+}
 
-    :host([show-empty]) .empty {
-        display: block;
-    }
-</style>`
+label {
+    font-family: monospace;
+}
+
+.empty {
+    display: none;
+}
+
+:host([show-empty]) .empty {
+    display: block;
+}`
 
 export class WerkvoorraadItem extends HTMLElement {
     static observedAttributes = ["open"]
@@ -90,19 +102,19 @@ export class WerkvoorraadItem extends HTMLElement {
         this.handleClose = this.handleClose.bind(this)
     }
 
+    get _details() { return this.shadow.querySelector("details") }
+
     connectedCallback() {
         this.shadow.innerHTML = this.render()
-        const details = this.shadow.querySelector("details")
-        details.addEventListener("toggle", () => { details.open ? this.handleOpen() : this.handleClose() })
+        this._details.addEventListener("toggle", () => { this._details.open ? this.handleOpen() : this.handleClose() })
         this.shadow.addEventListener("click", this.handleClick)
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
         if (name === 'open') {
-            const details = this.shadow.querySelector("details")
             this.hasAttribute("open")
-            ? details.setAttribute("open", "")
-            : details.removeAttribute("open")
+            ? _details.setAttribute("open", "")
+            : _details.removeAttribute("open")
         }
     }
 
@@ -121,13 +133,8 @@ export class WerkvoorraadItem extends HTMLElement {
         this.dispatchEvent(clipboardWriteEvent)
     }
 
-    handleOpen() {
-        this.setAttribute("open", "")
-    }
-
-    handleClose() {
-        this.removeAttribute("open")
-    }
+    handleOpen() { this.setAttribute("open", "") }
+    handleClose() { this.removeAttribute("open")}
 
     render() {
         const { label, data, ...rest } = this.item
@@ -148,7 +155,7 @@ export class WerkvoorraadItem extends HTMLElement {
         const n = Object.values(data).reduce((sum, arr) => sum + arr.length, 0)
         const hasDetails = batches.length > 0 || details.length > 0
 
-        return `${style}
+        return `<style>${style}</style>
         <details${n < 1 ? ' class="empty"' : ""}>
             <summary${hasDetails ? ' class="has-details"' : ""}>
                 <div>${label}</div>
