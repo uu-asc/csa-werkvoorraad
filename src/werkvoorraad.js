@@ -1,9 +1,16 @@
 const style =
-`*, *::before, *::after {
+`/* LAYOUT */
+*, *::before, *::after {
     box-sizing: border-box;
     margin: 0;
 }
 
+/* STYLING */
+label {
+    font-family: monospace;
+}
+
+/* MAIN PANEL */
 summary {
     border-top: 1px solid;
     min-width: 200px;
@@ -13,13 +20,34 @@ summary {
     align-items: center;
     gap: .5em;
 }
+summary > div:last-child {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    margin-inline: auto 2ch;
+    gap: .25em;
+}
+summary button {
+    min-width: 5ch;
+    background-color: var(--color-shade-1);
+    color: inherit;
+    cursor: pointer;
+    font-family: monospace;
+    border: 1px solid;
+    border-radius: 4px;
+}
+summary button:hover {
+    background-color: var(--color-shade-2);
+}
+summary button:active {
+    background-color: var(--color-shade-3);
+}
 
-summary.has-details {
+/* HAS DETAILS */
+.has-details summary {
     position: relative;
     cursor: pointer;
 }
-
-summary.has-details:after {
+.has-details summary:after {
     content: "+";
     position: absolute;
     font-size: 1.25em;
@@ -30,47 +58,18 @@ summary.has-details:after {
     transform-origin: center;
     transition: 40ms linear;
 }
-
-details[open] > summary.has-details:after {
+details.has-details[open] > summary:after {
     transform: rotate(45deg);
 }
-
-details[open] > summary.has-details {
+details.has-details[open] > summary {
     border-bottom: 1px dotted;
     margin-bottom: .5em;
 }
-
-summary > div:last-child {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    margin-inline: auto 2ch;
-    gap: .25em;
-}
-
-summary button {
-    min-width: 5ch;
-    background-color: var(--color-shade-1);
-    color: inherit;
-    cursor: pointer;
-    font-family: monospace;
-    border: 1px solid;
-    border-radius: 4px;
-}
-
-summary button:hover {
-    background-color: var(--color-shade-2);
-}
-
-summary button:active {
-    background-color: var(--color-shade-3);
-}
-
-details > div {
+details.has-details > div {
     display: grid;
     gap: .5em;
     padding-bottom: .75em;
 }
-
 .batches {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(15ch, 1fr));
@@ -78,14 +77,10 @@ details > div {
     margin-bottom: .5rem;
 }
 
-label {
-    font-family: monospace;
-}
-
+/* UTILITY */
 .empty {
     display: none;
 }
-
 :host([show-empty]) .empty {
     display: block;
 }`
@@ -157,10 +152,13 @@ export class WerkvoorraadItem extends HTMLElement {
 
         const n = Object.values(data).reduce((sum, arr) => sum + arr.length, 0)
         const hasDetails = batches.length > 0 || details.length > 0
+        const classes = []
+        if (n < 1) { classes.push("empty") }
+        if (hasDetails) { classes.push("has-details") }
 
         return `<style>${style}</style>
-        <details${n < 1 ? ' class="empty"' : ""}>
-            <summary${hasDetails ? ' class="has-details"' : ""}>
+        <details class="${classes.join(" ")}">
+            <summary}>
                 <div>${label}</div>
                 <div>${buttons.join("")}</div>
             </summary>
