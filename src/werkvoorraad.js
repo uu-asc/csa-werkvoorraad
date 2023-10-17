@@ -1,16 +1,13 @@
 const style =
-`/* LAYOUT */
-*, *::before, *::after {
+`*, *::before, *::after {
     box-sizing: border-box;
     margin: 0;
 }
 
-/* STYLING */
 label {
     font-family: monospace;
 }
 
-/* MAIN PANEL */
 summary {
     border-top: 1px solid;
     min-width: 200px;
@@ -42,7 +39,6 @@ summary button:active {
     background-color: var(--color-shade-3);
 }
 
-/* HAS DETAILS */
 .has-details summary {
     position: relative;
     cursor: pointer;
@@ -77,7 +73,6 @@ details.has-details > div {
     margin-bottom: .5rem;
 }
 
-/* UTILITY */
 .empty {
     display: none;
 }
