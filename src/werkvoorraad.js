@@ -4,7 +4,7 @@ const style =
     margin: 0;
 }
 
-details {
+details[open] {
     padding-bottom: .75em;
 }
 
