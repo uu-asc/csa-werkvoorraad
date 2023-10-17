@@ -153,7 +153,7 @@ export class WerkvoorraadItem extends HTMLElement {
 
         return `<style>${style}</style>
         <details class="${classes.join(" ")}">
-            <summary}>
+            <summary>
                 <div>${label}</div>
                 <div>${buttons.join("")}</div>
             </summary>
