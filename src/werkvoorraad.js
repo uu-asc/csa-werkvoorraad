@@ -91,22 +91,23 @@ label {
 
 export class WerkvoorraadItem extends HTMLElement {
     static observedAttributes = ["open"]
-    batchSize = 500
+    config = {
+        batchSize: 500,
+    }
 
     constructor(item) {
         super()
         this.item = item
         this.shadow = this.attachShadow({ mode: 'open' })
         this.handleClick = this.handleClick.bind(this)
-        this.handleOpen = this.handleOpen.bind(this)
-        this.handleClose = this.handleClose.bind(this)
+        this.handleToggle = this.handleToggle.bind(this)
     }
 
     get _details() { return this.shadow.querySelector("details") }
 
     connectedCallback() {
         this.shadow.innerHTML = this.render()
-        this._details.addEventListener("toggle", () => { this._details.open ? this.handleOpen() : this.handleClose() })
+        this._details.addEventListener("toggle", this.handleToggle)
         this.shadow.addEventListener("click", this.handleClick)
     }
 
@@ -135,6 +136,7 @@ export class WerkvoorraadItem extends HTMLElement {
 
     handleOpen() { this.setAttribute("open", "") }
     handleClose() { this.removeAttribute("open")}
+    handleToggle() { this._details.open ? this.handleOpen() : this.handleClose() }
 
     render() {
         const { label, data, ...rest } = this.item
@@ -145,7 +147,7 @@ export class WerkvoorraadItem extends HTMLElement {
 
         const batches =
             Object.entries(data)
-            .filter(([key, arr]) => arr.length > this.batchSize)
+            .filter(([key, arr]) => arr.length > this.config.batchSize)
             .map(([key, arr]) => this.renderBatches(key, arr))
 
         const details =
@@ -174,7 +176,7 @@ export class WerkvoorraadItem extends HTMLElement {
     }
 
     renderBatches(target, arr) {
-        const batches = this.getBatches(arr, this.batchSize)
+        const batches = this.getBatches(arr, this.config.batchSize)
         const buttons = batches.map(batch => this.renderButton(target, batch.start, batch.end, true))
         return `<div>
             <div><code>${target}</code></div>
