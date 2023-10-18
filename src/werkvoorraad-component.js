@@ -74,10 +74,10 @@ export class WerkvoorraadComponent extends HTMLElement {
     render() {
         this.innerHTML = `<style>${style}</style>
         <div class="acties">
-            <button id="open-all">${config.labels.openAll}</button>
-            <button id="close-all">${config.labels.closeAll}</button>
+            <button id="open-all">${this.config.labels.openAll}</button>
+            <button id="close-all">${this.config.labels.closeAll}</button>
             <input type="checkbox" id="show-empty">
-            <label for="show-empty">${config.labels.showEmpty}</label>
+            <label for="show-empty">${this.config.labels.showEmpty}</label>
         </div>`
         this.hoofdstukken.forEach(this.appendChild)
     }
