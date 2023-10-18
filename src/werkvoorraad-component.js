@@ -85,7 +85,7 @@ export class WerkvoorraadComponent extends HTMLElement {
     loadFromSpec(spec) {
         const { id, label, items } = spec
         const element = new WerkvoorraadHoofdstuk(id, label, items, this.config)
-        hoofdstukken[id] = element
+        this.hoofdstukken[id] = element
     }
 
     getToggleStateFromLocalStorage() {
