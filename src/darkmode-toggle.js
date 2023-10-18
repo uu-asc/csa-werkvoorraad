@@ -28,12 +28,12 @@ export class DarkModeToggle extends HTMLElement {
         this.scheme = this.getUserPreference()
         this.handleClick = this.handleClick.bind(this)
         this.dispatch = this.dispatch.bind(this)
-        this.dispatch()
     }
 
     connectedCallback() {
         this.render()
         this._button.addEventListener("click", this.handleClick)
+        this.dispatch()
     }
 
     get _button() { return this.shadow.querySelector("button") }
@@ -44,6 +44,7 @@ export class DarkModeToggle extends HTMLElement {
         this._sun.classList.toggle("hidden")
         this._moon.classList.toggle("hidden")
         this.scheme = this.scheme === "dark" ? "light" : "dark"
+        localStorage.setItem("prefers-color-scheme", this.scheme)
         this.dispatch()
     }
 
