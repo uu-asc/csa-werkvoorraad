@@ -18,10 +18,10 @@ summary {
     align-items: center;
     gap: .5em;
 }
-summary > div:first-child {
+summary > :first-child {
     flex-grow: 1;
 }
-summary > div:last-child {
+summary > :last-child {
     display: grid;
     grid-template-columns: 1fr auto;
     gap: .25em;
