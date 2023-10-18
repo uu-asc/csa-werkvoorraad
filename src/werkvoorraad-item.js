@@ -18,7 +18,7 @@ summary {
     align-items: center;
     gap: .5em;
 }
-summary > div {
+summary > div:first-child {
     flex-grow: 1;
 }
 summary > div:last-child {
