@@ -18,6 +18,14 @@ summary {
     gap: .5em;
 }
 
+summary code {
+    flex-grow: 1;
+}
+
+summary :last-child {
+    margin-right: 2ch;
+}
+
 summary:after {
     content: "+";
     position: absolute;
@@ -67,6 +75,11 @@ export class WerkvoorraadHoofdstuk extends HTMLElement {
         this.shadow.innerHTML = this.render()
         this.populate()
         this._details.addEventListener("toggle", this.handleToggle)
+        this.addEventListener("clipboardWriteEvent", () => {
+            const el = this.querySelector("summary div")
+            el.innerHTML = "gekopieerd naar klembord!"
+            setTimeout(() => { el.innerHTML = "" }, 1000)
+        })
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
@@ -106,7 +119,7 @@ export class WerkvoorraadHoofdstuk extends HTMLElement {
                 totals[key] = (totals[key] ?? 0) + arr.length
             })
         })
-        const label = Object.entries(totals)
+        const totalsString = Object.entries(totals)
             .map(([key, n]) => `${key}: ${n}`)
             .join(', ')
         const n = Object.values(totals).reduce((sum, arr) => sum + arr.length, 0)
@@ -116,7 +129,8 @@ export class WerkvoorraadHoofdstuk extends HTMLElement {
             <details>
                 <summary>
                     <h2>${this.label}</h2>
-                    <code>(${label})</code>
+                    <code>(${totalsString})</code>
+                    <div></div>
                 </summary>
             </details>
         </section>`
