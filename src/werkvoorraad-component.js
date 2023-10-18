@@ -36,7 +36,7 @@ export class WerkvoorraadComponent extends HTMLElement {
         super()
         this.config = { ...this.config, ...config }
         this.hoofdstukken = {}
-        spec.forEach(this.loadFromSpec)
+        spec.forEach(this.loadFromSpec.bind(this))
         this.toggleState = this.getToggleStateFromLocalStorage()
         this.applyInitialToggleStates()
         this.handleOpenAll = this.handleOpenAll.bind(this)
