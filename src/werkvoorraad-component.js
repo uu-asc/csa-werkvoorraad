@@ -23,7 +23,7 @@ button:active {
     margin-block: .75em;
 }`
 
-class WerkvoorraadComponent extends HTMLElement {
+export class WerkvoorraadComponent extends HTMLElement {
     config = {
         labels: {
             openAll: "Toon alles",
