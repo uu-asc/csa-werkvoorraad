@@ -76,7 +76,7 @@ export class WerkvoorraadHoofdstuk extends HTMLElement {
         this.populate()
         this._details.addEventListener("toggle", this.handleToggle)
         this.addEventListener("clipboardWriteEvent", () => {
-            const el = this.querySelector("summary div")
+            const el = this.shadow.querySelector("summary div")
             el.innerHTML = "gekopieerd naar klembord!"
             setTimeout(() => { el.innerHTML = "" }, 1000)
         })
