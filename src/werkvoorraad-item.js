@@ -90,9 +90,10 @@ export class WerkvoorraadItem extends HTMLElement {
         batchSize: 500,
     }
 
-    constructor(item) {
+    constructor(item, config={}) {
         super()
         this.item = item
+        this.config = { ...this.config, ...config }
         this.shadow = this.attachShadow({ mode: 'open' })
         this.handleClick = this.handleClick.bind(this)
         this.handleToggle = this.handleToggle.bind(this)

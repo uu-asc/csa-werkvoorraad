@@ -58,27 +58,31 @@ h2 {
 
 export class WerkvoorraadHoofdstuk extends HTMLElement {
     static observedAttributes = ["open", "show-empty"]
+    config = {
+        clipboardWriteLabel: "naar klembord gekopieerd!",
+    }
 
-    constructor(id, label, items) {
+    constructor(id, label, items, config={}) {
         super()
         this.id = id
         this.label = label
         this.items = items
+        this.config = { ...this.config, ...config }
         this.shadow = this.attachShadow({ mode: 'open' })
         this.handleToggle = this.handleToggle.bind(this)
     }
 
     get _details() { return this.shadow.querySelector("details") }
     get _items() { return this.shadow.querySelectorAll("werkvoorraad-item") }
+    get _display() { return this.shadow.querySelector("summary div") }
 
     connectedCallback() {
         this.shadow.innerHTML = this.render()
         this.populate()
         this._details.addEventListener("toggle", this.handleToggle)
         this.addEventListener("clipboardWriteEvent", () => {
-            const el = this.shadow.querySelector("summary div")
-            el.innerHTML = "gekopieerd naar klembord!"
-            setTimeout(() => { el.innerHTML = "" }, 1000)
+            this._display.innerHTML = this.config.clipboardWriteLabel
+            setTimeout(() => { this._display.innerHTML = "" }, 1000)
         })
     }
 
@@ -138,7 +142,7 @@ export class WerkvoorraadHoofdstuk extends HTMLElement {
 
     populate() {
         this.items.forEach(item => {
-            const element = new WerkvoorraadItem(item)
+            const element = new WerkvoorraadItem(item, this.config)
             element.batchSize = 10
             this._details.appendChild(element)
         })
