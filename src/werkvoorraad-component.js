@@ -64,7 +64,6 @@ export class WerkvoorraadComponent extends HTMLElement {
     handleToggleState(event) {
         this.toggleState[event.target.id] = event.detail.isOpen
         localStorage.setItem("toggleState", JSON.stringify(this.toggleState))
-        console.log(this.toggleState)
     }
 
     handleOpenAll() { this._items.forEach(el => el.setAttribute("open", "")) }
