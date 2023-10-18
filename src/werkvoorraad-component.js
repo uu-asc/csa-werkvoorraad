@@ -35,10 +35,13 @@ export class WerkvoorraadComponent extends HTMLElement {
     constructor(spec, config={}) {
         super()
         this.config = { ...this.config, ...config }
+        this.shadow = this.attachShadow({ mode: 'open' })
+        this.toggleState = this.getToggleStateFromLocalStorage()
+
         this.hoofdstukken = {}
         spec.forEach(this.loadFromSpec.bind(this))
-        this.toggleState = this.getToggleStateFromLocalStorage()
-        this.applyInitialToggleStates()
+
+        this.handleToggleState = this.handleToggleState.bind(this)
         this.handleOpenAll = this.handleOpenAll.bind(this)
         this.handleCloseAll = this.handleCloseAll.bind(this)
         this.handleShowEmpty = this.handleShowEmpty.bind(this)
@@ -49,37 +52,38 @@ export class WerkvoorraadComponent extends HTMLElement {
         this._buttonOpenAll.addEventListener("click", this.handleOpenAll)
         this._buttonCloseAll.addEventListener("click", this.handleCloseAll)
         this._buttonShowEmpty.addEventListener("click", this.handleShowEmpty)
+        this.shadow.addEventListener("toggle", this.handleToggleState)
+        this.applyInitialToggleStates()
     }
 
-    get _buttonOpenAll() { this.getElementById("open-all") }
-    get _buttonCloseAll() { this.getElementById("close-all") }
-    get _buttonShowEmpty() { this.getElementById("show-empty") }
+    get _items() { return Object.values(this.hoofdstukken) }
+    get _buttonOpenAll() { return this.shadow.getElementById("open-all") }
+    get _buttonCloseAll() { return this.shadow.getElementById("close-all") }
+    get _buttonShowEmpty() { return this.shadow.getElementById("show-empty") }
 
-    handleToggleState() {
-        const toggleState = {}
-            document.addEventListener("toggle", event => {
-            toggleState[event.target.id] = event.detail.isOpen
-            localStorage.setItem("toggleState", JSON.stringify(toggleState))
-            console.log(toggleState)
-        })
+    handleToggleState(event) {
+        this.toggleState[event.target.id] = event.detail.isOpen
+        localStorage.setItem("toggleState", JSON.stringify(this.toggleState))
+        console.log(this.toggleState)
     }
-    handleOpenAll() { this.hoofdstukken.forEach(el => el.setAttribute("open", "")) }
-    handleCloseAll() { this.hoofdstukken.forEach(el => el.removeAttribute("open")) }
+
+    handleOpenAll() { this._items.forEach(el => el.setAttribute("open", "")) }
+    handleCloseAll() { this._items.forEach(el => el.removeAttribute("open")) }
     handleShowEmpty(event) {
         event.target.checked
-        ? this.hoofdstukken.forEach(el => el.setAttribute("show-empty", ""))
-        : this.hoofdstukken.forEach(el => el.removeAttribute("show-empty"))
+        ? this._items.forEach(el => el.setAttribute("show-empty", ""))
+        : this._items.forEach(el => el.removeAttribute("show-empty"))
     }
 
     render() {
-        this.innerHTML = `<style>${style}</style>
+        this.shadow.innerHTML = `<style>${style}</style>
         <div class="acties">
             <button id="open-all">${this.config.labels.openAll}</button>
             <button id="close-all">${this.config.labels.closeAll}</button>
             <input type="checkbox" id="show-empty">
             <label for="show-empty">${this.config.labels.showEmpty}</label>
         </div>`
-        Object.values(this.hoofdstukken).forEach(this.appendChild)
+        this._items.forEach(item => (this.shadow.appendChild(item)))
     }
 
     loadFromSpec(spec) {
