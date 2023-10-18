@@ -1,5 +1,53 @@
 import { WerkvoorraadItem } from "https://uu-asc.github.io/csa-werkvoorraad/src/werkvoorraad-item.js"
 
+const style =
+`*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+}
+
+summary {
+    border-top: 4px solid;
+    min-width: 200px;
+    padding: 0.5em 0;
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .5em;
+}
+
+summary:after {
+    content: "+";
+    position: absolute;
+    font-size: 1.75em;
+    line-height: 0;
+    margin-top: 0.75rem;
+    right: 0;
+    top: 25%;
+    font-weight: 200;
+    transform-origin: center;
+    transition: 40ms linear;
+}
+
+details[open] > summary:after {
+    transform: rotate(45deg);
+}
+
+h2 {
+    font-variant: small-caps;
+    font-size: 1.5em;
+}
+
+.empty {
+    display: none;
+}
+
+:host([show-empty]) .empty {
+    display: block;
+}`
+
 export class WerkvoorraadHoofdstuk extends HTMLElement {
     static observedAttributes = ["open", "show-empty"]
 
