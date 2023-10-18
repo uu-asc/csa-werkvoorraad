@@ -6,6 +6,7 @@ const style =
     margin: 0;
 }
 
+/* LAYOUT */
 summary {
     border-top: 4px solid;
     min-width: 200px;
@@ -21,7 +22,6 @@ summary {
 summary code {
     flex-grow: 1;
 }
-
 summary :last-child {
     margin-right: 2ch;
 }
@@ -38,20 +38,20 @@ summary:after {
     transform-origin: center;
     transition: 40ms linear;
 }
-
 details[open] > summary:after {
     transform: rotate(45deg);
 }
 
+/* STYLING */
 h2 {
     font-variant: small-caps;
     font-size: 1.5em;
 }
 
+/* UTILITY */
 .empty {
     display: none;
 }
-
 :host([show-empty]) .empty {
     display: block;
 }`
