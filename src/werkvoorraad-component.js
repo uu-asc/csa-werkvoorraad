@@ -79,7 +79,7 @@ export class WerkvoorraadComponent extends HTMLElement {
             <input type="checkbox" id="show-empty">
             <label for="show-empty">${this.config.labels.showEmpty}</label>
         </div>`
-        this.hoofdstukken.forEach(this.appendChild)
+        Object.values(this.hoofdstukken).forEach(this.appendChild)
     }
 
     loadFromSpec(spec) {
