@@ -14,14 +14,18 @@ summary {
     padding: 0.5em 0;
     display: flex;
     flex-wrap: wrap;
+    justify-content: space-between;
     align-items: center;
     gap: .5em;
+}
+summary > div {
+    flex-grow: 1;
 }
 summary > div:last-child {
     display: grid;
     grid-template-columns: 1fr auto;
-    margin-inline: auto 2ch;
     gap: .25em;
+    margin-right: 2ch;
 }
 summary button {
     min-width: 5ch;
