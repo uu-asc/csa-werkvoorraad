@@ -28,13 +28,14 @@ export class DarkModeToggle extends HTMLElement {
         this.mediaQuery = window.matchMedia("(prefers-color-scheme: dark)")
         this.scheme = this.getUserPreference()
         this.handleClick = this.handleClick.bind(this)
+        this.handleMediaQueryChange = this.handleMediaQueryChange.bind(this)
         this.dispatch = this.dispatch.bind(this)
     }
 
     connectedCallback() {
         this.render()
         this._button.addEventListener("click", this.handleClick)
-        this.mediaQuery.addEventListener("change")
+        this.mediaQuery.addEventListener("change", this.handleMediaQueryChange)
         this.dispatch()
     }
 
