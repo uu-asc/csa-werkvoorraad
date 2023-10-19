@@ -94,9 +94,12 @@ export class WerkvoorraadItem extends HTMLElement {
         batchSize: 500,
     }
 
-    constructor(item, config={}) {
+    constructor(spec, config={}) {
         super()
-        this.item = item
+        const { id, type, label, data, ...rest } = spec
+        this.label = label
+        this.data = data
+        this.rest = rest
         this.config = { ...this.config, ...config }
         this.shadow = this.attachShadow({ mode: 'open' })
         this.handleClick = this.handleClick.bind(this)
@@ -106,7 +109,7 @@ export class WerkvoorraadItem extends HTMLElement {
     get _details() { return this.shadow.querySelector("details") }
 
     connectedCallback() {
-        this.shadow.innerHTML = this.render()
+        this.render()
         this._details.addEventListener("toggle", this.handleToggle)
         this.shadow.addEventListener("click", this.handleClick)
     }
@@ -125,7 +128,7 @@ export class WerkvoorraadItem extends HTMLElement {
         const start = event.target.dataset.start
         const end = event.target.dataset.end
 
-        const data = this.item.data[target].slice(start, end).join(";")
+        const data = this.data[target].slice(start, end).join(";")
         await navigator.clipboard.writeText(data)
         const clipboardWriteEvent = new CustomEvent("clipboardWriteEvent", {
             bubbles: true,
@@ -139,38 +142,37 @@ export class WerkvoorraadItem extends HTMLElement {
     handleToggle() { this._details.open ? this.handleOpen() : this.handleClose() }
 
     render() {
-        const { id, type, label, data, ...rest } = this.item
-
         const buttons =
-            Object.entries(data)
+            Object.entries(this.data)
             .map(([key, arr]) => `<label>${key}</label>${this.renderButton(key, 0, arr.length)}`)
 
         const batches =
-            Object.entries(data)
+            Object.entries(this.data)
             .filter(([key, arr]) => arr.length > this.config.batchSize)
             .map(([key, arr]) => this.renderBatches(key, arr))
 
         const details =
-            Object.entries(rest)
+            Object.entries(this.rest)
             .map(([key, val]) => `<div><strong>${key}</strong> ${val}</div>`)
 
-        const n = Object.values(data).reduce((sum, arr) => sum + arr.length, 0)
+        const n = Object.values(this.data).reduce((sum, arr) => sum + arr.length, 0)
         const hasDetails = batches.length > 0 || details.length > 0
         const classes = []
         if (n < 1) { classes.push("empty") }
         if (hasDetails) { classes.push("has-details") }
 
-        return `<style>${style}</style>
-        <details class="${classes.join(" ")}">
-            <summary>
-                <div>${label}</div>
-                <div>${buttons.join("")}</div>
-            </summary>
-            <div>
-            ${details.join("")}
-            ${batches.join("")}
-            </div>
-        </details>`
+        this.shadow.innerHTML =
+            `<style>${style}</style>
+            <details class="${classes.join(" ")}">
+                <summary>
+                    <div>${this.label}</div>
+                    <div>${buttons.join("")}</div>
+                </summary>
+                <div>
+                ${details.join("")}
+                ${batches.join("")}
+                </div>
+            </details>`
     }
 
     renderButton(target, start, end, isBatch=false) {

@@ -1,4 +1,4 @@
-import { WerkvoorraadItem } from "https://uu-asc.github.io/csa-werkvoorraad/src/werkvoorraad-item.js"
+import { WerkvoorraadItem } from "./werkvoorraad-item.js"
 
 const style =
 `*, *::before, *::after {
@@ -43,9 +43,8 @@ details[open] > summary:after {
 }
 
 /* STYLING */
-h2 {
+h2, h3, h4, h5, h6 {
     font-variant: small-caps;
-    font-size: 1.5em;
 }
 
 /* UTILITY */
@@ -62,14 +61,31 @@ export class WerkvoorraadHoofdstuk extends HTMLElement {
         clipboardWriteLabel: "naar klembord gekopieerd!",
     }
 
-    constructor(chapter, config={}) {
+    constructor(spec, config={}, depth=0) {
         super()
-        this.id = chapter.id
-        this.label = chapter.label
-        this.items = chapter.items
+        this.id = spec.id
+        this.depth = depth
+        this.label = spec.label
         this.config = { ...this.config, ...config }
         this.shadow = this.attachShadow({ mode: 'open' })
+
         this.handleToggle = this.handleToggle.bind(this)
+        this.loadFromSpec = this.loadFromSpec.bind(this)
+
+        this.items = spec.items.map(this.loadFromSpec)
+    }
+
+    get totals() {
+        const totals = {}
+        for (const item of this.items) {
+            const isChapter = item instanceof WerkvoorraadHoofdstuk
+            const source = isChapter ? item.totals : item.data
+            for (const [key, val] of Object.entries(source)) {
+                const n = Array.isArray(val) ? val.length : val
+                totals[key] = (totals[key] ?? 0) + n
+            }
+        }
+        return totals
     }
 
     get _details() { return this.shadow.querySelector("details") }
@@ -77,10 +93,10 @@ export class WerkvoorraadHoofdstuk extends HTMLElement {
     get _display() { return this.shadow.querySelector("summary div") }
 
     connectedCallback() {
-        this.shadow.innerHTML = this.render()
-        this.populate()
+        this.render()
         this._details.addEventListener("toggle", this.handleToggle)
-        this.addEventListener("clipboardWriteEvent", () => {
+        this.addEventListener("clipboardWriteEvent", event => {
+            event.stopPropagation()
             this._display.innerHTML = this.config.clipboardWriteLabel
             setTimeout(() => { this._display.innerHTML = "" }, 1000)
         })
@@ -114,42 +130,50 @@ export class WerkvoorraadHoofdstuk extends HTMLElement {
 
     handleOpen() { this.setAttribute("open", "") }
     handleClose() { this.removeAttribute("open") }
-    handleToggle() { this._details.open ? this.handleOpen() : this.handleClose() }
+    handleToggle() {
+        const isOpen = this._details.open
+        isOpen ? this.handleOpen() : this.handleClose()
 
-    render() {
-        const totals = {}
-        this.items.forEach(item => {
-            Object.entries(item.data).forEach(([key, arr]) => {
-                totals[key] = (totals[key] ?? 0) + arr.length
-            })
-        })
-        const totalsString = Object.entries(totals)
-            .map(([key, n]) => `${key}: ${n}`)
-            .join(', ')
-        const n = Object.values(totals).reduce((sum, arr) => sum + arr.length, 0)
-
-        return `<style>${style}</style>
-        <section${n < 1 ? ' class="empty"' : ""}>
-            <details>
-                <summary>
-                    <h2>${this.label}</h2>
-                    <code>(${totalsString})</code>
-                    <div></div>
-                </summary>
-            </details>
-        </section>`
+        const toggleState = this.getToggleStateFromLocalStorage()
+        toggleState[this.id] = isOpen
+        localStorage.setItem("toggleState", JSON.stringify(toggleState))
     }
 
-    populate() {
-        this.items.forEach(item => {
-            let element
-            if (item.type === "hoofdstuk") {
-                element = new WerkvoorraadHoofdstuk(item, this.config)
-            } else {
-                element = new WerkvoorraadItem(item, this.config)
-            }
-            this._details.appendChild(element)
-        })
+    getToggleStateFromLocalStorage() {
+        const json = localStorage.getItem("toggleState")
+        return JSON.parse(json) ?? {}
+    }
+
+    render() {
+        const totals =
+            Object.entries(this.totals)
+            .map(([key, n]) => `${key}: ${n}`)
+            .join(', ')
+        const n = Object.values(this.totals).reduce((sum, arr) => sum + arr.length, 0)
+
+        this.shadow.innerHTML =
+            `<style>${style}</style>
+            <section${n < 1 ? ' class="empty"' : ""}>
+                <details>
+                    <summary>
+                        <h${2 + this.depth}>${this.label}</h2>
+                        <code>(${totals})</code>
+                        <div></div>
+                    </summary>
+                </details>
+            </section>`
+        this.items.forEach(item => (this._details.appendChild(item)))
+
+        const toggleState = this.getToggleStateFromLocalStorage()
+        const isOpen = toggleState[this.id] ? true : false
+        this._details.open = isOpen
+    }
+
+    loadFromSpec(spec) {
+        const element = spec.type === "hoofdstuk"
+        ? new WerkvoorraadHoofdstuk(spec, this.config, this.depth + 1)
+        : new WerkvoorraadItem(spec, this.config)
+        return element
     }
 }
 
