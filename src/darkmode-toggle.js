@@ -53,6 +53,7 @@ export class DarkModeToggle extends HTMLElement {
     handleMediaQueryChange(event) {
         this.scheme = event.matches ? "dark" : "light"
         this.updateState()
+        this.dispatch()
     }
 
     dispatch() {
