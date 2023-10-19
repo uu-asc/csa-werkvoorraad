@@ -139,7 +139,7 @@ export class WerkvoorraadItem extends HTMLElement {
     handleToggle() { this._details.open ? this.handleOpen() : this.handleClose() }
 
     render() {
-        const { label, data, ...rest } = this.item
+        const { id, type, label, data, ...rest } = this.item
 
         const buttons =
             Object.entries(data)

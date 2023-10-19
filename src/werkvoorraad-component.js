@@ -38,7 +38,7 @@ export class WerkvoorraadComponent extends HTMLElement {
         this.shadow = this.attachShadow({ mode: 'open' })
         this.toggleState = this.getToggleStateFromLocalStorage()
 
-        this.hoofdstukken = {}
+        this.chapters = {}
         spec.forEach(this.loadFromSpec.bind(this))
 
         this.handleToggleState = this.handleToggleState.bind(this)
@@ -56,7 +56,7 @@ export class WerkvoorraadComponent extends HTMLElement {
         this.applyInitialToggleStates()
     }
 
-    get _items() { return Object.values(this.hoofdstukken) }
+    get _items() { return Object.values(this.chapters) }
     get _buttonOpenAll() { return this.shadow.getElementById("open-all") }
     get _buttonCloseAll() { return this.shadow.getElementById("close-all") }
     get _buttonShowEmpty() { return this.shadow.getElementById("show-empty") }
@@ -86,9 +86,9 @@ export class WerkvoorraadComponent extends HTMLElement {
     }
 
     loadFromSpec(spec) {
-        const { id, label, items } = spec
-        const element = new WerkvoorraadHoofdstuk(id, label, items, this.config)
-        this.hoofdstukken[id] = element
+        const { id } = spec
+        const element = new WerkvoorraadHoofdstuk(spec, this.config)
+        this.chapters[id] = element
     }
 
     getToggleStateFromLocalStorage() {
@@ -98,9 +98,9 @@ export class WerkvoorraadComponent extends HTMLElement {
 
     applyInitialToggleStates() {
         Object.entries(this.toggleState).forEach(([key, val]) => {
-            if (key in this.hoofdstukken) {
-                const hoofdstuk = this.hoofdstukken[key]
-                val ? hoofdstuk.setAttribute("open", "") : hoofdstuk.removeAttribute("open")
+            if (key in this.chapters) {
+                const chapter = this.chapters[key]
+                val ? chapter.setAttribute("open", "") : chapter.removeAttribute("open")
             }
         })
     }

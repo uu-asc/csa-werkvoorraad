@@ -62,11 +62,11 @@ export class WerkvoorraadHoofdstuk extends HTMLElement {
         clipboardWriteLabel: "naar klembord gekopieerd!",
     }
 
-    constructor(id, label, items, config={}) {
+    constructor(chapter, config={}) {
         super()
-        this.id = id
-        this.label = label
-        this.items = items
+        this.id = chapter.id
+        this.label = chapter.label
+        this.items = chapter.items
         this.config = { ...this.config, ...config }
         this.shadow = this.attachShadow({ mode: 'open' })
         this.handleToggle = this.handleToggle.bind(this)
@@ -142,8 +142,12 @@ export class WerkvoorraadHoofdstuk extends HTMLElement {
 
     populate() {
         this.items.forEach(item => {
-            const element = new WerkvoorraadItem(item, this.config)
-            element.batchSize = 10
+            let element
+            if (item.type === "hoofdstuk") {
+                element = new WerkvoorraadHoofdstuk(item, this.config)
+            } else {
+                element = new WerkvoorraadItem(item, this.config)
+            }
             this._details.appendChild(element)
         })
     }
