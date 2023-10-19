@@ -66,7 +66,7 @@ label {
 
 button {
     min-width: 5ch;
-    background-color: var(--color-shade-1);
+    background-color: var(--color-button);
     color: inherit;
     cursor: pointer;
     font-family: monospace;
@@ -74,10 +74,10 @@ button {
     border-radius: 4px;
 }
 button:hover {
-    background-color: var(--color-shade-2);
+    background-color: var(--color-button-hover);
 }
 button:active {
-    background-color: var(--color-shade-3);
+    background-color: var(--color-button-active);
 }
 
 /* UTILITY */

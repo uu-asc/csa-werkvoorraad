@@ -2,7 +2,7 @@ import { WerkvoorraadHoofdstuk } from "https://uu-asc.github.io/csa-werkvoorraad
 
 const style =
 `button {
-    background-color: var(--color-shade-1);
+    background-color: var(--color-button);
     color: inherit;
     cursor: pointer;
     padding: .125em .25em;
@@ -12,11 +12,11 @@ const style =
 }
 
 button:hover {
-    background-color: var(--color-shade-2);
+    background-color: var(--color-button-hover);
 }
 
 button:active {
-    background-color: var(--color-shade-3);
+    background-color: var(--color-button-active);
 }
 
 .acties {
