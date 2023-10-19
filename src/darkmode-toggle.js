@@ -52,6 +52,7 @@ export class DarkModeToggle extends HTMLElement {
 
     handleMediaQueryChange(event) {
         this.scheme = event.matches ? "dark" : "light"
+        localStorage.setItem("prefers-color-scheme", this.scheme)
         this.updateState()
         this.dispatch()
     }
