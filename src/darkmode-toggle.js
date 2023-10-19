@@ -25,6 +25,7 @@ export class DarkModeToggle extends HTMLElement {
         super()
         this.config = { ...this.config, ...config }
         this.shadow = this.attachShadow({ mode: 'open' })
+        this.mediaQuery = window.matchMedia("(prefers-color-scheme: dark)")
         this.scheme = this.getUserPreference()
         this.handleClick = this.handleClick.bind(this)
         this.dispatch = this.dispatch.bind(this)
@@ -33,6 +34,7 @@ export class DarkModeToggle extends HTMLElement {
     connectedCallback() {
         this.render()
         this._button.addEventListener("click", this.handleClick)
+        this.mediaQuery.addEventListener("change")
         this.dispatch()
     }
 
@@ -41,11 +43,15 @@ export class DarkModeToggle extends HTMLElement {
     get _moon() { return this.shadow.getElementById("moon") }
 
     handleClick() {
-        this._sun.classList.toggle("hidden")
-        this._moon.classList.toggle("hidden")
         this.scheme = this.scheme === "dark" ? "light" : "dark"
         localStorage.setItem("prefers-color-scheme", this.scheme)
+        this.updateState()
         this.dispatch()
+    }
+
+    handleMediaQueryChange(event) {
+        this.scheme = event.matches ? "dark" : "light"
+        this.updateState()
     }
 
     dispatch() {
@@ -58,9 +64,9 @@ export class DarkModeToggle extends HTMLElement {
     }
 
     getUserPreference() {
-        const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)")
         const storedMode = localStorage.getItem("prefers-color-scheme")
-        const prefersDarkMode = (mediaQuery.matches && storedMode === null) || storedMode === "dark"
+        const prefersDarkMode =
+            (this.mediaQuery.matches && storedMode === null) || storedMode === "dark"
         return prefersDarkMode ? "dark" : "light"
     }
 
@@ -68,9 +74,20 @@ export class DarkModeToggle extends HTMLElement {
         this.shadow.innerHTML =
         `<style>${style}</style>
         <button title="${this.config.buttonTitle}">
-            <span id="sun"${this.scheme === "dark" ? ' class="hidden"' : ""}>☼</span>
-            <span id="moon"${this.scheme === "light" ? ' class="hidden"' : ""}>☽</span>
+            <span id="sun">☼</span>
+            <span id="moon">☽</span>
         </button>`
+        this.updateState()
+    }
+
+    updateState() {
+        if (this.scheme === "dark") {
+            this._sun.classList.add("hidden")
+            this._moon.classList.remove("hidden")
+        } else {
+            this._sun.classList.remove("hidden")
+            this._moon.classList.add("hidden")
+        }
     }
 }
 
