@@ -148,7 +148,7 @@ export class WerkvoorraadHoofdstuk extends HTMLElement {
             Object.entries(this.totals)
             .map(([key, n]) => `${key}: ${n}`)
             .join(', ')
-        const n = Object.values(this.totals).reduce((sum, arr) => sum + arr.length, 0)
+        const n = Object.values(this.totals).reduce((sum, val) => sum + val, 0)
 
         this.shadow.innerHTML =
             `<style>${style}</style>
