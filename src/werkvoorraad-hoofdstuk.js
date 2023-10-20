@@ -30,10 +30,7 @@ summary:after {
     content: "+";
     position: absolute;
     font-size: 1.75em;
-    line-height: 0;
-    margin-top: 0.75rem;
     right: 0;
-    top: 25%;
     font-weight: 200;
     transform-origin: center;
     transition: 40ms linear;
