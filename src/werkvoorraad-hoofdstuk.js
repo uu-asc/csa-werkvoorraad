@@ -105,12 +105,6 @@ export class WerkvoorraadHoofdstuk extends HTMLElement {
                 attrWasAdded
                 ? this._details.setAttribute("open", "")
                 : this._details.removeAttribute("open")
-                const event = new CustomEvent("toggle", {
-                    composed: true,
-                    bubbles: true,
-                    detail: { isOpen: attrWasAdded }
-                })
-                this.dispatchEvent(event)
                 break
 
             case "show-empty":
@@ -126,6 +120,20 @@ export class WerkvoorraadHoofdstuk extends HTMLElement {
 
     handleOpen() { this.setAttribute("open", "") }
     handleClose() { this.removeAttribute("open") }
+    handleOpenAll() {
+        this.handleOpen()
+        for (const item of this.items) {
+            const isChapter = item instanceof WerkvoorraadHoofdstuk
+            if (isChapter) { item.handleOpenAll() }
+        }
+    }
+    handleCloseAll() {
+        this.handleClose()
+        for (const item of this.items) {
+            const isChapter = item instanceof WerkvoorraadHoofdstuk
+            if (isChapter) { item.handleCloseAll() }
+        }
+    }
     handleToggle() {
         const isOpen = this._details.open
         isOpen ? this.handleOpen() : this.handleClose()

@@ -42,7 +42,7 @@ export class WerkvoorraadComponent extends HTMLElement {
         this.handleShowEmpty = this.handleShowEmpty.bind(this)
         this.loadFromSpec = this.loadFromSpec.bind(this)
 
-        this.chapters = Object.fromEntries(spec.map(this.loadFromSpec))
+        this.items = spec.map(this.loadFromSpec)
     }
 
     connectedCallback() {
@@ -52,17 +52,16 @@ export class WerkvoorraadComponent extends HTMLElement {
         this._buttonShowEmpty.addEventListener("click", this.handleShowEmpty)
     }
 
-    get _items() { return Object.values(this.chapters) }
     get _buttonOpenAll() { return this.shadow.getElementById("open-all") }
     get _buttonCloseAll() { return this.shadow.getElementById("close-all") }
     get _buttonShowEmpty() { return this.shadow.getElementById("show-empty") }
 
-    handleOpenAll() { this._items.forEach(el => el.setAttribute("open", "")) }
-    handleCloseAll() { this._items.forEach(el => el.removeAttribute("open")) }
+    handleOpenAll() { this.items.forEach(item => item.handleOpenAll() ) }
+    handleCloseAll() { this.items.forEach(item => item.handleCloseAll() ) }
     handleShowEmpty(event) {
         event.target.checked
-        ? this._items.forEach(el => el.setAttribute("show-empty", ""))
-        : this._items.forEach(el => el.removeAttribute("show-empty"))
+        ? this.items.forEach(el => el.setAttribute("show-empty", ""))
+        : this.items.forEach(el => el.removeAttribute("show-empty"))
     }
 
     render() {
@@ -74,13 +73,11 @@ export class WerkvoorraadComponent extends HTMLElement {
                 <input type="checkbox" id="show-empty">
                 <label for="show-empty">${this.config.labels.showEmpty}</label>
             </div>`
-        this._items.forEach(item => (this.shadow.appendChild(item)))
+        this.items.forEach(item => (this.shadow.appendChild(item)))
     }
 
     loadFromSpec(spec) {
-        const { id } = spec
-        const element = new WerkvoorraadHoofdstuk(spec, this.config)
-        return [id, element]
+        return new WerkvoorraadHoofdstuk(spec, this.config)
     }
 }
 
