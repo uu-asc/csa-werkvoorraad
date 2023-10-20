@@ -89,7 +89,6 @@ export class WerkvoorraadHoofdstuk extends HTMLElement {
     }
 
     get _details() { return this.shadow.querySelector("details") }
-    get _items() { return this.shadow.querySelectorAll("werkvoorraad-item") }
     get _display() { return this.shadow.querySelector("summary div") }
 
     connectedCallback() {
@@ -119,8 +118,8 @@ export class WerkvoorraadHoofdstuk extends HTMLElement {
 
             case "show-empty":
                 attrWasAdded
-                ? this._items.forEach(item => item.setAttribute("show-empty", ""))
-                : this._items.forEach(item => item.removeAttribute("show-empty"))
+                ? this.items.forEach(item => item.setAttribute("show-empty", ""))
+                : this.items.forEach(item => item.removeAttribute("show-empty"))
                 break
 
             default:
