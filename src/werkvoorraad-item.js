@@ -89,21 +89,24 @@ export class WerkvoorraadItem extends HTMLElement {
     static observedAttributes = ["open"]
     config = {
         batchSize: 500,
+        offset: .25,
     }
 
-    constructor(spec, config={}) {
+    constructor(spec, config={}, depth=0) {
         super()
         const { id, type, label, data, ...rest } = spec
         this.label = label
         this.data = data
         this.rest = rest
         this.config = { ...this.config, ...config }
+        this.depth = depth
         this.shadow = this.attachShadow({ mode: 'open' })
         this.handleClick = this.handleClick.bind(this)
         this.handleToggle = this.handleToggle.bind(this)
     }
 
     get _details() { return this.shadow.querySelector("details") }
+    get _stylesheet() { return this.shadowRoot.styleSheets[0] }
 
     connectedCallback() {
         this.render()
@@ -170,6 +173,11 @@ export class WerkvoorraadItem extends HTMLElement {
                 ${batches.join("")}
                 </div>
             </details>`
+        this._stylesheet.insertRule(
+            `summary > div, details > div {
+                margin-left: ${this.depth * this.config.offset}rem
+            }`
+        )
     }
 
     renderButton(target, start, end, isBatch=false) {

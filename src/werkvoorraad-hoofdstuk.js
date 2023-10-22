@@ -56,6 +56,7 @@ export class WerkvoorraadHoofdstuk extends HTMLElement {
     static observedAttributes = ["open", "show-empty"]
     config = {
         clipboardWriteLabel: "naar klembord gekopieerd!",
+        offset: .25,
     }
 
     constructor(spec, config={}, depth=0) {
@@ -87,6 +88,7 @@ export class WerkvoorraadHoofdstuk extends HTMLElement {
 
     get _details() { return this.shadow.querySelector("details") }
     get _display() { return this.shadow.querySelector("summary div") }
+    get _stylesheet() { return this.shadowRoot.styleSheets[0] }
 
     connectedCallback() {
         this.render()
@@ -167,6 +169,11 @@ export class WerkvoorraadHoofdstuk extends HTMLElement {
                 </details>
             </section>`
         this.items.forEach(item => (this._details.appendChild(item)))
+        this._stylesheet.insertRule(
+            `h2,h3,h4,h5,h6 {
+                margin-left: ${this.depth * this.config.offset}rem
+            }`
+        )
 
         const toggleState = this.getToggleStateFromLocalStorage()
         const isOpen = toggleState[this.id] ? true : false
@@ -176,7 +183,7 @@ export class WerkvoorraadHoofdstuk extends HTMLElement {
     loadFromSpec(spec) {
         const element = spec.type === "hoofdstuk"
         ? new WerkvoorraadHoofdstuk(spec, this.config, this.depth + 1)
-        : new WerkvoorraadItem(spec, this.config)
+        : new WerkvoorraadItem(spec, this.config, this.depth + 1)
         return element
     }
 }
