@@ -56,7 +56,7 @@ export class WerkvoorraadHoofdstuk extends HTMLElement {
     static observedAttributes = ["open", "show-empty"]
     config = {
         clipboardWriteLabel: "naar klembord gekopieerd!",
-        offset: .25,
+        offset: .5,
     }
 
     constructor(spec, config={}, depth=0) {

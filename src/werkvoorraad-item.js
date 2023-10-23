@@ -89,7 +89,7 @@ export class WerkvoorraadItem extends HTMLElement {
     static observedAttributes = ["open"]
     config = {
         batchSize: 500,
-        offset: .25,
+        offset: .5,
     }
 
     constructor(spec, config={}, depth=0) {
