@@ -1,0 +1,15 @@
+:root {
+    --color-background: hsl({{ hue_background }}, {{ sat_background }}%, 98%);
+    --color-button: hsl({{ hue_button }}, {{ sat_button }}%, 93%);
+    --color-button-hover: hsl({{ hue_button }}, {{ sat_button }}%, 89%);
+    --color-button-active: hsl({{ hue_button }}, {{ sat_button }}%, 83%);
+    --color-text: hsl({{ hue_text}}, {{ sat_text }}%, 17%);
+}
+
+.dark-theme {
+    --color-background: hsl({{ hue_background }}, {{ sat_background }}%, 23%);
+    --color-button: hsl({{ hue_button }}, {{ sat_button }}%, 31%);
+    --color-button-hover: hsl({{ hue_button }}, {{ sat_button }}%, 36%);
+    --color-button-active: hsl({{ hue_button }}, {{ sat_button }}%, 40%);
+    --color-text: hsl({{ hue_text}}, {{ sat_text }}%, 98%);
+}
