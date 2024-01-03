@@ -1,4 +1,7 @@
 # Werkvoorraad
+
+**VEROUDERDE DOCUMENTATIE**
+
 [VOORBEELD](https://uu-asc.github.io/csa-werkvoorraad/)
 
 Script om een handzaam en overzichtelijk dashboard met werkvoorraad te genereren. Alleen de items met resultaten worden getoond (maar alle items zijn met een druk op de knop raadpleegbaar).

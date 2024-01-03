@@ -1,240 +1,219 @@
-"""
-Maakt een pagina met werkvoorraaditems die zijn gedefinieerd in config.json.
-
-Een werkvoorraad bestaat uit hoofdstukken die elk een of meerdere items kunnen
-bevatten. Een item bestaat uit een omschrijving, één of meerdere queries en
-eventueel een instructie.
-
-Queries kunnen direct zijn vastgelegd bij het item, maar het is ook mogelijk om
-naar één of meerdere queries te verwijzen die onder "abstractions" zijn
-gedefenieerd in config.json. Deze "abstractions" fungeren als een soort
-bouwstenen waarmee je gemakkelijk een complexere query kunt opbouwen. Verwijzen
-naar een bouwsteen gebeurt met een <sleutel> (gebruik vishaken om naar
-een bouwsteen te verwijzen).
-
-Een sleutel kan naar één specifieke query in "abstractions" verwijzen, maar
-evt. ook naar een subset van queries. In dat laatste geval worden alle
-onderliggende queries verenigd. Dit maakt het bijv. mogelijk om met één
-instructie zowel toegelaten masters als ingelote bachelors te selecteren.
-"""
-
-import os
-import sys
+import copy
 import json
-import random
-from argparse import ArgumentParser
-from collections import defaultdict
+
 from datetime import datetime
 from pathlib import Path
-from string import ascii_uppercase
+from string import Template
+from typing import Any, Callable
+
 from jinja2 import Environment, FileSystemLoader
 
+
+type Spec = list[dict[str, Any]]
+type ItemTransformer = Callable[..., str]
+
+
 PATH = Path(__file__).parent.parent.resolve()
+LOADER = FileSystemLoader(searchpath=PATH / 'templates')
+ENV = Environment(loader=LOADER)
 
 
-def fetch_queries(repo, ref=None, sep='|'):
+class Ts:
+    @property
+    def timestamp(self):
+        return f"{self.now:%d-%m-%Y %H:%M}"
+
+    @property
+    def datum(self):
+        return f"{self.now:%d-%m-%Y}"
+
+    @property
+    def ymd(self):
+        return f"{self.now:%Y%m%d}"
+
+    @property
+    def daymonth(self):
+        return f"{self.now:%d %B}"
+
+    @property
+    def now(self):
+        return datetime.now()
+
+
+TS = Ts()
+
+
+# PROCES SPEC
+def load_spec_from_json(path: Path|str) -> Spec:
     """
-    Recursively fetch all queries from `repo`.
-    Subset of `repo` may be retrieved by supplying (nested) key `ref`.
+    Load specifications from JSON files in specified path.
 
-    Parameters
-    ==========
-    repo : dict
-        (Nested) repository of queries.
-    ref : str
-        (Nested) key for accessing subset of `repo`.
-    sep : str
-        Seperator to split `ref` with.
+    Parameters:
+    - path (Path|str): The path to the directory containing JSON files.
 
-    Returns
-    =======
-    list
+    Returns:
+    - list[dict]: A specification.
     """
-    def fetch_all(repo):
-        for value in repo.values():
-            if isinstance(value, dict):
-                for inner_value in fetch_all(value):
-                    yield inner_value
-            else:
-                yield value
-
-    if ref is not None:
-        keys = ref.strip('<>').split(sep)
-        for key in keys:
-            repo = repo[key]
-
-    return list(fetch_all(repo)) if isinstance(repo, dict) else [repo]
+    werkvoorraad = []
+    for f in Path(path).glob('*.json'):
+        item = json.loads(f.read_text())
+        werkvoorraad.append(item)
+    return werkvoorraad
 
 
-def translate_queries(queries, repo):
+def process_spec(
+    spec: Spec,
+    data_getter: Callable,
+    transformers: dict[str, ItemTransformer]|None = None,
+    **kwargs
+) -> Spec:
     """
-    Translate references to query abstractions (<key>) into queries that
-    moedertabel can execute:
-    - Use key to look up query in config.json abstractions
-    - If key refers to set op queries then join them with ' or '
-    - Regular queries will be returned unmodified
+    Process a specification using transformers and optional keyword arguments. Reads the path to sql from the "data" keys and executes them. Transforms any items based on the `transformers` dictionary.
+
+    Parameters:
+    - spec (Spec): The input specification to be processed.
+    - transformers (dict[ItemTransformer]|None):
+        Optional dict of transformers to apply.
+        - The key should refer to an item in the spec to be transformed.
+        - The value is a function to be applied to the item.
+    - **kwargs: Additional keyword arguments for processing.
+
+    Returns:
+    - Spec: Processed specification.
     """
-    as_list = lambda i: [i] if isinstance(i, str) else i
-    fetch = lambda q: fetch_queries(repo, q) if q.startswith('<') else [q]
-    return [' or '.join(fetch(q)) for q in as_list(queries)]
+    new_spec = copy.deepcopy(spec)
+    transformers = {} if transformers is None else transformers
+
+    match new_spec:
+        case list():
+            return [
+                process_spec(item, data_getter, transformers, **kwargs)
+                for item in new_spec
+            ]
+        case dict():
+            if data := new_spec.get('data'):
+                for key, transformer in transformers.items():
+                    if key in data:
+                        new_spec[key] = transformer(data[key])
+                result = data_getter(**data, **kwargs)
+                new_spec['data'] = result
+            return {
+                key: process_spec(value, data_getter, transformers, **kwargs)
+                for key, value in new_spec.items()
+            }
+        case _:
+            return new_spec
 
 
-class MaakRapportage:
-    CONFIGFILE = PATH / 'config.json'
-    LOADER = FileSystemLoader(searchpath=PATH / 'static')
-    TEMPLATE = 'template.jinja'
-    ENV = Environment(loader=LOADER)
-
-    def __init__(self, collegejaar=None, outfile=None):
-        self.config = json.loads(self.CONFIGFILE.read_text(encoding='utf8'))
-        self.collegejaar = collegejaar or self.config['collegejaar']
-        self.outfile = Path(outfile or self.config['output'])
-        self.queries = self.config['queries']
-        self.abstractions = self.config['abstractions']
-        self.data = []
-        self.metadata = {}
-
-    def add_results_to_item(self):
-        """
-        Add the results of the query to the item.
-        Modifies in place.
-        """
-        pass
-
-    def process_queries(self):
-        """
-        Run all queries and add results to respective items.
-        Modifies in place.
-        """
-        for items in self.queries.values():
-            for item in items:
-                self.add_results_to_item(item)
-
-    def render(self):
-        template = self.ENV.get_template(self.TEMPLATE)
-        updated = datetime.now().strftime('%H:%M %d-%m-%Y')
-        return template.render(
-            updated=updated,
-            collegejaar=self.collegejaar,
-            data=self.queries,
-            metadata=self.metadata,
-            abstractions=self.abstractions,
-        )
-
-    def write(self):
-        html = self.render()
-        self.outfile.write_text(html, encoding='utf8')
+# SQL STATEMENTS
+def gather_sql_from_spec(spec: Spec, sql_getter: Callable, **kwargs) -> dict:
+    paths = extract_query_paths_from_spec(spec)
+    return gather_sql(paths, sql_getter, **kwargs)
 
 
-class WithRandomData(MaakRapportage):
-    NUMS = '0123456789'
-    LETTERS = ascii_uppercase
+def extract_query_paths_from_spec(spec: Spec) -> set[str]:
+    """
+    Extract SQL query paths from the given specification.
 
-    def __init__(self, collegejaar=None, outfile=None):
-        super().__init__(**kwargs)
-        path = (PATH / 'ex.datamodel.json')
-        self.metadata = json.loads(path.read_text(encoding='utf8'))
+    Parameters:
+    - spec (Spec): The input specification.
 
-    def process_queries(self):
-        for items in self.queries.values():
-            skip_chapter = random.random() > .8
-            for item in items:
-                skip_item = random.random() < .7
-                skip = skip_chapter or skip_item
-                self.add_results_to_item(item, skip)
-
-    def add_results_to_item(self, item, skip):
-        def fake_sin():
-            part1 = self.fake_result(self.LETTERS, 3)
-            part2 = self.fake_result(self.NUMS, 5)
-            return part1 + part2
-
-        sin = []
-        stu = []
-        if not skip:
-            n = round(random.paretovariate(1))
-            for _ in range(n):
-                sin.append(fake_sin())
-                stu.append(self.fake_result(self.NUMS, 6))
-        item['stu'] = stu
-        item['sin'] = sin
-
-    @staticmethod
-    def fake_result(elems, length):
-        return ''.join(random.choices(elems, k=length))
+    Returns:
+    - set: A set containing paths to SQL queries found in the specification.
+    """
+    paths = set()
+    if isinstance(spec, list):
+        for item in spec:
+            queries = extract_query_paths_from_spec(item)
+            paths.update(queries)
+    elif isinstance(spec, dict):
+        if query := spec.get('query'):
+            paths.add(query)
+        for value in spec.values():
+            queries = extract_query_paths_from_spec(value)
+            paths.update(queries)
+    return paths
 
 
-class FromMoedertabel(MaakRapportage):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.ops = self.config['ops']
-        self.data = self.laad_moedertabel()
-        self.metadata = self.laad_metadata()
+def gather_sql(paths: set[str], sql_getter: Callable, **kwargs) -> dict:
+    """
+    Gather SQL statements from files specified in the provided set of paths.
 
-    def add_results_to_item(self, item):
-        queries = translate_queries(item['query'], self.abstractions)
-        data = self.data.query(*queries)
-        item['stu'] = data.snr(output='series').to_list()
-        item['sin'] = data.snr(output='series', uniek=False).index.to_list()
+    Parameters:
+    - paths (set[str]): A set of file paths containing SQL statements.
+    - **kwargs: Additional keyword arguments to be passed to osiris.get_sql().
 
-    def laad_moedertabel(self, collapse=True):
-        path_to_moeder = str(PATH.parent / 'moedertabel')
-        sys.path.insert(0, path_to_moeder)
-        from moedertabel import Moedertabel
-        query = "inschrijvingstatus != 'G'"
-        moedertabel = Moedertabel(
-            'monitor',
-            collegejaar=self.collegejaar,
-            flush_cache=False,
-        )
-        moedertabel(*self.ops, query=query, collapse=collapse)
-        return moedertabel
+    Returns:
+    - dict[str, str]: A dict mapping file stem to SQL query. Sorted by key.
+    """
+    statements = {}
+    sorter = lambda i: (-i.count('/'), *i.split('/'))
 
-    def laad_metadata(self):
-        datamodel = defaultdict(dict)
-        dtypes = {
-            "datetime64[ns]": "date",
-            "object": "str",
-            "category": "cat",
-            "float64": "float",
-            "int64": "int",
-            "boolean": "bool",
-        }
-        raw = self.data.metadata.raw
-        for op, info in raw.items():
-            info = info.get('toegevoegde velden', {})
-            if not info:
-                continue
-            for col, oms in info.items():
-                name = col.split(':')[0].strip()
-                s = self.data.data[name]
-                info = dict(
-                    oms = oms,
-                    dtype = dtypes.get(s.dtype.name, s.dtype.name),
-                    hasnans = s.hasnans,
-                )
-                if info['dtype'] == 'cat':
-                    info['cats'] = list(
-                        s
-                        .cat.remove_unused_categories()
-                        .cat.categories
-                    )
-                datamodel[op].update({name: info})
-        return datamodel
+    for path in sorted(paths, key=sorter):
+        key = path.replace('/', ' / ')
+        query = sql_getter(path, **kwargs)
+        statements[key] = query
+
+    return statements
 
 
-if __name__ == '__main__':
-    os.chdir(PATH)
-    parser = ArgumentParser(description='Maak werkvoorraad')
-    parser.add_argument('--collegejaar', type=int)
-    parser.add_argument('--random', action='store_true')
-    parser.add_argument('--outfile', '-f')
-    args = vars(parser.parse_args())
+# TRANSFORMERS
+def wrap_criteria_in_blockquotes(criteria: list[str]) -> str:
+    tpl = Template("""
+    <blockquote
+        style="
+            background: var(--background-color);
+            padding: .25em;
+            border-radius: 3px;
+        ">
+        <code>${criterium}</code>
+    </blockquote>
+    """)
+    blockquoted = [tpl.substitute(criterium=crit) for crit in criteria]
+    as_string = ''.join(blockquoted)
+    wrapped = f'<div style="display: grid; gap: .25em;">{as_string}</div>'
+    return wrapped
 
-    kwargs = {k:v for k,v in args.items() if k != 'random'}
-    if args['random']:
-        werkvoorraad = WithRandomData(**kwargs)
-    else:
-        werkvoorraad = FromMoedertabel(**kwargs)
-    werkvoorraad.process_queries()
-    werkvoorraad.write()
+
+def wrap_item_in_code_tags(item: str) -> str:
+    wrapped = f"<code>{item}</code>"
+    return wrapped
+
+
+# WERKVOORRAAD
+def make_werkvoorraad(
+    data_getter: Callable,
+    sql_getter: Callable,
+    path_to_spec: Path|str,
+    outpath: Path|str,
+    query_kwargs: dict|None = None,
+    template: str = 'werkvoorraad.jinja.html',
+    tpl_kwargs: dict|None = None,
+    tabs: dict| None = None,
+) -> None:
+    query_kwargs = {} if query_kwargs is None else query_kwargs
+    tpl_kwargs = {} if tpl_kwargs is None else tpl_kwargs
+
+    transformers = {
+        'query': wrap_item_in_code_tags,
+        'where': wrap_criteria_in_blockquotes,
+    }
+
+    spec = load_spec_from_json(path_to_spec)
+    processed_spec = process_spec(
+        spec,
+        data_getter = data_getter,
+        transformers = transformers,
+        **query_kwargs
+    )
+    queries = gather_sql_from_spec(spec, sql_getter, **query_kwargs)
+
+    tpl = ENV.get_template(template)
+    html = tpl.render(
+        spec = processed_spec,
+        queries = queries,
+        ts = TS,
+        tabs = tabs,
+        **tpl_kwargs,
+    )
+    Path(outpath).expanduser().write_text(html)

@@ -1,282 +1,174 @@
-@import url('https://fonts.googleapis.com/css2?family=Bungee+Hairline&display=swap');
-@import "https://unpkg.com/open-props";
+@import url('https://fonts.googleapis.com/css2?family=Bungee+Hairline&family=Lato&display=swap');
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    /* outline: 1px solid blue; */
+}
 
 :root {
-    --surface-1: var(--gray-0);
-    --surface-2: var(--gray-3);
-    --surface-3: var(--gray-4);
-    --surface-4: var(--gray-5);
-    --brand: var(--gray-8);
-    --text-1: var(--gray-9);
-    --text-2: var(--gray-7);
+    --color-background: hsl({{ hue_background }}, {{ sat_background }}%, 98%);
+    --color-button: hsl({{ hue_button }}, {{ sat_button }}%, 93%);
+    --color-button-hover: hsl({{ hue_button }}, {{ sat_button }}%, 89%);
+    --color-button-active: hsl({{ hue_button }}, {{ sat_button }}%, 83%);
+    --color-text: hsl({{ hue_text}}, {{ sat_text }}%, 17%);
 }
 
-@media (prefers-color-scheme: dark) {
-    :root {
-        --surface-1: var(--gray-9);
-        --surface-2: var(--gray-8);
-        --surface-3: var(--gray-7);
-        --surface-4: var(--gray-6);
-        --brand: var(--gray-4);
-        --text-1: var(--gray-3);
-        --text-2: var(--gray-4);
-    }
-}
-
-*,
-*::before,
-*::after {
-    box-sizing: border-box;
-    margin: 0;
-}
-
-html {
-    height: 100vh;
+.dark-theme {
+    --color-background: hsl({{ hue_background }}, {{ sat_background }}%, 23%);
+    --color-button: hsl({{ hue_button }}, {{ sat_button }}%, 31%);
+    --color-button-hover: hsl({{ hue_button }}, {{ sat_button }}%, 36%);
+    --color-button-active: hsl({{ hue_button }}, {{ sat_button }}%, 40%);
+    --color-text: hsl({{ hue_text}}, {{ sat_text }}%, 98%);
 }
 
 body {
-    display: flex;
-    flex-direction: column;
-    margin: auto;
-    width: clamp(320px, 80vw, 900px);
-    height: 100%;
-    background-color: var(--surface-1);
+    display: grid;
+    grid-template-rows: auto auto auto 1fr auto;
     font-family: Calibri;
-    color: var(--text-1);
+    background: var(--color-background);
+    color: var(--color-text);
+    width: min(calc(100% - 2em), 600px);
+    margin-inline: auto;
+    height: 100vh;
+    padding-bottom: 1em;
 }
 
 header {
-    margin-bottom: .25rem;
-}
-
-header h1 {
-    font-family: 'Bungee Hairline', cursive;
-    line-height: 1em;
-    margin-block: 1.5rem;
-}
-
-header h1+div {
-    font-family: var(--font-mono);
-    font-size: .8rem;
-}
-
-header nav {
-    display: flex;
-    margin-block: 1rem;
-}
-
-header nav>button {
-    flex-grow: 1;
-    font-size: .9em;
-    background-color: var(--surface-2);
-    border: 1px solid var(--surface-4);
-    border-bottom: 7px solid var(--surface-4);
-    border-radius: 0;
-    padding: .5rem;
-}
-
-header nav>button:first-child {
-    border-left: none;
-}
-
-header nav>button:last-child {
-    border-right: none
-}
-
-header nav>button:hover {
-    background-color: var(--surface-3);
-}
-
-header nav>button[selected] {
-    background-color: var(--surface-1);
-    border-bottom: none;
-    font-weight: bold;
-}
-
-main {
-    margin-bottom: 5rem;
-}
-
-section[data-component="werkvoorraad"]>div:first-child {
     display: flex;
     align-items: center;
-    gap: .5rem;
-    margin-bottom: .75rem;
-    font-family: var(--font-mono);
-    font-size: .9em;
+    justify-content: space-between;
 }
 
-section[data-component="datamodel"] div:first-child {
-    display: flex;
-    gap: .5rem;
-    margin-bottom: .75rem;
+h1 {
+    font-family: 'Bungee Hairline', cursive;
+    /* font-size: clamp(1.5em, 6vw, 4em); */
+    font-size: 2em;
+    line-height: 1.25em;
+    padding-block: .75em;
 }
 
-section[data-component="datamodel"] table {
-    border-collapse: collapse;
-    font-size: .8em;
-    font-family: var(--font-mono);
-}
-
-section[data-component="datamodel"] th,
-td {
-    border-bottom: 1px solid var(--surface-4);
-    padding: .25rem;
-}
-
-section[data-component="bouwstenen"] details {
-    border-top: 1px solid var(--brand);
-}
-
-section[data-component="bouwstenen"] details details {
-    padding-left: .75rem;
-    border-left: 3px solid var(--brand);
-}
-
-section[data-component="bouwstenen"] summary {
-    border-top: none;
-}
-
-footer {
-    margin-top: auto;
-    padding-block: 1.5rem;
-}
-
+/* LAYOUT */
 summary {
-    border-top: 1px solid var(--brand);
-    width: 100%;
-    padding: 0.5rem 0;
+    border-top: 4px solid;
+    min-width: 200px;
+    padding: 0.5em 0;
     position: relative;
     cursor: pointer;
-    list-style: none;
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    gap: .5rem;
+    gap: .5em;
+}
+
+summary code {
+    flex-grow: 1;
+}
+summary :last-child {
+    margin-right: 2ch;
 }
 
 summary:after {
     content: "+";
-    color: var(--text-1);
     position: absolute;
     font-size: 1.75em;
-    line-height: 0;
-    margin-top: 0.75rem;
     right: 0;
-    top: 25%;
     font-weight: 200;
     transform-origin: center;
-    transition: 100ms linear;
+    transition: 40ms linear;
 }
-
-details[open]>summary:after {
+details[open] > summary:after {
     transform: rotate(45deg);
-    font-size: 2em;
 }
 
-summary h2 {
-    font-variant: small-caps;
-    font-weight: 300;
-    overflow-x: hidden;
-    text-overflow: ellipsis;
+#timestamp {
+    font-family: monospace;
 }
 
-section>details>summary {
+nav {
     display: flex;
-    border-top: 4px solid var(--brand);
+    margin-block: 1em;
 }
 
-.display {
-    margin-left: auto;
-    margin-right: 1.5rem;
+section {
+    max-width: 600px;
 }
 
-details details {
-    font-size: 0.9em;
+section[data-component] summary {
+    position: sticky;
+    background-color: var(--color-background);
+    top: 0;
 }
 
-.item[open]>summary {
-    border-bottom: 1px dotted var(--brand);
-    margin-bottom: .5rem;
-}
-
-.item>summary {
-    display: grid;
-    width: 100%;
+button[data-show-target] {
+    flex-grow: 1;
+    background-color: var(--color-button);
+    color: inherit;
+    cursor: pointer;
+    font-family: monospace;
     font-size: 1.2em;
-    grid-template-columns: 1fr 7rem 4rem;
-    gap: 0.5em;
+    border: none;
+    border-top: 1px solid;
+    border-right: 1px solid;
+    border-bottom: 7px solid;
+    padding: .5em;
 }
 
-.item>* {
-    padding-left: .75rem;
+button[data-show-target]:last-child {
+    border-right: none;
 }
 
-.item>summary>label {
-    justify-self: end;
-    font-family: var(--font-mono);
-    font-size: .8em;
+button[data-show-target][selected] {
+    cursor: auto;
+    background-color: var(--color-background);
+    border-bottom: 7px solid var(--color-background);
 }
 
-.item>summary>div:first-child {
-    grid-row: span 2;
+button[data-show-target]:not([selected]):hover {
+    background-color: var(--color-button-hover);
 }
 
-.item>summary>button {
-    margin-right: 1.5rem;
+a {
+    color: inherit;
 }
 
-.batches {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(15ch, 1fr));
-    margin-bottom: .5rem;
-}
-
-.batches>div:first-of-type {
-    grid-column: 1 / -1;
-    font-family: var(--font-mono);
-    font-size: .8em;
-}
-
-.instructie {
-    display: flex;
-    gap: .5rem;
-}
-
-.instructie span {
-    font-weight: bold;
-}
-
-blockquote {
-    font-size: 1rem;
-    padding: 1em;
-    margin: .5em;
-    background-color: var(--surface-2);
-    color: var(--text-2);
-    border-radius: 5px;
-}
-
-.empty {
+.hidden {
     display: none;
 }
 
-.show {
-    display: block;
+/* TABLES */
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
 }
-
-button {
-    background-color: var(--surface-2);
-    color: var(--text-2);
-    border: 1px solid var(--surface-4);
-    border-radius: 3px;
-    font-family: var(--font-mono);
-    font-size: .8em;
+thead tr {
+    border-bottom: 1px solid var(--color-text);
 }
-
-button:hover {
-    cursor: pointer;
-    background-color: var(--surface-3);
+table[id^='T'] {
+    border-top: 3px solid var(--color-text);
+    border-bottom: 3px solid var(--color-text);
+    margin-bottom: 3rem;
+    font-size: .925em;
 }
-
-button:active {
-    background-color: var(--surface-4);
+table[id^='T'] > tbody > tr:last-child > :where(td, th) {
+    border-bottom: 1px solid var(--color-text);
+}
+table.heeft_totalen tr:last-of-type {
+    border-top: 1px solid var(--color-text);
+}
+table.left_align td {
+    text-align: left;
+}
+th, td {
+    padding: .25em .5em;
+    text-align: right;
+}
+caption {
+    text-align: left;
+    font-size: 0.9em;
+    font-style: italic;
+    padding: 0 0.25em 0.25em;
+    width: 100%;
+    margin-left: 0;
 }
