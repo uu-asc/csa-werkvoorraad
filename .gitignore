@@ -2,3 +2,4 @@ __pycache__
 notebooks
 *.html
 !index.html
+!*.jinja.html

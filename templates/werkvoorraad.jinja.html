@@ -1,0 +1,138 @@
+{% set language = language | default('nl') %}
+{% set title = title | default('werkvoorraad') %}
+{% set tabs = tabs | default({}) %}
+{% set werkvoorraad_label = werkvoorraad_label | default('werkvoorraad') %}
+
+{% set hue = hue | default(210) %}
+{% set hue_background = hue_background | default(hue) %}
+{% set hue_button = hue_button | default(hue) %}
+{% set hue_text = hue_text | default(hue) %}
+
+{% set sat = sat | default(18) %}
+{% set sat_background = sat_background | default(sat) %}
+{% set sat_button = sat_button | default(sat) %}
+{% set sat_text = sat_text | default(sat) %}
+
+<!DOCTYPE html>
+<html lang="{{ language }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <link rel="icon" type="image/svg+xml" href="https://uu-asc.github.io/csa-werkvoorraad/static/favicon.svg">
+    <link rel="icon" type="image/png" href="https://uu-asc.github.io/csa-werkvoorraad/static/favicon.png">
+    <style>
+    {% include 'stylesheet.jinja.css' %}
+    </style>
+    <link rel="stylesheet" href="https://lcvriend.github.io/wc-multi-selector/static/prism.css">
+    <link rel="stylesheet" href="https://uu-asc.github.io/csa-werkvoorraad/static/stylesheet.css">
+</head>
+<body>
+    <header>
+        <h1>{{ title }}</h1>
+    </header>
+    <div id="timestamp">{% if language == 'nl' %}Laatste update:{% else %}Last update:{% endif %} {{ ts.timestamp }}</div>
+    <nav>
+        <button data-show-target="werkvoorraad" selected>{{ werkvoorraad_label }}</button>
+        {% if queries %}
+        <button data-show-target="queries">queries</button>
+        {% endif %}
+        {% if tabs %}
+        {% for tab in tabs %}
+        <button data-show-target="{{ tab }}">{{ tab }}</button>
+        {% endfor %}
+        {% endif %}
+    </nav>
+    <section data-component="werkvoorraad"></section>
+    {% if queries %}
+    <section data-component="queries" class="hidden">
+    {% for title, sql in queries.items() %}
+        <details>
+            <summary>{{ title }}</summary>
+            <pre><code class="language-sql">{{ sql }}</code></pre>
+        </details>
+    {% endfor %}
+    </section>
+    {% endif %}
+    {% if tabs %}
+    {% for tab, content in tabs.items() %}
+    <section data-component="{{ tab }}" class="hidden">
+        {{ content }}
+    </section>
+    {% endfor %}
+    {% endif %}
+    <footer>
+        <a href="github.com/uu-asc/csa-werkvoorraad">github.com/uu-asc/csa-werkvoorraad</a>
+    </footer>
+<script type="module">
+    import { WerkvoorraadComponent } from "https://uu-asc.github.io/csa-werkvoorraad/src/werkvoorraad-component.js"
+    import { DarkModeToggle } from "https://uu-asc.github.io/csa-werkvoorraad/src/darkmode-toggle.js"
+
+    const spec = {{ spec | tojson }}
+    const config = {{ config | default('') | tojson }}
+    const werkvoorraadComponent = new WerkvoorraadComponent(spec, config)
+    document.querySelector(`[data-component="werkvoorraad"]`).appendChild(werkvoorraadComponent)
+
+    document.addEventListener("color-scheme-change", event => {
+        event.detail.scheme === "dark"
+        ? document.body.classList.add("dark-theme")
+        : document.body.classList.remove("dark-theme")
+    })
+    const darkModeToggle = new DarkModeToggle()
+    document.querySelector("header").appendChild(darkModeToggle)
+
+    let navigation = document.querySelector("nav")
+    navigation.addEventListener("click", function(event) {
+        let target = event.target.dataset.showTarget
+        if (target != undefined) {
+            let sections = document.querySelectorAll("section[data-component]")
+            sections.forEach(node => {
+                let component = node.dataset.component
+                component === target
+                ? node.classList.remove("hidden")
+                : node.classList.add("hidden")
+            })
+            let buttons = navigation.querySelectorAll("button")
+            buttons.forEach(node => {
+                let component = node.dataset.showTarget
+                component === target
+                ? node.setAttribute("selected", "")
+                : node.removeAttribute("selected", "")
+            })
+        }
+    })
+</script>
+<script type="module">
+    function addBorderToRowspans(table) {
+        table.querySelectorAll("th[rowspan]").forEach(
+            th => {
+                const row = th.closest("tr")
+                if (row.matches(":first-child")) { return }
+                row.style.borderTop = "1px solid var(--color-text)"
+            }
+        )
+    }
+
+    function addBorderToColspans(table) {
+        const borderCols = []
+        table.querySelectorAll(`thead tr:first-child th.col_heading[colspan]`).forEach(
+            th => {
+                if (th.matches(".col_heading.col0")) { return }
+                const col = Array.from(th.classList).find(cls => /^col\d+$/.test(cls))
+                borderCols.push(col)
+            }
+        )
+        borderCols.forEach(col => {
+            table.querySelectorAll(`.${col}`).forEach(
+                col => col.style.borderLeft = "1px solid var(--color-text)"
+            )
+        })
+    }
+
+    document.querySelectorAll("table").forEach(addBorderToRowspans)
+    document.querySelectorAll("table").forEach(addBorderToColspans)
+</script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs/prism.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs/plugins/autoloader/prism-autoloader.min.js"></script>
+</body>
+</html>
