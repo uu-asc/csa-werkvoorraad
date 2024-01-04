@@ -6,6 +6,7 @@ from pathlib import Path
 from string import Template
 from typing import Any, Callable
 
+from markdown import markdown
 from jinja2 import Environment, FileSystemLoader
 
 
@@ -68,7 +69,7 @@ def process_spec(
     **kwargs
 ) -> Spec:
     """
-    Process a specification using transformers and optional keyword arguments. Reads the path to sql from the "data" keys and executes them. Transforms any items based on the `transformers` dictionary.
+    Process a specification using transformers and optional keyword arguments. Reads the path to sql from the "data" keys and executes them. Any other items within "data" are passed along as keyword arguments. Transforms any items based on the `transformers` dictionary.
 
     Parameters:
     - spec (Spec): The input specification to be processed.
@@ -84,6 +85,12 @@ def process_spec(
     new_spec = copy.deepcopy(spec)
     transformers = {} if transformers is None else transformers
 
+    def transform_items(spec):
+        for key, transformer in transformers.items():
+            if key in spec:
+                item = spec[key]
+                spec[key] = transformer(item)
+
     match new_spec:
         case list():
             return [
@@ -91,12 +98,13 @@ def process_spec(
                 for item in new_spec
             ]
         case dict():
-            if data := new_spec.get('data'):
-                for key, transformer in transformers.items():
-                    if key in data:
-                        new_spec[key] = transformer(data[key])
-                result = data_getter(**data, **kwargs)
-                new_spec['data'] = result
+            # get data and then merge results into `spec`
+            if result := new_spec.get('data'):
+                result['data'] = data_getter(**result, **kwargs)
+                new_spec = new_spec | result
+
+            transform_items(new_spec)
+
             return {
                 key: process_spec(value, data_getter, transformers, **kwargs)
                 for key, value in new_spec.items()
@@ -159,16 +167,7 @@ def gather_sql(paths: set[str], sql_getter: Callable, **kwargs) -> dict:
 
 # TRANSFORMERS
 def wrap_criteria_in_blockquotes(criteria: list[str]) -> str:
-    tpl = Template("""
-    <blockquote
-        style="
-            background: var(--background-color);
-            padding: .25em;
-            border-radius: 3px;
-        ">
-        <code>${criterium}</code>
-    </blockquote>
-    """)
+    tpl = Template("""<blockquote style="background: var(--background-color); padding: .25em; border-radius: 3px;"><code>${criterium}</code></blockquote>""")
     blockquoted = [tpl.substitute(criterium=crit) for crit in criteria]
     as_string = ''.join(blockquoted)
     wrapped = f'<div style="display: grid; gap: .25em;">{as_string}</div>'
@@ -178,6 +177,14 @@ def wrap_criteria_in_blockquotes(criteria: list[str]) -> str:
 def wrap_item_in_code_tags(item: str) -> str:
     wrapped = f"<code>{item}</code>"
     return wrapped
+
+
+def as_markdown_to_html(item: str) -> str:
+    replacements = {'\\n': '\n', '\\t': '\t', '\\r': '\r'}
+    for old, new in replacements.items():
+        item = item.replace(old, new)
+    md = markdown(item)
+    return md
 
 
 # WERKVOORRAAD
@@ -190,14 +197,11 @@ def make_werkvoorraad(
     template: str = 'werkvoorraad.jinja.html',
     tpl_kwargs: dict|None = None,
     tabs: dict| None = None,
+    transformers: dict[str, Callable]|None = None,
 ) -> None:
     query_kwargs = {} if query_kwargs is None else query_kwargs
     tpl_kwargs = {} if tpl_kwargs is None else tpl_kwargs
-
-    transformers = {
-        'query': wrap_item_in_code_tags,
-        'where': wrap_criteria_in_blockquotes,
-    }
+    transformers = {} if transformers is None else transformers
 
     spec = load_spec_from_json(path_to_spec)
     processed_spec = process_spec(
