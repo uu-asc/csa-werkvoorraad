@@ -16,7 +16,11 @@ type ItemTransformer = Callable[..., str]
 
 PATH = Path(__file__).parent.parent.resolve()
 LOADER = FileSystemLoader(searchpath=PATH / 'templates')
-ENV = Environment(loader=LOADER)
+ENV = Environment(
+    loader=LOADER,
+    trim_blocks = True,
+    lstrip_blocks = True,
+)
 
 
 class Ts:
