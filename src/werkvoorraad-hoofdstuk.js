@@ -181,7 +181,7 @@ export class WerkvoorraadHoofdstuk extends HTMLElement {
     }
 
     loadFromSpec(spec) {
-        const element = spec.type === "hoofdstuk"
+        const element = "items" in spec
         ? new WerkvoorraadHoofdstuk(spec, this.config, this.depth + 1)
         : new WerkvoorraadItem(spec, this.config, this.depth + 1)
         return element
