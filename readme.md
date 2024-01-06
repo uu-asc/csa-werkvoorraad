@@ -1,67 +1,38 @@
 # Werkvoorraad
 
-**VEROUDERDE DOCUMENTATIE**
+Deze repository bevat tooling voor het making van een zogenaamde "werkvoorraad". Een werkvoorraad is een overzichtelijk dashboard waarin openstaand werk getoond wordt. Openstaand werk, wordt in de basis getoond als een kopieerbare lijst ids. Elk item heeft standaard een label en bevat informatie over de query op basis waarvan het item is gegenereerd. Daarnaast kan naar behoefte aanvullende informatie worden toegevoegd aan items. De volgende tooling is onderdeel van deze repository:
 
-[VOORBEELD](https://uu-asc.github.io/csa-werkvoorraad/)
+- Custom web components voor het tonen van de werkvoorraad items
+- Script voor het converteren van json specifcaties naar een werkvoorraaad
+- Template voor een werkvoorraad
 
-Script om een handzaam en overzichtelijk dashboard met werkvoorraad te genereren. Alleen de items met resultaten worden getoond (maar alle items zijn met een druk op de knop raadpleegbaar).
+Zie hier een [VOORBEELD WERKVOORRAAD](https://uu-asc.github.io/csa-werkvoorraad/) gemaakt van onzin gegevens.
 
-Items kunnen worden toegevoegd via 'config.json'. Een item bestaat uit:
-- Omschrijving
-- Eén of meerdere queries
-- Optioneel een instructie
-
-Per item worden de gedefinieerde queries uitgevoerd op de `moedertabel`. De resultaten worden opgenomen als een kopieerbare lijst met studentnummers en sinh_ids.
-
-## Config
-Het configuratiebestand 'config.json' bevat de volgende elementen:
-- **collegejaar** : collegejaar waarop werkvoorraad betrekking heeft
-- **outfile** : naam en (evt. relatieve) pad waar output moet worden opgeslagen
-- **queries** : de toe te voegen items onderverdeeld in hoofdstukken
-- **ops** : de operaties waarmee de moedertabel moet worden opgebouwd
-- **defaults** : default queries waarnaar verwezen kan worden in de item definitie
-
-## Queries
-Het is mogelijk om meerdere queries op te geven bij een item. In dat geval komt een record alleen dan in de output voor als het record aan alle vastgelegde queries voldoet. Het resultaat vormt iaw de *intersectie* van de opgegeven queries.
-
-### Abstractions
-Bij het opbouwen van een query kun je gebruik maken van de zogenaamde "abstractions". Dit zijn bouwstenen die zijn vastgelegd onder "abstractions" in 'config.json' waarmee je gemakkelijk complexere queries kunt opbouwen. In de queries verwijs je naar zo'n bouwsteen door in de query definitie van het item de bijbehorende sleutel op te geven tussen vishaken. Het is daarbij ook mogelijk om een sleutel op te geven die waaronder meerdere geneste queries vallen. Neem het volgende voorbeeld:
+## Specificatie
+Met json definieer je de items die in de werkvoorraad getoond moeten worden. De specificatie bestaat uit *hoofdstukken* en *items*. Een item bevat informatie over openstaand werk. In de specificatie ziet een item er als volgt uit:
 
 ```json
-"kansrijk": {
-    "herinschrijving": "soort == 'herinschrijving'",
-    "master": "soort in ['master', 'selma'] and (toelatingsbeschikking == 'Ja.'",
-    "premaster": "soort in ['premaster', 'educatief'] and toelatingsbeschikking == 'Ja.'",
-    "bachelor": {
-        "matching": {
-            "regulier": "soort == 'bachelor' and k_studiekeuzecheck == 'GROEN'",
-            "geen_skc": "soort == 'bachelor' and statusbesluit_ooa.isna()"
-        },
-        "fixus": "soort == 'fixus' and plaatsingsbewijs == 'Status plaatsing is Geaccepteerd.'",
-        "selectie": {
-            "ppeb": "soort == 'selectie' and opleiding == 'PPEB' and statusbesluit_ooa == 'T'",
-            "b&ob": "soort == 'selectie' and opleiding == 'B&OB' and k_toelatingsbeschikking == 'GROEN'",
-            "ucu": "soort == 'selectie' and opleiding == 'LASB-UC' and statusbesluit_ooa in ['S', 'T']"
-        }
-    }
+{
+    "label": "..."
+    "data": {<...>},
+    <...>
 }
 ```
 
-Je kunt naar één van de queries verwijzen door de volledige sleutel op te geven, bijv. `<kansrijk|bachelor|selectie|ucu>` verwijst naar:
+Een item heeft dus ten minste een label dat het item beschrijft en een `data` object. Het `data` object wordt in het [werkvoorraad script](./werkvoorraad/werkvoorraad.py) doorgestuurd naar een functie die de data ophaalt. Deze functie dien je zelf aan te leveren. Van belang is dat deze functie met behulp van de argumenten in `data` in staat is om de benodigde gegevens uit de database op te halen en te retourneren als een `dict[str, list]` waarbij de sleutels verwijzen naar de naam van de identifier en de lijst de waarde van de identifiers bevat die door de gebruiker bekeken/afgehandeld moeten worden. Aan het item kunnen overige velden worden toegevoegd. Deze worden ook in de werkvoorraad getoond. Zo is het mogelijk om instructies, toelichtingen en wat dies meer zij toe te voegen aan de output.
+
+Een hoofdstuk is een container voor items. Een hoofdstuk kan ook weer andere hoofdstukken bevatten. Met hoofstukken kun je iaw structuur aanbrengen in de werkvoorraad. In de specificatie ziet een hoofdstuk er als volgt uit:
 
 ```json
-"ucu": "soort == 'selectie' and opleiding == 'LASB-UC' and statusbesluit_ooa in ['S', 'T']"
+{
+    "id": "...",
+    "label": "...",
+    "items": [
+        <...>
+    ]
+}
 ```
 
-Je kunt echter ook naar een hele tak van queries verwijzen, bijv. `<kansrijk|bachelor>`. In dat geval zullen alle queries die in de tak kansrijk > bachelor vallen met een `or` verbonden worden. Het resultaat is in dat geval een *vereniging* van de opgegeven queries.
+Net als een item bevat een hoofdstuk ten minste een label dat het item beschrijft. Daarnaast moet bij een hoofdstuk ook een (in de context van de werkvoorraad) uniek `id` worden vastgelegd (het `id` is nodig zodat de werkvoorraad voor een gebruiker kan bijhouden welke hoofdstukken zijn opengeklapt). Tot slot bevat een hoofdstuk `items`: een lijst van hoofdstukken/items. In tegenstelling tot een item kunnen er geen aanvullende eigenschappen bij een hoofdstuk worden vastgelegd (preciezer gezegd: dit kan wel maar deze eigenschappen worden genegeerd).
 
-## Executie
-De `werkvoorraad` module kan als script worden uitgevoerd:
-
-`python werkvoorraad.py`
-
-Daarnaast kunnen de volgende optionele argumenten worden opgegeven die de waarden in config.json overschrijven:
-- collegejaar
-- outfile
-
-Verder kun je voor testdoeleinden met de flag `--random` een werkvoorraad maken met fake data (zie [voorbeeld](https://uu-asc.github.io/csa-werkvoorraad/)).
+Zie hier de [SPECIFICATIE](demo_specificatie.json) waarmee de bovenstaande voorbeeld werkvoorraad is gemaakt.

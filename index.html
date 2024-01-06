@@ -1,468 +1,237 @@
+
+
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="nl">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>csa werkvoorraad inschrijfcampagne</title>
+    <title>werkvoorraad</title>
+    <link rel="icon" type="image/svg+xml" href="https://uu-asc.github.io/csa-werkvoorraad/static/favicon.svg">
+    <link rel="icon" type="image/png" href="https://uu-asc.github.io/csa-werkvoorraad/static/favicon.png">
     <style>
-@import url('https://fonts.googleapis.com/css2?family=Bungee+Hairline&display=swap');
-@import "https://unpkg.com/open-props";
-
 :root {
-    --surface-1: var(--gray-0);
-    --surface-2: var(--gray-3);
-    --surface-3: var(--gray-4);
-    --surface-4: var(--gray-5);
-    --brand: var(--gray-8);
-    --text-1: var(--gray-9);
-    --text-2: var(--gray-7);
-}
-@media (prefers-color-scheme: dark) {
-    :root {
-        --surface-1: var(--gray-9);
-        --surface-2: var(--gray-8);
-        --surface-3: var(--gray-7);
-        --surface-4: var(--gray-6);
-        --brand: var(--gray-4);
-        --text-1: var(--gray-3);
-        --text-2: var(--gray-4);
-    }
+    --color-background: hsl(210, 18%, 98%);
+    --color-button: hsl(210, 18%, 93%);
+    --color-button-hover: hsl(210, 18%, 89%);
+    --color-button-active: hsl(210, 18%, 83%);
+    --color-text: hsl(210, 18%, 17%);
 }
 
-*,
-*::before,
-*::after {
-    box-sizing: border-box;
-    margin: 0;
-}
-
-html {
-    height: 100vh;
-}
-body {
-    display: flex;
-    flex-direction: column;
-    margin: auto;
-    width: clamp(320px, 80vw, 900px);
-    height: 100%;
-    background-color: var(--surface-1);
-    font-family: Calibri;
-    color: var(--text-1);
-}
-
-header {
-    margin-bottom: .25rem;
-}
-header h1 {
-    font-family: 'Bungee Hairline', cursive;
-    line-height: 1em;
-    margin-block: 1.5rem;
-}
-header h1 + div {
-    font-family: var(--font-mono);
-    font-size: .8rem;
-}
-header nav {
-    display: flex;
-    margin-block: 1rem;
-}
-header nav > button {
-    flex-grow: 1;
-    font-size: .9em;
-    background-color: var(--surface-2);
-    border: 1px solid var(--surface-4);
-    border-bottom: 7px solid var(--surface-4);
-    border-radius: 0;
-    padding: .5rem;
-}
-header nav > button:first-child {
-    border-left: none;
-}
-header nav > button:last-child {
-    border-right: none
-}
-header nav > button:hover {
-    background-color: var(--surface-3);
-}
-header nav > button[selected] {
-    background-color: var(--surface-1);
-    border-bottom: none;
-    font-weight: bold;
-}
-main {
-    margin-bottom: 5rem;
-}
-
-section[data-component="werkvoorraad"] > div:first-child {
-    display: flex;
-    align-items: center;
-    gap: .5rem;
-    margin-bottom: .75rem;
-    font-family: var(--font-mono);
-    font-size: .9em;
-}
-
-section[data-component="datamodel"] div:first-child {
-    display: flex;
-    gap: .5rem;
-    margin-bottom: .75rem;
-}
-
-section[data-component="datamodel"] table {
-    border-collapse: collapse;
-    font-size: .8em;
-    font-family: var(--font-mono);
-}
-section[data-component="datamodel"] th, td {
-    border-bottom: 1px solid var(--surface-4);
-    padding: .25rem;
-}
-
-section[data-component="bouwstenen"] details {
-    border-top: 1px solid var(--brand);
-}
-section[data-component="bouwstenen"] details details {
-    padding-left: .75rem;
-    border-left: 3px solid var(--brand);
-}
-section[data-component="bouwstenen"] summary {
-    border-top: none;
-}
-
-footer {
-    margin-top: auto;
-    padding-block: 1.5rem;
-}
-
-summary {
-    border-top: 1px solid var(--brand);
-    width: 100%;
-    padding: 0.5rem 0;
-    position: relative;
-    cursor: pointer;
-    list-style: none;
-    display: flex;
-    align-items: center;
-    gap: .5rem;
-}
-summary:after {
-    content: "+";
-    color: var(--text-1);
-    position: absolute;
-    font-size: 1.75em;
-    line-height: 0;
-    margin-top: 0.75rem;
-    right: 0;
-    top: 25%;
-    font-weight: 200;
-    transform-origin: center;
-    transition: 100ms linear;
-}
-details[open] > summary:after {
-    transform: rotate(45deg);
-    font-size: 2em;
-}
-
-summary h2 {
-    font-variant: small-caps;
-    font-weight: 300;
-    overflow-x: hidden;
-    text-overflow: ellipsis;
-}
-section > details > summary {
-    display: flex;
-    border-top: 3px solid var(--brand);
-}
-.display {
-    margin-left: auto;
-    margin-right: 1.5rem;
-}
-details details {
-    font-size: 0.9em;
-}
-
-.item[open] > summary {
-    border-bottom: 1px dotted var(--brand);
-    margin-bottom: .5rem;
-}
-.item > summary {
-    display: grid;
-    width: 100%;
-    font-size: 1.2em;
-    grid-template-columns: 1fr 7rem 4rem;
-    gap: 0.5em;
-}
-.item > summary > label {
-    justify-self: end;
-    font-family: var(--font-mono);
-    font-size: .8em;
-}
-.item > summary > div:first-child {
-    grid-row: span 2;
-}
-.item > summary > button {
-    margin-right: 1.5rem;
-}
-
-.instructie {
-    display: flex;
-    gap: .5rem;
-}
-.instructie span {
-    font-weight: bold;
-}
-blockquote {
-    font-size: 1rem;
-    padding: 1em;
-    margin: .5em;
-    background-color: var(--surface-2);
-    color: var(--text-2);
-    border-radius: 5px;
-}
-
-.empty {
-    display: none;
-}
-.show {
-    display: block;
-}
-button {
-    background-color: var(--surface-2);
-    color: var(--text-2);
-    border: 1px solid var(--surface-4);
-    border-radius: 3px;
-    font-family: var(--font-mono);
-    font-size: .8em;
-}
-button:hover {
-    cursor: pointer;
-    background-color: var(--surface-3);
-}
-button:active {
-    background-color: var(--surface-4);
-}
-    </style>
+.dark-theme {
+    --color-background: hsl(210, 18%, 23%);
+    --color-button: hsl(210, 18%, 31%);
+    --color-button-hover: hsl(210, 18%, 36%);
+    --color-button-active: hsl(210, 18%, 40%);
+    --color-text: hsl(210, 18%, 98%);
+}    </style>
+    <link rel="stylesheet" href="https://lcvriend.github.io/wc-multi-selector/static/prism.css">
+    <link rel="stylesheet" href="https://uu-asc.github.io/csa-werkvoorraad/static/stylesheet.css">
 </head>
 <body>
     <header>
-        <h1>csa | collegejaar 2022 | werkvoorraad</h1>
-        <div>Laatste update: 23:59 28-03-2022</div>
-        <nav>
-            <button data-show-target="werkvoorraad" selected>werkvoorraad</button>
-            <button data-show-target="datamodel">datamodel</button>
-            <button data-show-target="bouwstenen">bouwstenen</button>
-        </nav>
+        <h1>werkvoorraad</h1>
     </header>
-    <main>
-        <section data-component="werkvoorraad">
-            <div>
-                <button id="toonalles">Toon alles</button>
-                <button id="verbergalles">Verberg alles</button>
-                <input type="checkbox" name="toonleeg" id="toonleeg"><label for="toonleeg">queries zonder resultaten</label>
-            </div>
-            <div></div>
-        </section>
-        <section data-component="datamodel" class="empty">
-            <div>
-                <label for="searchdatamodel">Zoek in datamodel</label>
-                <input id="searchdatamodel" type="text">
-                <button>&#215;</button>
-            </div>
-            <div></div>
-        </section>
-        <section data-component="bouwstenen" class="empty">
-        </section>
-    </main>
+    <div id="timestamp">Laatste update: 06-01-2024 21:55</div>
+    <nav>
+        <button data-show-target="werkvoorraad" selected>werkvoorraad</button>
+        <button data-show-target="queries">queries</button>
+    </nav>
+    <section data-component="werkvoorraad"></section>
+    <section data-component="queries" class="hidden">
+        <details>
+            <summary>brocht_isingrijn.sql</summary>
+            <pre><code class="language-sql">select * from x</code></pre>
+        </details>
+        <details>
+            <summary>claghene_sitten_reynaert.sql</summary>
+            <pre><code class="language-sql">select * from x</code></pre>
+        </details>
+        <details>
+            <summary>coninc_menich.sql</summary>
+            <pre><code class="language-sql">select * from x</code></pre>
+        </details>
+        <details>
+            <summary>cortoys_ghestolen_datter.sql</summary>
+            <pre><code class="language-sql">select * from x</code></pre>
+        </details>
+        <details>
+            <summary>crancken_wijlen.sql</summary>
+            <pre><code class="language-sql">select * from x</code></pre>
+        </details>
+        <details>
+            <summary>datmen_staer.sql</summary>
+            <pre><code class="language-sql">select * from x</code></pre>
+        </details>
+        <details>
+            <summary>dinct_tlaken_sechdi.sql</summary>
+            <pre><code class="language-sql">select * from x</code></pre>
+        </details>
+        <details>
+            <summary>ghenomen_heeft_reynaert.sql</summary>
+            <pre><code class="language-sql">select * from x</code></pre>
+        </details>
+        <details>
+            <summary>ghent_ghedede.sql</summary>
+            <pre><code class="language-sql">select * from x</code></pre>
+        </details>
+        <details>
+            <summary>ghesproken.sql</summary>
+            <pre><code class="language-sql">select * from x</code></pre>
+        </details>
+        <details>
+            <summary>heeft_vorst_waende.sql</summary>
+            <pre><code class="language-sql">select * from x</code></pre>
+        </details>
+        <details>
+            <summary>heleghe_blent.sql</summary>
+            <pre><code class="language-sql">select * from x</code></pre>
+        </details>
+        <details>
+            <summary>hinnen_baerde.sql</summary>
+            <pre><code class="language-sql">select * from x</code></pre>
+        </details>
+        <details>
+            <summary>leerne_nobel_tsinxen.sql</summary>
+            <pre><code class="language-sql">select * from x</code></pre>
+        </details>
+        <details>
+            <summary>miere_crayeren.sql</summary>
+            <pre><code class="language-sql">select * from x</code></pre>
+        </details>
+        <details>
+            <summary>mijns.sql</summary>
+            <pre><code class="language-sql">select * from x</code></pre>
+        </details>
+        <details>
+            <summary>molen_ombeere_alles.sql</summary>
+            <pre><code class="language-sql">select * from x</code></pre>
+        </details>
+        <details>
+            <summary>nachte_waende_ysengrijn.sql</summary>
+            <pre><code class="language-sql">select * from x</code></pre>
+        </details>
+        <details>
+            <summary>noint_hadse.sql</summary>
+            <pre><code class="language-sql">select * from x</code></pre>
+        </details>
+        <details>
+            <summary>ontfaen_ombeere.sql</summary>
+            <pre><code class="language-sql">select * from x</code></pre>
+        </details>
+        <details>
+            <summary>reynaerd_bevaen.sql</summary>
+            <pre><code class="language-sql">select * from x</code></pre>
+        </details>
+        <details>
+            <summary>reynaert.sql</summary>
+            <pre><code class="language-sql">select * from x</code></pre>
+        </details>
+        <details>
+            <summary>scade.sql</summary>
+            <pre><code class="language-sql">select * from x</code></pre>
+        </details>
+        <details>
+            <summary>sonder.sql</summary>
+            <pre><code class="language-sql">select * from x</code></pre>
+        </details>
+        <details>
+            <summary>sonder_blent_reynaerde.sql</summary>
+            <pre><code class="language-sql">select * from x</code></pre>
+        </details>
+        <details>
+            <summary>staen_ontsiet_onsculde.sql</summary>
+            <pre><code class="language-sql">select * from x</code></pre>
+        </details>
+        <details>
+            <summary>veste_began.sql</summary>
+            <pre><code class="language-sql">select * from x</code></pre>
+        </details>
+        <details>
+            <summary>waren_dandre.sql</summary>
+            <pre><code class="language-sql">select * from x</code></pre>
+        </details>
+        <details>
+            <summary>yewet_dandre.sql</summary>
+            <pre><code class="language-sql">select * from x</code></pre>
+        </details>
+        <details>
+            <summary>ysengrijn.sql</summary>
+            <pre><code class="language-sql">select * from x</code></pre>
+        </details>
+    </section>
     <footer>
         <a href="https://github.com/uu-asc/csa-werkvoorraad">github.com/uu-asc/csa-werkvoorraad</a>
     </footer>
-</body>
-<script>
-// DATA
-function renderChapter(chapter, items) {
-    let rendered = []
-    let total = {stu: 0, sin: 0}
-    for (let [idx, item] of items.entries()) {
-        item.idx = idx
-        item.chapter = chapter
-        total.stu += item.stu.length
-        total.sin += item.sin.length
-        rendered.push(renderRecord(item))
-    }
-    return `<section${total.stu < 1 ? ' class="empty"' : ""}>
-        <details>
-            <summary><h2>${chapter}</h2><code>(${total.stu}/${total.sin})</code><div class="display"></div></summary>
-            ${rendered.join("")}
-        </details>
-    </section>`
-}
+<script type="module">
+    import { WerkvoorraadComponent } from "https://uu-asc.github.io/csa-werkvoorraad/src/werkvoorraad-component.js"
+    import { DarkModeToggle } from "https://uu-asc.github.io/csa-werkvoorraad/src/darkmode-toggle.js"
 
-function renderRecord(item) {
-    return `<details class="item${item.stu.length < 1 ? " empty" : ""}">
-        <summary>
-            <div>${item.oms}</div>
-            <label>studentnummers</label><button data-copy="${item.chapter}-${item.idx}-stu">${item?.stu.length}</button>
-            <label>sinh_ids</label><button data-copy="${item.chapter}-${item.idx}-sin">${item?.sin.length}</button>
-        </summary>
-        ${item.instructie ? `<div class="instructie"><span>Instructie</span> ${item.instructie}</div>` : ""}
-        ${renderQuery(item)}
-    </details>`
-}
+    const spec = [{"id": "JUPMXLJONYDT", "items": [{"id": "LABAMVSWDPHC", "items": [{"data": {"id_2": []}, "instructie": "Ende ontfoer ons in sine veste", "label": "Eenen slapenden molen man", "query": "\u003ccode\u003eclaghene_sitten_reynaert.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003escuwedi = 495\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ereynaert = \u0027XDIXCJNJ\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}, {"data": {"id_3": []}, "instructie": "Ende seide: \u0027Heere coninc", "label": "Omme bejach in eene molen", "query": "\u003ccode\u003ereynaerd_bevaen.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003edaghe = \u0027DHMIGBZ\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}, {"data": {"id_1": ["YBNSD", "YVDSD", "AXDWB", "KMVHD", "IMLUR", "TROKM", "VHWEG", "PJAYN", "NIPNN", "NEPKX", "NMYJN", "BZFHJ", "ITCIZ", "FOJCI", "MQOMD", "IAJID", "RDTJV", "HKUUG", "RJCLX", "NPXBL", "YRFCQ", "XOSMG", "MEORF", "JAOYM", "NIOWG", "DGYFT"]}, "instructie": "Reynaert es een recht mordeneere", "label": "Ne ware mijns wives lachter", "query": "\u003ccode\u003eyewet_dandre.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eghinghen is not null\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}, {"data": {"id_1": ["TGFXR", "MNNID", "IFWKJ", "OGKNI", "CHXZF", "CUUPK", "KXGGH", "FYEWV", "BYLBN", "FRQVR", "MGJJY", "HPJQN", "QJVJY", "PUQWR", "HLKKR", "KDJHG", "CQLJF", "MNOCJ", "NZBDJ", "OPKJP", "KYOEI", "IWLWK"]}, "instructie": "Die hem besculdich kent, ontsiet!", "label": "Die claghe die Cortoys doet.\u0027", "query": "\u003ccode\u003enachte_waende_ysengrijn.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eghedaen = \u0027LTCBIXXNL\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003etusschen = \u0027SVAPOCBVX\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003econinx is not null\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ebrocht \u003c 0.2883503537118215\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eoverdaet != 800\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}, {"data": {"id_3": ["U550633", "K904673"]}, "instructie": "Doe dedine sitten gaen", "label": "Ende binnen des coninx gheleede", "query": "\u003ccode\u003eheleghe_blent.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eghedaen != 0.46035961943308346\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003econinc \u003e= 0.4215471852200685\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}], "label": "Tybeert, datmen die claghe ombeere?"}, {"id": "GHGYVUPNQLMF", "items": [{"data": {"id_1": ["EYTAB", "PHBJH", "KASEG", "CKMEC", "TNSEV", "TMMAD", "EAUSI", "RKUUE", "UGMFA", "PMIMS"]}, "instructie": "Ghelovede te leerne sinen crede", "label": "Ende lude te zinghene crede", "query": "\u003ccode\u003esonder.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003edaghe is not null\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003epancer \u003c 0.5938892676492765\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ewaren is null\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eghescreeft = \u0027QBJQHFPT\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}, {"data": {"id_3": ["A606661", "W823494", "E341330", "B415877", "Y358330", "Y103361", "M964857", "M768592", "X534379", "S451675"]}, "instructie": "Stont up een hondekijn, hiet Cortoys", "label": "Hadder Cortoys yewet an", "query": "\u003ccode\u003econinc_menich.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003c/div\u003e"}, {"data": {"id_1": []}, "instructie": "Datter eenen dach af was ghenomen", "label": "Doe al dat hof versamet was", "query": "\u003ccode\u003eysengrijn.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003c/div\u003e"}, {"data": {"id_3": ["D306851", "K767454", "C912414", "F427686"]}, "instructie": "Omme bejach in eene molen", "label": "Den fellen metten grijsen baerde", "query": "\u003ccode\u003esonder_blent_reynaerde.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003esitten is null\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ewaren \u003e= 0.4533016922538242\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003esconinx \u003c= 0.8789037056851144\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003erecht = 0.7087857846779656\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003egroet = \u0027BEZWQQB\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}, {"data": {"id_1": []}, "instructie": "Voer al dandre ontfaerme hu dies", "label": "Die claghe die Cortoys doet.\u0027", "query": "\u003ccode\u003eveste_began.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ebever \u003e 0.617949098781882\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ewijlen is null\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eghistren = \u0027CLQHDQX\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003everhoert != 790\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ereynaert is null\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}], "label": "Spellen ende lesen beede"}, {"id": "HHQJZLCDZIIA", "items": [{"data": {"id_2": []}, "instructie": "Eenen slapenden molen man", "label": "Die mi Reynaert heeft ghedaen", "query": "\u003ccode\u003edatmen_staer.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ecortoys = 590\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}, {"data": {"id_2": []}, "instructie": "Ende mine kindre so mesvoert", "label": "Een vet morzeel van eere hinnen", "query": "\u003ccode\u003emijns.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ealdus \u003e 0.08635798325524457\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003elesen is not null\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003erecht \u003e 0.17636170984099264\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}, {"data": {"id_3": ["Z301627", "O236230", "N939294", "W908450", "W436392", "E724787", "N204149", "V257840", "H519668", "R690200", "I863190", "I266852", "Z350926", "Q578238", "X464827"]}, "instructie": "Aldus hi sine tale began", "label": "No onversweghen no onghewroken!\u0027", "query": "\u003ccode\u003ehinnen_baerde.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ekennen is not null\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eworst \u003e 640\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003edatter = \u0027DUDZLIR\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}], "label": "Ghinghen voer den coninc staen"}, {"id": "DKRPAGVEWIOK", "items": [{"data": {"id_2": []}, "instructie": "Mi hevet Reynaert, dat felle dier", "label": "Ende sprac: \u0027Coninc, heere", "query": "\u003ccode\u003eghesproken.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003enochtan is null\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003emijns = 0.3398677912543059\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}, {"data": {"id_3": ["E037586", "T263530", "F391146", "V336431", "L626297", "N011295", "Z290159", "N146461", "P702907", "I297911", "E954243", "I229457", "P264527", "O878392", "P866030"]}, "instructie": "Vaste tusschen sine beene", "label": "Dats over menich jaer ghesciet", "query": "\u003ccode\u003ecrancken_wijlen.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003c/div\u003e"}, {"data": {"id_1": ["CNOCV", "JDGTA", "QSUSH", "LELCJ", "EWGNO", "REAXS", "ZBDGU", "JBVIJ", "OOSRK", "WAUDO", "RZBNR", "RNZAD", "VVCGH", "IQKOF", "AHDSE"]}, "instructie": "Die worst was mine, al en claghic niet", "label": "Also was Reynaerde ghesciet", "query": "\u003ccode\u003emolen_ombeere_alles.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003escuwedi \u003c= 802\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eleerne \u003e= 665\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003evorst \u003e= 693\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eblent is null\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}], "label": "Al ware al tlaken paerkement"}], "label": "In eenen winter, in eene vorst"}, {"id": "JSXSXPGUVPTW", "items": [{"id": "WVPSEPQCGQTL", "items": [{"data": {"id_2": ["4674130", "9584554", "6713415", "4496295", "1038332", "8054108", "0910758", "7192769", "6347118", "3047620", "3075384", "0595499", "0034674", "8057745", "4108010", "7818306", "6139568", "3467038", "0645939", "0114832", "3988526", "4307021", "6892945", "0610642", "0977858", "5181435", "0572627"]}, "instructie": "Dat Cortoys claghet nu", "label": "Ende seide: \u0027Heere coninc", "query": "\u003ccode\u003ewaren_dandre.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ehadde \u003c 414\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}, {"data": {"id_2": ["2460767", "2242289"]}, "instructie": "Die selve worst stal ende nam", "label": "Die worst was mine, al en claghic niet", "query": "\u003ccode\u003enoint_hadse.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eonghewroken \u003c= 226\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003econinc \u003e= 0.9823883959753141\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eheleghe is null\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ereynaerd = \u0027CKVLCRT\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003erecht is not null\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}, {"data": {"id_3": []}, "instructie": "Doe begonsten si over eene", "label": "Daer ic af dicken hebbe ontfaen", "query": "\u003ccode\u003eheeft_vorst_waende.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003c/div\u003e"}], "label": "Houden ten wel groeten love"}, {"id": "CZGVPTUUFCYF", "items": [{"data": {"id_3": ["Y020655", "F349218", "S627809", "A157343", "I643814", "I256638", "B749561", "V185124"]}, "instructie": "Ende Reynaerd soude hebben ghedaen", "label": "Spellen ende lesen beede", "query": "\u003ccode\u003ebrocht_isingrijn.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003c/div\u003e"}, {"data": {"id_3": ["R665438", "N737702", "H988600", "F426397", "U140518", "C504539", "K534392", "H019178", "N410865", "F698571", "T518319", "R622883", "B008510", "N435900", "K901946", "E649879", "Y742368", "Y520861", "L401301", "M461705", "O145574", "A783691", "O828908", "M129886", "V352318", "I524547", "B041666"]}, "instructie": "Dan alleene eene worst", "label": "Die te hove zijn commen hier", "query": "\u003ccode\u003eontfaen_ombeere.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ebinnen = \u0027PYOLH\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}], "label": "Hoet so arem was wijlen eere"}, {"id": "HGLBXHAPBVNW", "items": [{"data": {"id_3": ["M568584", "B786133"]}, "instructie": "Ende sprac: \u0027Coninc, heere", "label": "Sine onsculde. Ende also saen", "query": "\u003ccode\u003emiere_crayeren.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003escade \u003e 0.1986742050844229\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ehadde \u003e 0.6892642262230303\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}, {"data": {"id_2": ["7327004", "2219020", "0381553", "4036509", "7436272", "5255936", "8222568", "1600046", "9379147", "5279589", "2200108", "5131033", "9599961", "6705892", "1230260", "2675158", "6606917", "5693663", "3238653"]}, "instructie": "Dat alles goets en hadde meere", "label": "Aldus hi sine tale began", "query": "\u003ccode\u003ereynaert.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ehadde \u003c= 0.5242213453255263\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eheleghe \u003e= 770\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003egrijsen = \u0027YGBMPEY\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003escuwedi = \u0027UPDQGN\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ehebbe \u003c= 0.9984578204366423\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}, {"data": {"id_2": []}, "instructie": "Al ware al tlaken paerkement", "label": "Die claghe die Cortoys doet.\u0027", "query": "\u003ccode\u003edinct_tlaken_sechdi.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ekennen \u003c 0.30667461383525396\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003egoets \u003c 0.9526761816528855\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}, {"data": {"id_2": ["7545065", "0016523", "6575790", "5562529", "8316715", "1936797", "8444755", "5881415", "8761153", "0372210", "5217909", "1952544", "0480222", "9463738", "5629241", "5236515", "4045670", "2893592", "2782652", "0290525", "5623100", "0362653", "9165763", "4676460", "7014435", "2614143", "3039734"]}, "instructie": "Datmen maket nu te Ghent", "label": "Nobel, die coninc, hadde ghedaen", "query": "\u003ccode\u003estaen_ontsiet_onsculde.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eyewet = \u0027TFVXF\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eworden is not null\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eghelovede \u003e 0.9685625417677449\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eombeere = \u0027AMVXCRLC\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}], "label": "Dat hire niet dorste gaen"}], "label": "Ende claghede den coninc in Francsoys"}, {"id": "SMFNHGWLLBXF", "items": [{"data": {"id_2": []}, "instructie": "Dat hire niet dorste gaen", "label": "Ghinghen voer den coninc staen", "query": "\u003ccode\u003escade.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003elesen is null\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}, {"data": {"id_2": ["1927326", "0247658", "9712192", "9206277", "5273468", "0367315", "3750682", "3661792", "9904996", "0695979", "6855626", "2875424", "6619287", "9833489", "8619968", "7999651", "9944847", "7229688", "1875676", "7015385", "8176115", "8089601", "1491259"]}, "instructie": "Isingrijn ende sine maghe", "label": "Ic weet wel al sonder waen", "query": "\u003ccode\u003eghenomen_heeft_reynaert.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003esprac \u003c 453\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003esoude is not null\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003epancer = \u0027NWKFUF\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003emesvoert = \u0027RLAZH\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003estont != 0.1735559878425892\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}, {"data": {"id_1": []}, "instructie": "Tybeert die cater die wart gram", "label": "Omme bejach in eene molen", "query": "\u003ccode\u003eleerne_nobel_tsinxen.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003c/div\u003e"}], "label": "Die mi Reynaert heeft ghedaen"}, {"id": "HZESGQYMWAHX", "items": [{"data": {"id_2": ["0927807", "3899773", "4162729", "9397144", "3848759", "9341128", "8422829", "3280675", "5792018", "8038961", "9121910", "0262100", "5550796", "0100226"]}, "instructie": "Het was in eenen tsinxen daghe", "label": "Dat Cortoys claghet nu", "query": "\u003ccode\u003ecortoys_ghestolen_datter.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003estaer = \u0027USEWJQT\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ewives = 33\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eeenen \u003c 162\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eonsculde is null\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eclaghede is null\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}, {"data": {"id_3": []}, "instructie": "Dor hu edelheit ende dor hu eere", "label": "Voer al dandre ontfaerme hu dies", "query": "\u003ccode\u003eghent_ghedede.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003c/div\u003e"}], "label": "Datter eenen dach af was ghenomen"}]
+    const config = ""
+    const werkvoorraadComponent = new WerkvoorraadComponent(spec, config)
+    document.querySelector(`[data-component="werkvoorraad"]`).appendChild(werkvoorraadComponent)
 
-function renderQuery(item) {
-    let queries = Array.isArray(item.query) ? item.query : [item.query]
-    let clean = i => i.replace(/</g, "&lt;").replace(/>/g, "&gt;")
-    return queries.map(query => `<blockquote><code>${clean(query)}</code></blockquote>`).join("")
-}
+    document.addEventListener("color-scheme-change", event => {
+        event.detail.scheme === "dark"
+        ? document.body.classList.add("dark-theme")
+        : document.body.classList.remove("dark-theme")
+    })
+    const darkModeToggle = new DarkModeToggle()
+    document.querySelector("header").appendChild(darkModeToggle)
 
-// COPY DATA
-function copyData(event) {
-    if (!event.target.matches("[data-copy]")) { return }
-    let [chapter, idx, kind] = event.target.dataset.copy.split("-")
-    let clip = data[chapter][idx][kind]
-    navigator.clipboard.writeText(clip).then(
-        function() {
-            let el = event.target.closest("section").querySelector(".display")
-            el.innerHTML = "gekopieerd naar klembord!"
-            setTimeout(function() { el.innerHTML = "" }, 1000)
+    let navigation = document.querySelector("nav")
+    navigation.addEventListener("click", function(event) {
+        let target = event.target.dataset.showTarget
+        if (target != undefined) {
+            let sections = document.querySelectorAll("section[data-component]")
+            sections.forEach(node => {
+                let component = node.dataset.component
+                component === target
+                ? node.classList.remove("hidden")
+                : node.classList.add("hidden")
+            })
+            let buttons = navigation.querySelectorAll("button")
+            buttons.forEach(node => {
+                let component = node.dataset.showTarget
+                component === target
+                ? node.setAttribute("selected", "")
+                : node.removeAttribute("selected", "")
+            })
         }
-    )
-}
-
-// METADATA
-function renderMetaData(metadata) {
-    let blocks = []
-    for (let [label, fields] of Object.entries(metadata)) {
-        let block = renderLabelData(label, fields)
-        blocks.push(block)
-    }
-    return `<table>
-        <thead>
-            <th>thema</th>
-            <th>veld</th>
-            <th>oms</th>
-            <th>dtype</th>
-            <th>null</th>
-            <th>cats</th>
-        </thead>
-        <tbody>${blocks.join("")}</tbody>
-    </table>`
-}
-
-function renderLabelData(label, fields) {
-    let rows = []
-    let length = 0
-    for (let [field, info] of Object.entries(fields)) {
-        let s = filterDatamodel.value.trim().toLowerCase()
-        if (s) {
-            if (!(field.toLowerCase().includes(s) || info.oms.toLowerCase().includes(s))) {
-                continue
-            }
-        }
-        length++
-        let cells = renderField(info)
-        cells.unshift(`<td>${field}</td>`)
-        rows.push(cells)
-    }
-    if (length === 0) { return "" }
-    th = `<th rowspan=${length}>${label.split("__").join(" ")}</th>`
-    rows[0].unshift(th)
-    return rows.map(row => `<tr>${row.join("")}</tr>`).join("")
-}
-
-function renderField(field) {
-    let render = i => `<td>${i}</td>`
-    return [field.oms, field.dtype, field.hasnans, renderCats(field?.cats)].map(render)
-}
-
-function renderCats(cats) {
-    if (!cats) { return "" }
-    return cats.map(i => `[${i}]`).join("\n")
-}
-
-// ABSTRACTIONS
-function renderAbstractions(abstractions) {
-    let output = []
-    for (let [key, val] of Object.entries(abstractions)) {
-        if (typeof val === 'string') {
-            output.push(`<details><summary>${key}</summary><blockquote>${val}</blockquote></details>`)
-        } else {
-            output.push(`<details open><summary>${key}</summary>${renderAbstractions(val)}</details>`)
-        }
-    }
-    return output.join("")
-}
-
-// DATA
-let data = {"bekostiging": [{"instructie": "Controleer of regel bekostigd kan worden en pas eventueel aan. Schrijf student in (negeer waarschuwing).", "oms": "Inschrijfbaar verzoek en geen bekostigde regel", "query": ["\u003cinschrijfregel|verzoek\u003e", "aantal_bekostigde_regels == 0 and stoplicht_groen"], "sin": [], "stu": []}, {"instructie": "Pas bekostigingsindicatie aan naar \u0027J\u0027 bij betreffende sinh_id.", "oms": "Inschrijving en geen bekostigde regel", "query": "inschrijvingstatus == \u0027I\u0027 and aantal_bekostigde_regels == 0 and bekostiging == \u0027T\u0027", "sin": [], "stu": []}, {"instructie": "Zet de laagst bekostigde regel op \u0027T\u0027 en schrijf student in.", "oms": "Inschrijfbaar verzoek en meer dan \u00e9\u00e9n bekostigde regel", "query": ["\u003cinschrijfregel|verzoek\u003e", "aantal_bekostigde_regels \u003e 1 and stoplicht_groen"], "sin": ["ELE26929", "FNL38558", "MXV49260", "YJP96451", "DYM69391", "GDW31650"], "stu": ["183050", "574260", "052122", "232804", "738428", "859340"]}, {"instructie": "Wijzig bekostigingsindicatie van betreffende sinh_id naar \u0027A\u0027.", "oms": "Premaster maar bekostigingsindicatie is niet A, B of X", "query": "examentype == \u0027PM\u0027 and bekostiging not in [\u0027A\u0027, \u0027B\u0027, \u0027X\u0027]", "sin": [], "stu": []}, {"instructie": "Stel reden vasts van verlate inschrijving, codeer en vul bij opmerkingveld van betreffende sinh_id.", "oms": "Inschrijving na 30 september maar geen opmerking", "query": "datum_ac4 \u003e 2021-10-01 and ingangsmaand in [9, 10] and opmerking is null", "sin": [], "stu": []}], "betaling": [{"oms": "VBC | Verklaring maar geen betaling", "query": "vbc == \u0027V\u0027", "sin": [], "stu": []}, {"oms": "VBC | Geld maar geen verklaring", "query": "vbc == \u0027G\u0027", "sin": [], "stu": []}, {"instructie": "Zoek document en upload in OSIRIS Document (indien niet aanwezig, vraag document op bij student).", "oms": "VBC | Verklaring maar geen document", "query": "\u0027V\u0027 in vbc and not doc_vbc", "sin": ["OFS91309", "XGF95783", "FFO32626", "YJS08384", "XED24621", "VRK80486"], "stu": ["344773", "531772", "133073", "448125", "901441", "203882"]}], "hogerejaars": [{"oms": "Hogerejaarsverzoek ingediend bij fixus", "query": ["\u003cinschrijfregel|hogerejaars\u003e", "soort == \u0027fixus\u0027"], "sin": ["WBJ75406", "RSB25558", "BZF12882", "HGQ18363"], "stu": ["159517", "243021", "809431", "914523"]}, {"oms": "Hogerejaarsverzoek ingediend bij bachelor", "query": ["\u003cinschrijfregel|hogerejaars\u003e", "soort != \u0027fixus\u0027 and examentype == \u0027BA\u0027"], "sin": [], "stu": []}, {"oms": "Hogerejaarsverzoek ingediend bij master", "query": ["\u003cinschrijfregel|hogerejaars\u003e", "examentype == \u0027MA\u0027"], "sin": ["UXJ98558", "LEQ62670", "NDX43035", "BNZ46899", "JPN08613", "CKD53904", "AQX16320", "YTC74284", "GAF53289", "XPL83900", "FLY26356", "KUP52585", "PWY81665"], "stu": ["936852", "996254", "246685", "413000", "299606", "875982", "071930", "429783", "071689", "726796", "320857", "595912", "575186"]}], "inschrijving": [{"instructie": "Trek inschrijving in en verstuur \u0027graad_behaald\u0027 mail.", "oms": "Graad behaald", "query": "actiefcode == \u00274\u0027 and examen_behaald and examendatum \u003c 2021-09-01", "sin": [], "stu": []}], "matching": [{"instructie": "Verwijder oude matchingsproces en start nieuw proces.", "oms": "Reanimatie (nog geen besluit)", "query": ["\u003cheeft_proces|matching\u003e", "statusbesluit_ooa in [\u0027G\u0027] and inschrijvingstatus == \u0027V\u0027 and adres_nl_aanwezig == \u0027BRP\u0027"], "sin": [], "stu": []}, {"instructie": "Informeer student dat inschrijfverzoek wordt ingetrokken wegens eerdere afwijzing, trek betreffende sinh_id in.", "oms": "Reanimatie (afgewezen)", "query": ["\u003cheeft_proces|matching\u003e", "statusbesluit_ooa in [\u0027A\u0027] and inschrijvingstatus == \u0027V\u0027 and adres_nl_aanwezig == \u0027BRP\u0027"], "sin": [], "stu": []}, {"instructie": "Trek verzoek in en verstuur afwijzing.", "oms": "Te laat", "query": "soort == \u0027matching\u0027 and proces_ooa is null and adres_nl_aanwezig == \u0027BRP\u0027 and datum_eerste_vti_ho \u003e 2022-05-01", "sin": [], "stu": []}], "persoonsgegevens": [{"instructie": "Controleer of idb aanwezig is in OSIRIS Document; zo ja, verwerk, zo nee, start proces CSA_IDB.", "oms": "CSA_IDB | Geen proces, wel in aanmerking", "query": ["\u003ckansrijk\u003e", "\u003cuitsluiten|bachelor|isa|niet_toegelaten\u003e", "statusbesluit_idb is null and not b_identiteit_status and not doc_idb"], "sin": ["MOX95553", "TIH51504", "FWT73807", "BQZ62066", "OHO90495", "QVW10363", "NNW24051", "KHA73550", "JPU40697", "NPK90330", "ONU31166", "OEC00237", "QXM09541", "ITB49499", "KWZ48534", "EHI70159", "HQG81943"], "stu": ["957254", "871082", "913447", "445990", "339904", "168064", "179367", "376913", "770421", "944406", "502795", "900704", "053023", "321321", "552014", "058299", "915841"]}, {"instructie": "Rappelleer bij geen reactie na twee weken.", "oms": "CSA_IDB | Uitvraag gedaan", "query": ["\u003cinschrijfregel|verzoek\u003e", "statusbesluit_idb == \u0027N\u0027"], "sin": ["ZDH99765"], "stu": ["385532"]}, {"instructie": "Controleer ge\u00c3\u00bcpload document (let ook op geldigheid op ingangsdatum sinh_id); indien correct, verifieer en handel proces af, indien niet correct, zet terug naar student.", "oms": "CSA_IDB | Ingediend", "query": ["\u003cinschrijfregel|verzoek\u003e", "statusbesluit_idb == \u0027I\u0027 and not heeft_afkeur_idb"], "sin": ["KTU00067"], "stu": ["374091"]}, {"instructie": "Rappelleer bij geen reactie na twee weken.", "oms": "CSA_IDB | Open afkeur vragen", "query": ["\u003cinschrijfregel|verzoek\u003e", "statusbesluit_idb in [\u0027I\u0027, \u0027B\u0027] and heeft_afkeur_idb"], "sin": [], "stu": []}, {"instructie": "Sluit proces af.", "oms": "CSA_IDB | Proces open, maar persoonsgegevens geverifieerd", "query": "statusbesluit_idb in [\u0027I\u0027, \u0027B\u0027] and b_identiteit_status", "sin": [], "stu": []}, {"instructie": "Controleer of idb aanwezig is in OSIRIS Document; zo ja, verwerk, zo nee, start proces CSA_IDB.", "oms": "Kansrijk verzoek, identiteit nog niet geverifieerd (EU)", "query": ["\u003ckansrijk\u003e", "\u003cnationaliteit|eu\u003e", "\u003cuitsluiten|bachelor|isa|niet_toegelaten\u003e", "\u003cuitsluiten|master|niet_toegelaten\u003e", "k_identiteit_status == \u0027GEEL\u0027 and statusbesluit_idb is null"], "sin": [], "stu": []}, {"instructie": "Controleer of idb aanwezig is in OSIRIS Document; zo ja, verwerk, zo nee, start proces CSA_IDB.", "oms": "Kansrijk verzoek, identiteit nog niet geverifieerd (non-EU)", "query": ["\u003ckansrijk\u003e", "\u003cnationaliteit|non-eu\u003e", "\u003cuitsluiten|bachelor|isa|niet_toegelaten\u003e", "\u003cuitsluiten|master|niet_toegelaten\u003e", "k_identiteit_status == \u0027GEEL\u0027 and statusbesluit_idb is null"], "sin": ["KDN09257"], "stu": ["230367"]}], "roosevelt": [{"instructie": "Voeg korting toe en schrijf student in.", "oms": "UCR eerstejaars toegelaten", "query": ["\u003cinschrijfregel|verzoek\u003e", "opleiding == \u0027LASB-RA\u0027 and statusbesluit_ooa in [\u0027T\u0027]"], "sin": [], "stu": []}], "toelatingsbeschikking": [{"instructie": "Vraag GS om situatie op te lossen.", "oms": "Toelatingsbeschikking vorm (vt/dt) ongelijk aan inschrijfregel vorm", "query": "tb_vorm_niet_gelijk.fillna(False)", "sin": ["NET30099", "TRN77048", "IOB85081", "APV27070"], "stu": ["037821", "519004", "939701", "170041"]}, {"instructie": "Vraag GS om situatie op te lossen.", "oms": "Toelatingsbeschikking croho ongelijk aan inschrijfregel croho", "query": "tb_croho_niet_gelijk.fillna(False)", "sin": [], "stu": []}, {"oms": "Toelatingsbeschikking aanvangsdatum kleiner dan inschrijfregel ingangsdatum", "query": "tb_aanvang_kleiner.fillna(False)", "sin": [], "stu": []}], "verblijfsvergunning": [{"instructie": "Controleer of verblijfsvergunning aanwezig is; zo ja, controleer en verwerk indien mogelijk, zo nee, doe uitvraag.", "oms": "CSA_I_VVR | Eerste controle nog niet uitgevoerd", "query": ["\u003cinschrijfregel|verzoek\u003e", "statusbesluit_vvr_csa == \u0027C\u0027"], "sin": [], "stu": []}, {"instructie": "Rappelleer bij geen reactie na twee weken.", "oms": "CSA_I_VVR | Uitvraag gedaan", "query": ["\u003cinschrijfregel|verzoek\u003e", "statusbesluit_vvr_csa == \u0027U\u0027"], "sin": [], "stu": []}, {"instructie": "Controleer of verblijfsvergunning juist is; zo nee, zet terug aan student, zo ja, verwerk document en handel proces af.", "oms": "CSA_I_VVR | Ingediend", "query": ["\u003cinschrijfregel|verzoek\u003e", "statusbesluit_vvr_csa == \u0027I\u0027 and not heeft_afkeur_vvr_csa"], "sin": [], "stu": []}, {"instructie": "Rappelleer bij geen reactie na twee weken.", "oms": "CSA_I_VVR | Open afkeur vragen", "query": ["\u003cinschrijfregel|verzoek\u003e", "statusbesluit_vvr_csa in [\u0027I]\u0027, \u0027B\u0027] and heeft_afkeur_vvr_csa"], "sin": ["MLG46060"], "stu": ["259929"]}, {"instructie": "Sluit proces af.", "oms": "CSA_I_VVR | Proces open, maar VVR reeds verwerkt", "query": "statusbesluit_vvr_csa is not null and statusbesluit_vvr_csa not in [\u0027G\u0027, \u0027F\u0027, \u0027X\u0027, \u0027S\u0027, \u0027T\u0027] and k_verblijfsdocument == \u0027GROEN\u0027", "sin": ["ZNR42705", "NVX92968"], "stu": ["584154", "558588"]}, {"instructie": "Rappelleer bij geen reactie na twee weken.", "oms": "CSA_I_VVR | Voorwaardelijk afgehandelde VVR", "query": "statusbesluit_vvr_csa == \u0027S\u0027", "sin": ["OZG18250"], "stu": ["014940"]}, {"instructie": "Stel vast of student vvr studie zou moeten krijgen; zo ja, geef door aan ISA, zo nee, doe uitvraag.", "oms": "Kansrijk verzoek, vvr nodig maar geen vvr proces (isa of csa) (alleen toegelaten)", "query": ["\u003ckansrijk\u003e", "\u003cuitsluiten|bachelor|isa|niet_toegelaten\u003e", "\u003cuitsluiten|bachelor|ucr\u003e", "k_verblijfsdocument == \u0027GEEL\u0027 and statusbesluit_ooa == \u0027T\u0027 and not heeft_proces_vvr_csa and not heeft_proces_vvr_isa"], "sin": [], "stu": []}, {"oms": "Kansrijk verzoek, vvr nodig maar geen vvr proces (isa of csa)", "query": ["\u003ckansrijk\u003e", "\u003cuitsluiten|bachelor|isa|niet_toegelaten\u003e", "\u003cuitsluiten|bachelor|ucr\u003e", "k_verblijfsdocument == \u0027GEEL\u0027 and not heeft_proces_vvr_csa and not heeft_proces_vvr_isa"], "sin": [], "stu": []}, {"instructie": "Stem met ISA af, wie de uitvraag doet; sluit indien nodig CSA_I_VVR af.", "oms": "Open CSa VVR-proces \u00c3\u00a9n open ISA VVR-proces", "query": "heeft_proces_vvr_csa and heeft_proces_vvr_isa and statusbesluit_vvr_csa not in [\u0027G\u0027, \u0027F\u0027, \u0027X\u0027, \u0027T\u0027] and statusbesluit_vvr_isa not in [\u0027G\u0027, \u0027F\u0027]", "sin": [], "stu": []}], "verblijfsvergunning_aanvullende_stukken": [{"instructie": "Rappelleer bij geen reactie na twee weken.", "oms": "CSA_I_VVR | Uitvraag gedaan na inschrijving", "query": "inschrijvingstatus == \u0027I\u0027 and statusbesluit_vvr_csa == \u0027U\u0027", "sin": [], "stu": []}, {"instructie": "Controleer of verblijfsvergunning juist is; zo nee, zet terug aan student, zo ja, verwerk document en handel proces af.", "oms": "CSA_I_VVR | Ingediend na inschrijving", "query": "inschrijvingstatus == \u0027I\u0027 and statusbesluit_vvr_csa == \u0027I\u0027 and not heeft_afkeur_vvr_csa", "sin": [], "stu": []}, {"instructie": "Rappelleer bij geen reactie na twee weken.", "oms": "CSA_I_VVR | Open afkeur vragen na inschrijving", "query": "inschrijvingstatus == \u0027I\u0027 and statusbesluit_vvr_csa in [\u0027I\u0027, \u0027B\u0027] and heeft_afkeur_vvr_csa", "sin": [], "stu": []}], "vooropleiding": [{"instructie": "Start CSA_I_DIPLOMA proces op bij betreffende sinh_id.", "oms": "CSA_I_DIPLOMA | Geen proces, wel in aanmerking", "query": ["\u003ckansrijk|bachelor\u003e", "opleiding not in [\u0027LASB-UC\u0027, \u0027LASB-RA\u0027]", "k_vooropleiding_geverifieerd == \u0027GEEL\u0027 and statusbesluit_dipw_csa is null and statusbesluit_dipw_isa is null and not heeft_cd_proces and datum_aangevraagd_zachte_knip is null and not fsw_wiskunde_toets"], "sin": [], "stu": []}, {"instructie": "Rappelleer bij geen reactie na twee weken.", "oms": "CSA_I_DIPLOMA | Nog niet ingediend", "query": ["\u003cheeft_proces|csa_dip\u003e", "statusbesluit_dipw_csa == \u0027B\u0027"], "sin": [], "stu": []}, {"instructie": "Controleer of vooropleiding juist is; zo nee, zet terug aan student, zo ja, verwerk document en handel proces af.", "oms": "CSA_I_DIPLOMA | Ingediend", "query": ["\u003cheeft_proces|csa_dip\u003e", "statusbesluit_dipw_csa in [\u0027I\u0027] and statusbesluit_zachte_knip not in [\u0027S\u0027, \u0027T\u0027] and not heeft_afkeur_dipw_csa"], "sin": [], "stu": []}, {"instructie": "Rappelleer bij geen reactie na twee weken.", "oms": "CSA_I_DIPLOMA | Open afkeur vragen", "query": ["\u003cheeft_proces|csa_dip\u003e", "statusbesluit_dipw_csa in [\u0027I\u0027, \u0027B\u0027] and statusbesluit_zachte_knip not in [\u0027S\u0027, \u0027T\u0027] and heeft_afkeur_dipw_csa"], "sin": [], "stu": []}, {"instructie": "Sluit proces af.", "oms": "CSA_I_DIPLOMA | Proces open, maar diploma geverifieerd", "query": ["\u003cheeft_proces|csa_dip\u003e", "statusbesluit_dipw_csa not in [\u0027F\u0027, \u0027G\u0027, \u0027T\u0027] and b_vooropleiding_geverifieerd"], "sin": [], "stu": []}, {"instructie": "Rappelleer bij geen reactie na twee weken.", "oms": "CSA-CERTIFICAAT | Nog niet ingediend", "query": ["\u003cheeft_proces|csa_cert\u003e", "statusbesluit_dipw_csa == \u0027B\u0027"], "sin": [], "stu": []}, {"instructie": "Controleer of certificaat juist is; zo nee, zet terug aan student, zo ja, verwerk document en handel proces af.", "oms": "CSA-CERTIFICAAT | Ingediend", "query": ["\u003cheeft_proces|csa_cert\u003e", "statusbesluit_dipw_csa in [\u0027I\u0027] and statusbesluit_zachte_knip not in [\u0027S\u0027, \u0027T\u0027] and not heeft_afkeur_dipw_csa"], "sin": [], "stu": []}, {"instructie": "Rappelleer bij geen reactie na twee weken.", "oms": "CSA-CERTIFICAAT | Open afkeur vragen", "query": ["\u003cheeft_proces|csa_cert\u003e", "statusbesluit_dipw_csa in [\u0027I\u0027, \u0027B\u0027] and statusbesluit_zachte_knip not in [\u0027S\u0027, \u0027T\u0027] and heeft_afkeur_dipw_csa"], "sin": [], "stu": []}, {"instructie": "Sluit proces af.", "oms": "CSA-CERTIFICAAT | Proces open, maar diploma geverifieerd", "query": ["\u003cheeft_proces|csa_cert\u003e", "statusbesluit_dipw_csa not in [\u0027F\u0027, \u0027G\u0027, \u0027T\u0027] and b_vooropleiding_geverifieerd"], "sin": [], "stu": []}, {"instructie": "Verwerk suffici\u00c3\u00abntieverklaring.", "oms": "Suffici\u00c3\u00abntieverklaring", "query": "examentype in [\u0027BA\u0027, \u0027PM\u0027] and proces_dipw_isa is null and k_vooropleiding_geverifieerd == \u0027GEEL\u0027 and status_sufficientie == \u0027OPL-SUFFVERKL\u0027", "sin": [], "stu": []}, {"instructie": "Controller colloquium doctum in OSIRIS Document; verwerk indien correct en voor betreffende sinh_id.", "oms": "Colloquium doctum in document, vooropleiding == GEEL", "query": "doc_cd and k_vooropleiding_geverifieerd == \u0027GEEL\u0027", "sin": [], "stu": []}, {"oms": "In behandeling voor colloquium doctum maar geen document", "query": "heeft_cd_proces and not doc_cd", "sin": [], "stu": []}, {"oms": "Vwo uit Carribische gebieden", "query": ["\u003ckansrijk|bachelor\u003e", "examentype == \u0027BA\u0027 and k_vooropleiding_geverifieerd == \u0027GEEL\u0027 and statusbesluit_dipw_isa is null and datum_aangevraagd_zachte_knip is null", "vooropleiding_extensie_land in [\u00275106\u0027, \u00275107\u0027, \u0027AW\u0027]"], "sin": [], "stu": []}, {"oms": "Colegio Arubano", "query": "vooropleiding_school.str.contains(\u0027arubano\u0027, case=False, na=False) and k_vooropleiding_geverifieerd == \u0027GEEL\u0027", "sin": [], "stu": []}, {"oms": "FSW nog niet afgeronde wiskunde toets", "query": "fsw_wiskunde_toets and k_vooropleiding_geverifieerd == \u0027GEEL\u0027", "sin": [], "stu": []}], "zachteknip": [{"oms": "BA | Uitvraag", "query": ["\u003cheeft_proces|zachteknip|bachelor\u003e", "statusbesluit_zachte_knip == \u0027N\u0027"], "sin": ["BRL21921", "LCK23385"], "stu": ["343787", "486292"]}, {"oms": "BA | Ingediend", "query": ["\u003cheeft_proces|zachteknip|bachelor\u003e", "statusbesluit_zachte_knip == \u0027I\u0027"], "sin": ["BUN81279"], "stu": ["208771"]}, {"oms": "MA | Uitvraag", "query": ["\u003cheeft_proces|zachteknip|master\u003e", "statusbesluit_zachte_knip == \u0027N\u0027"], "sin": [], "stu": []}, {"oms": "MA | Ingediend", "query": ["\u003cheeft_proces|zachteknip|master\u003e", "statusbesluit_zachte_knip == \u0027I\u0027"], "sin": [], "stu": []}, {"oms": "PM | Uitvraag", "query": ["\u003cheeft_proces|zachteknip|premaster\u003e", "statusbesluit_zachte_knip == \u0027N\u0027"], "sin": ["MQB01055", "ZSQ93546", "LXD62726", "ETK84460"], "stu": ["349833", "844970", "197305", "227290"]}, {"oms": "PM | Ingediend", "query": ["\u003cheeft_proces|zachteknip|premaster\u003e", "statusbesluit_zachte_knip == \u0027I\u0027"], "sin": [], "stu": []}]}
-let metadata = {"aanmelding__acceptatieformulier": {"acceptatieform": {"cats": [], "dtype": "cat", "hasnans": true, "oms": "Status van het acceptatieformulier"}, "datum_indienen_acc_form": {"dtype": "date", "hasnans": true, "oms": "Datum waarop het acceptatieformulier is ingediend"}, "datum_ontstaan_acc_form": {"dtype": "date", "hasnans": true, "oms": "Datum waarop het acceptatieformulier actief werd"}}, "aanmelding__isa": {"datum_aangevraagd_ooa_isa": {"dtype": "date", "hasnans": true, "oms": "Datum waarop het aanmeldproces is ingediend."}, "datum_besluit_ooa_isa": {"dtype": "date", "hasnans": true, "oms": "Datum waarop het besluit is genomen."}, "datum_status_ooa_isa": {"dtype": "date", "hasnans": true, "oms": "Datum waarop de laatste status tot stand is gekomen."}, "heeft_proces_isa": {"dtype": "bool", "hasnans": false, "oms": "Of ISA proces met inschrijfregel geassocieerd is."}, "proces_ooa_isa": {"cats": ["BA2223_INT", "MA2223_INT", "MA2223_INT_DGK"], "dtype": "cat", "hasnans": true, "oms": "Naam van het aanmeldproces."}, "statusbesluit_ooa_isa": {"dtype": "string", "hasnans": true, "oms": "Besluit indien aanwezig en anders status van aanmelding."}}, "aanmelding__proces": {"datum_aangevraagd_ooa": {"dtype": "date", "hasnans": true, "oms": "Datum waarop het aanmeldproces is ingediend."}, "datum_besluit_ooa": {"dtype": "date", "hasnans": true, "oms": "Datum waarop het besluit is genomen."}, "datum_status_ooa": {"dtype": "date", "hasnans": true, "oms": "Datum waarop de laatste status tot stand is gekomen."}, "proces_ooa": {"cats": ["BA2223_FIXUS", "BA2223_MATCHING", "BA2223_PPE", "MA2223_INT", "MA2223_INT_DGK", "MA2223_NL", "MA2223_NL_DGK", "PM2223_KORT", "UCR_FALL_22_BA", "UCU_FALL_22-23_BA"], "dtype": "cat", "hasnans": true, "oms": "Naam van het aanmeldproces."}, "statusbesluit_ooa": {"dtype": "string", "hasnans": true, "oms": "Besluit indien aanwezig en anders status van aanmelding."}}, "adres__nl_aanwezig": {"adres_nl_aanwezig": {"cats": ["BRP", "student", "geen"], "dtype": "cat", "hasnans": false, "oms": "Nederlands adrestype: BRP, student of geen."}}, "document__cd": {"doc_cd": {"dtype": "bool", "hasnans": false, "oms": "Of colloquium doctum doc aanwezig is."}}, "document__idb": {"doc_idb": {"dtype": "bool", "hasnans": false, "oms": "Of doc aanwezig is."}}, "document__vbc": {"doc_vbc": {"dtype": "bool", "hasnans": false, "oms": "Of vbc doc aanwezig is."}}, "examen__details": {"bron_id_grd": {"dtype": "float", "hasnans": true, "oms": "Bron id voor de graad"}, "eerste_graad": {"cats": ["J"], "dtype": "cat", "hasnans": true, "oms": "Of het examen de eerste graad betreft"}, "examen_behaald": {"dtype": "bool", "hasnans": false, "oms": "Of de student voor opleiding examen heeft behaald"}, "examendatum": {"dtype": "date", "hasnans": true, "oms": "Examendatum"}, "examenprogramma": {"dtype": "str", "hasnans": true, "oms": "Welk examenprogramma de student heeft bij opleiding"}, "uitstel_diploma_tot": {"dtype": "str", "hasnans": true, "oms": "Datum tot wanneer student utistelf van afstuderen heeft"}, "verzonden_naar_duo": {"cats": ["J", "N"], "dtype": "cat", "hasnans": true, "oms": "Of het examen is verzonden naar duo"}}, "financieel__vbc": {"vbc": {"cats": [], "dtype": "cat", "hasnans": true, "oms": "Code vbc (indien aanwezig)."}}, "inschrijfregel__actiefcode": {"actiefcode": {"cats": ["0", "2", "3", "7"], "dtype": "cat", "hasnans": false, "oms": "Actiefcode van de inschrijfregel."}, "datum_actiefcode": {"dtype": "date", "hasnans": false, "oms": "Datum waarop inschrijfregel huidige actiefcode heeft gekregen."}, "datum_intrekking": {"dtype": "date", "hasnans": true, "oms": "Datum waarop de inschrijfregel is ingetrokken."}, "datum_vti": {"dtype": "date", "hasnans": false, "oms": "Datum waarop het verzoek is gedaan."}, "inschrijvingstatus": {"dtype": "str", "hasnans": false, "oms": "Inschrijvingstatus van de inschrijfregel:\nG = geannuleerd\nV = verzoek\nI = ingeschreven\nU = uitgeschreven\n(Berekende status, dus niet hetzelfde als inschrijvingstatus SL)"}}, "inschrijfregel__datum_actief": {"datum_ac4": {"dtype": "date", "hasnans": true, "oms": "Datum waarop inschrijfregel actiefcode 4 bereikt."}}, "inschrijfregel__details": {"bekostiging": {"cats": ["A", "J", "T"], "dtype": "cat", "hasnans": false, "oms": "Bekostigingstatus van de inschrijfregel."}, "betaalvorm": {"cats": [], "dtype": "cat", "hasnans": true, "oms": "Eventueel geregistreerde betaalvorm."}, "mutatie_datum": {"dtype": "date", "hasnans": false, "oms": "Laatste mutatiedatum van de inschrijfregel."}, "opmerking": {"dtype": "str", "hasnans": true, "oms": "Inhoud van het opmerkingenveld bij de inschrijfregel."}, "toelatinggevende_vooropl": {"dtype": "str", "hasnans": true, "oms": "Eventueel geregistreerde toelatinggevende vooropleiding."}, "vrijst_collegegeld_bestuursf": {"dtype": "str", "hasnans": false, "oms": "Of student deelneemt aan jaar collegegeldvrij bestuur."}}, "inschrijfregel__hogerejaars": {"hogerejaars_geaccepteerd": {"dtype": "bool", "hasnans": true, "oms": "Of het hogerejaarsverzoek geaccepteerd is."}, "hogerejaars_verzoek": {"dtype": "bool", "hasnans": false, "oms": "Of het een hogerejaarsverzoek betreft."}}, "inschrijfregel__ingangsmaand": {"ingangsmaand": {"dtype": "int", "hasnans": false, "oms": "Maand van de ingangsdatum van de inschrijfregel."}}, "inschrijfregel__instroom": {"instroom": {"dtype": "bool", "hasnans": false, "oms": "Inschrijfregel betreft instroom (eerstejaars)."}}, "inschrijfregel__soort": {"soort": {"cats": ["bachelor", "fixus", "selectie", "master", "selma", "premaster", "educatief", "herinschrijving"], "dtype": "cat", "hasnans": false, "oms": "categorie inschrijfregel:\n- master\n- premaster\n- educatief\n- fixus\n- selectie\n- bachelor\n- herinschrijving"}}, "personalia__herkomst": {"herkomst_nationaliteit": {"cats": ["NL", "EU/EER", "Non-EU/EER"], "dtype": "cat", "hasnans": false, "oms": "Herkomst van de student naar nationaliteitstype:\n- NL\n- EU/EER\n- Non-EU/EER"}}, "personalia__idb": {"datum_aangevraagd_idb": {"dtype": "date", "hasnans": true, "oms": "Datum waarop proces is aangevraagd."}, "datum_besluit_idb": {"dtype": "date", "hasnans": true, "oms": "Datum waarop besluit proces is vastgelegd."}, "datum_status_idb": {"dtype": "date", "hasnans": true, "oms": "Datum waarop laatste status proces is vastgelegd."}, "statusbesluit_idb": {"dtype": "string", "hasnans": true, "oms": "Status/besluit van het proces."}}, "stoplicht__alles_groen": {"stoplicht_groen": {"dtype": "bool", "hasnans": false, "oms": "Of alle waarden bij inschrijfregel groen of grijs zijn."}}, "stoplicht__betaling_ok": {"stoplicht_betaling_ok": {"dtype": "bool", "hasnans": false, "oms": "Of betaling voldaan is volgens stoplicht."}}, "stoplicht__bool": {"b_aanmelddeadline": {"dtype": "bool", "hasnans": false, "oms": "Of voorwaarde stoplicht voor aanmelddeadline is voldaan"}, "b_betaalwijze_bekend": {"dtype": "bool", "hasnans": false, "oms": "Of voorwaarde stoplicht voor betaalwijze is voldaan"}, "b_blokkade": {"dtype": "bool", "hasnans": false, "oms": "Of voorwaarde stoplicht voor blokkade is voldaan"}, "b_bsa": {"dtype": "bool", "hasnans": false, "oms": "Of voorwaarde stoplicht voor bsa is voldaan"}, "b_collegegeld_ineens_ontvangen": {"dtype": "bool", "hasnans": false, "oms": "Of voorwaarde stoplicht voor collegegeld ineens ontvangen is voldaan"}, "b_hogerejaars_geaccepteerd": {"dtype": "bool", "hasnans": false, "oms": "Of voorwaarde stoplicht voor hogerejaarsverzoek is voldaan"}, "b_identiteit_status": {"dtype": "bool", "hasnans": false, "oms": "Of voorwaarde stoplicht voor identiteitstatus is voldaan"}, "b_machtiging": {"dtype": "bool", "hasnans": false, "oms": "Of voorwaarde stoplicht voor machtiging is voldaan"}, "b_plaatsingsbewijs": {"dtype": "bool", "hasnans": false, "oms": "Of voorwaarde stoplicht voor plaatsingsbewijs is voldaan"}, "b_studiekeuzecheck": {"dtype": "bool", "hasnans": false, "oms": "Of voorwaarde stoplicht voor studiekeuzecheck is voldaan"}, "b_toelatingsbeschikking": {"dtype": "bool", "hasnans": false, "oms": "Of voorwaarde stoplicht voor toelatingsbeschikking is voldaan"}, "b_verblijfsdocument": {"dtype": "bool", "hasnans": false, "oms": "Of voorwaarde stoplicht voor verblijfsdocument is voldaan"}, "b_verzilvering": {"dtype": "bool", "hasnans": false, "oms": "Of voorwaarde stoplicht voor verzilvering is voldaan"}, "b_vooropleiding_geverifieerd": {"dtype": "bool", "hasnans": false, "oms": "Of voorwaarde stoplicht voor vooropleiding is voldaan"}, "b_vooropleiding_toelatinggevend": {"dtype": "bool", "hasnans": false, "oms": "Of voorwaarde stoplicht voor vooropleiding toelatinggevend is voldaan"}}, "stoplicht__matrix": {"aanmelddeadline": {"cats": ["Aangemeld voor aanmelddeadline."], "dtype": "cat", "hasnans": true, "oms": "Toelichting stoplicht voor aanmelddeadline"}, "betaalwijze_bekend": {"cats": ["Aantal te betalen ECTS Pre-Master onbekend.", "Onbekend, betaalwijze financ.regel is default", "Onbekend."], "dtype": "cat", "hasnans": true, "oms": "Toelichting stoplicht voor betaalwijze"}, "blokkade": {"cats": ["Blokkade: 3X GESTORNEERD, INCASSOBUREAU.", "Blokkade: 3X GESTORNEERD.", "Blokkade: INCASSOBUREAU.", "Blokkade: VERBL DOC CONTR.", "Blokkade: ZACHTE KNIP."], "dtype": "cat", "hasnans": true, "oms": "Toelichting stoplicht voor blokkade"}, "bsa": {"cats": ["Aangehouden advies.", "Er is nog geen definitief advies uitgebracht.", "Geen advies nodig.", "Negatief advies.", "Positief advies."], "dtype": "cat", "hasnans": true, "oms": "Toelichting stoplicht voor bsa"}, "collegegeld_ineens_ontvangen": {"dtype": "str", "hasnans": true, "oms": "Toelichting stoplicht voor collegegeld ineens ontvangen"}, "hogerejaars_geaccepteerd": {"dtype": "bool", "hasnans": true, "oms": "Toelichting stoplicht voor hogerejaarsverzoek"}, "identiteit_status": {"cats": ["Centraal geverifieerd via DVP.", "Decentraal (instelling) geverifieerd.", "IBG: Centraal geverifieerd.", "Niet geverifieerd instelling.", "Niet geverifieerd."], "dtype": "cat", "hasnans": true, "oms": "Toelichting stoplicht voor identiteitstatus"}, "k_aanmelddeadline": {"cats": ["GROEN"], "dtype": "cat", "hasnans": true, "oms": "Kleur stoplicht voor aanmelddeadline"}, "k_betaalwijze_bekend": {"cats": ["GEEL"], "dtype": "cat", "hasnans": true, "oms": "Kleur stoplicht voor betaalwijze"}, "k_blokkade": {"cats": ["ROOD"], "dtype": "cat", "hasnans": true, "oms": "Kleur stoplicht voor blokkade"}, "k_bsa": {"cats": ["GEEL", "GROEN", "ROOD"], "dtype": "cat", "hasnans": true, "oms": "Kleur stoplicht voor bsa"}, "k_collegegeld_ineens_ontvangen": {"dtype": "str", "hasnans": true, "oms": "Kleur stoplicht voor collegegeld ineens ontvangen"}, "k_hogerejaars_geaccepteerd": {"cats": ["GEEL", "GROEN"], "dtype": "cat", "hasnans": true, "oms": "Kleur stoplicht voor hogerejaarsverzoek"}, "k_identiteit_status": {"cats": ["GEEL", "GROEN"], "dtype": "cat", "hasnans": true, "oms": "Kleur stoplicht voor identiteitstatus"}, "k_machtiging": {"dtype": "str", "hasnans": true, "oms": "Kleur stoplicht voor machtiging"}, "k_plaatsingsbewijs": {"cats": ["GEEL"], "dtype": "cat", "hasnans": true, "oms": "Kleur stoplicht voor plaatsingsbewijs"}, "k_studiekeuzecheck": {"cats": ["GEEL", "GROEN", "ROOD"], "dtype": "cat", "hasnans": true, "oms": "Kleur stoplicht voor studiekeuzecheck"}, "k_toelatingsbeschikking": {"cats": ["GEEL", "GROEN", "ROOD"], "dtype": "cat", "hasnans": true, "oms": "Kleur stoplicht voor toelatingsbeschikking"}, "k_verblijfsdocument": {"cats": ["GEEL", "GROEN"], "dtype": "cat", "hasnans": true, "oms": "Kleur stoplicht voor verblijfsdocument"}, "k_verzilvering": {"cats": ["GEEL"], "dtype": "cat", "hasnans": true, "oms": "Kleur stoplicht voor verzilvering"}, "k_vooropleiding_geverifieerd": {"cats": ["GEEL", "GROEN"], "dtype": "cat", "hasnans": true, "oms": "Kleur stoplicht voor vooropleiding"}, "k_vooropleiding_toelatinggevend": {"cats": ["GEEL", "GROEN"], "dtype": "cat", "hasnans": true, "oms": "Kleur stoplicht voor vooropleiding toelatinggevend"}, "machtiging": {"dtype": "str", "hasnans": true, "oms": "Toelichting stoplicht voor machtiging"}, "plaatsingsbewijs": {"cats": ["Niet in tabel deelname selectie.", "Status plaatsing is nog niet bepaald."], "dtype": "cat", "hasnans": true, "oms": "Toelichting stoplicht voor plaatsingsbewijs"}, "studiekeuzecheck": {"cats": ["Ja, SKC niet verplicht.", "Ja, positief advies.", "Ja, vrijstelling, eerder positief resultaat.", "Ja, vrijstelling.", "Nee, geen deelname verplichte SKC.", "Studiekeuzecheck is nog niet uitgevoerd."], "dtype": "cat", "hasnans": true, "oms": "Toelichting stoplicht voor studiekeuzecheck"}, "toelatingsbeschikking": {"cats": ["Ja, maar periode sluit niet aan.", "Ja.", "Nee.", "Nog geen beschikking aanwezig.", "Voorwaardelijk."], "dtype": "cat", "hasnans": true, "oms": "Toelichting stoplicht voor toelatingsbeschikking"}, "verblijfsdocument": {"cats": ["Afloopdatum verblijfsdocument te vroeg.", "Geen verblijfsdocument bekend.", "Verblijfsdocument: IA.", "Verblijfsdocument: IB.", "Verblijfsdocument: III.", "Verblijfsdocument: IN.", "Verblijfsdocument: IO.", "Verblijfsdocument: V.", "Verblijfsdocument: VS."], "dtype": "cat", "hasnans": true, "oms": "Toelichting stoplicht voor verblijfsdocument"}, "verzilvering": {"cats": ["Niet in tabel deelname selectie.", "Status plaatsing is nog niet bepaald."], "dtype": "cat", "hasnans": true, "oms": "Toelichting stoplicht voor verzilvering"}}, "stoplicht__scores": {"stoplicht_ngeel": {"dtype": "int", "hasnans": false, "oms": "Aantal stoplichtcriteria op GEEL."}, "stoplicht_nrood": {"dtype": "int", "hasnans": false, "oms": "Aantal stoplichtcriteria op ROOD."}}, "toelatingsbeschikking__issues": {"tb_aanvang_kleiner": {"dtype": "str", "hasnans": true, "oms": "Of aanvangsdatum toelatingsbeschikking kleiner is dan ingangsdatum\ninschrijfregel."}, "tb_croho_niet_gelijk": {"dtype": "str", "hasnans": true, "oms": "Of croho inschrijfregel niet overeenkomt met croho\ntoelatingsbeschikking."}, "tb_vorm_niet_gelijk": {"dtype": "str", "hasnans": true, "oms": "Of vorm (voltijd/deeltijd) inschrijfregel niet overeenkomt met vorm\ntoelatingsbeschikking."}}, "vooropleiding__fsw_wiskunde_toets": {"fsw_wiskunde_toets": {"dtype": "bool", "hasnans": false, "oms": "Of de student deelneemt aan de wiskunde toets maar nog geen uitslag\nheeft."}}, "vooropleiding__heeft_cd_proces": {"heeft_cd_proces": {"dtype": "bool", "hasnans": false, "oms": "Of de student een colloquium doctum proces heeft."}}, "vooropleiding__hoogst_aanwezig": {"vooropleiding": {"dtype": "str", "hasnans": true, "oms": "Hoogst aanwezige vooropleiding."}, "vooropleiding_behaald": {"dtype": "bool", "hasnans": true, "oms": "Of aanwezig vooropleiding behaald is."}, "vooropleiding_extensie_code": {"dtype": "str", "hasnans": true, "oms": ""}, "vooropleiding_extensie_land": {"cats": ["AE", "AF", "AL", "AM", "AO", "AR", "AT", "AU", "AW", "AZ", "BA", "BB", "BD", "BE", "BF", "BG", "BH", "BI", "BJ", "BN", "BO", "BR", "BS", "BT", "BW", "BY", "CA", "CH", "CI", "CL", "CM", "CN", "CO", "CU", "CY", "CZ", "DE", "DK", "DO", "DZ", "EC", "EE", "EG", "ER", "ES", "ET", "FI", "FJ", "FR", "GE", "GH", "GM", "GN", "GR", "GT", "HK", "HN", "HR", "HT", "HU", "ID", "IE", "IL", "IN", "IQ", "IR", "IS", "IT", "JM", "JO", "JP", "KE", "KG", "KR", "KW", "KZ", "LA", "LB", "LK", "LR", "LS", "LT", "LU", "LV", "LY", "MA", "MD", "MK", "ML", "MN", "MR", "MT", "MU", "MV", "MW", "MX", "MY", "MZ", "NA", "NG", "NI", "NL", "NO", "NP", "NZ", "OM", "PA", "PE", "PG", "PH", "PK", "PL", "PT", "PY", "QA", "RE", "RO", "RU", "RW", "SA", "SD", "SE", "SG", "SI", "SK", "SL", "SN", "SO", "SR", "SV", "SY", "SZ", "TD", "TG", "TH", "TJ", "TN", "TR", "TT", "TW", "TZ", "UA", "UG", "UK", "UY", "UZ", "VE", "VI", "VN", "VS", "YE", "ZA", "ZM", "ZW"], "dtype": "cat", "hasnans": true, "oms": ""}, "vooropleiding_extensie_naam": {"dtype": "str", "hasnans": true, "oms": ""}, "vooropleiding_school": {"dtype": "str", "hasnans": true, "oms": "School waar hoogst aanwezige vooropleiding is behaald."}, "vooropleiding_type": {"dtype": "str", "hasnans": true, "oms": "Hoogst aanwezige type vooropleiding."}}, "vooropleiding__isa": {"datum_aangevraagd_dipw_isa": {"dtype": "date", "hasnans": true, "oms": "Datum waarop proces is ingediend"}, "datum_besluit_dipw_isa": {"dtype": "date", "hasnans": true, "oms": "Datum van besluit indien aanwezig"}, "datum_status_dipw_isa": {"dtype": "date", "hasnans": true, "oms": "Datum van huidige status"}, "proces_dipw_isa": {"cats": ["BA2223_INT"], "dtype": "cat", "hasnans": true, "oms": "Naam van proces"}, "statusbesluit_dipw_isa": {"dtype": "string", "hasnans": true, "oms": "Besluit indien aanwezig, anders status"}}, "vooropleiding__matrix": {"beschikking": {"cats": ["DD", "N"], "dtype": "cat", "hasnans": true, "oms": "Verificatiestatus bij type vooropleiding \"beschikking\"."}, "buitenlands": {"cats": ["DD", "N"], "dtype": "cat", "hasnans": true, "oms": "Verificatiestatus bij type vooropleiding \"buitenlands\"."}, "havo": {"cats": ["GD", "GV", "N"], "dtype": "cat", "hasnans": true, "oms": "Verificatiestatus bij type vooropleiding \"havo\"."}, "hbo": {"cats": ["GD", "DD", "N"], "dtype": "cat", "hasnans": true, "oms": "Verificatiestatus bij type vooropleiding \"hbo\"."}, "hbo_ba": {"cats": ["GD", "DD", "GV", "N"], "dtype": "cat", "hasnans": true, "oms": "Verificatiestatus bij type vooropleiding \"hbo_ba\"."}, "hbo_ma": {"cats": ["GD", "GV", "N"], "dtype": "cat", "hasnans": true, "oms": "Verificatiestatus bij type vooropleiding \"hbo_ma\"."}, "hbo_p": {"cats": ["GD", "DD", "N"], "dtype": "cat", "hasnans": true, "oms": "Verificatiestatus bij type vooropleiding \"hbo_p\"."}, "mbo": {"cats": ["GD", "N"], "dtype": "cat", "hasnans": true, "oms": "Verificatiestatus bij type vooropleiding \"mbo\"."}, "overig": {"cats": ["GD", "DD", "GV", "N"], "dtype": "cat", "hasnans": true, "oms": "Verificatiestatus bij type vooropleiding \"overig\"."}, "vwo": {"cats": ["GD", "DD", "GV", "N"], "dtype": "cat", "hasnans": true, "oms": "Verificatiestatus bij type vooropleiding \"vwo\"."}, "wo": {"cats": ["GD", "DD", "N"], "dtype": "cat", "hasnans": true, "oms": "Verificatiestatus bij type vooropleiding \"wo\"."}, "wo_ba": {"cats": ["GD", "GV", "N"], "dtype": "cat", "hasnans": true, "oms": "Verificatiestatus bij type vooropleiding \"wo_ba\"."}, "wo_ma": {"cats": ["GD", "GV", "N"], "dtype": "cat", "hasnans": true, "oms": "Verificatiestatus bij type vooropleiding \"wo_ma\"."}, "wo_p": {"cats": ["GD", "N"], "dtype": "cat", "hasnans": true, "oms": "Verificatiestatus bij type vooropleiding \"wo_p\"."}}, "vooropleiding__suffverkl": {"status_sufficientie": {"cats": ["OPL-SUFFVERKL"], "dtype": "cat", "hasnans": true, "oms": "Status van de suffici\u00ebntieverklaring geregistreerd onder\ninstellingstatus."}}, "vooropleiding__vwo_profiel": {"vwo_profiel": {"dtype": "str", "hasnans": true, "oms": "Profielcode bij vwo-diploma."}}, "vvr__csa": {"datum_aangevraagd_vvr_csa": {"dtype": "date", "hasnans": true, "oms": "Datum waarop proces is aangevraagd."}, "datum_besluit_vvr_csa": {"dtype": "date", "hasnans": true, "oms": "Datum waarop besluit proces is vastgelegd."}, "datum_status_vvr_csa": {"dtype": "date", "hasnans": true, "oms": "Datum waarop laatste status proces is vastgelegd."}, "heeft_afkeur_vvr_csa": {"dtype": "bool", "hasnans": false, "oms": "Proces heeft afgekeurde vragen."}, "heeft_proces_vvr_csa": {"dtype": "bool", "hasnans": false, "oms": "Student heeft vvr proces van csa."}, "statusbesluit_vvr_csa": {"dtype": "str", "hasnans": true, "oms": "Status/besluit van het proces:\n- G: geannuleerd\n- B: nog niet gestart\n- C: eerste controle\n- U: uitvraag\n- I: ingediend\n- X: doorgezet naar ISA\n- F: afgehandeld zonder besluit\n- S: voorwaardelijk afgehandeld\n- T: afgehandeld"}}, "vvr__isa": {"datum_aangevraagd_vvr_isa": {"dtype": "date", "hasnans": true, "oms": "Datum waarop proces is aangevraagd."}, "datum_besluit_vvr_isa": {"dtype": "date", "hasnans": true, "oms": "Datum waarop besluit proces is vastgelegd."}, "datum_status_vvr_isa": {"dtype": "date", "hasnans": true, "oms": "Datum waarop laatste status proces is vastgelegd."}, "heeft_proces_vvr_isa": {"dtype": "bool", "hasnans": false, "oms": "Student heeft vvr proces van isa."}, "statusbesluit_vvr_isa": {"dtype": "string", "hasnans": true, "oms": "Status/besluit van het proces."}}}
-let abstractions = {"heeft_proces": {"csa_cert": "proces_dipw_csa == \u0027CSA-CERTIFICAAT\u0027", "csa_dip": "proces_dipw_csa == \u0027CSA_I_DIPLOMA\u0027", "matching": "proces_ooa == \u0027BA2223_MATCHING\u0027", "zachteknip": {"bachelor": "proces_zachte_knip == \u0027BA2223_ZACHTE_KNIP\u0027", "master": "proces_zachte_knip == \u0027MA2122_ZACHTE_KNIP\u0027", "premaster": "proces_zachte_knip == \u0027PM2122_ZACHTE_KNIP\u0027"}}, "inschrijfregel": {"hogerejaars": "hogerejaars_verzoek.fillna(False) and not hogerejaars_geaccepteerd.fillna(False)", "verzoek": "inschrijvingstatus == \u0027V\u0027"}, "kansrijk": {"bachelor": {"fixus": "soort == \u0027fixus\u0027 and plaatsingsbewijs == \u0027Status plaatsing is Geaccepteerd.\u0027", "matching": {"geen_skc": "soort == \u0027bachelor\u0027 and statusbesluit_ooa is null", "regulier": "soort == \u0027bachelor\u0027 and k_studiekeuzecheck == \u0027GROEN\u0027"}, "selectie": {"b\u0026ob": "soort == \u0027selectie\u0027 and opleiding == \u0027B\u0026OB\u0027 and k_toelatingsbeschikking == \u0027GROEN\u0027", "ppeb": "soort == \u0027selectie\u0027 and opleiding == \u0027PPEB\u0027 and statusbesluit_ooa == \u0027T\u0027", "ucu": "soort == \u0027selectie\u0027 and opleiding == \u0027LASB-UC\u0027 and statusbesluit_ooa in [\u0027S\u0027, \u0027T\u0027]"}}, "herinschrijving": "soort == \u0027herinschrijving\u0027", "master": {"toegelaten": "soort in [\u0027master\u0027, \u0027selma\u0027] and toelatingsbeschikking == \u0027Ja.\u0027", "voorwaardelijk": "soort in [\u0027master\u0027, \u0027selma\u0027] and toelatingsbeschikking == \u0027Voorwaardelijk.\u0027 and acceptatieform == \u0027A\u0027"}, "premaster": "soort in [\u0027premaster\u0027, \u0027educatief\u0027] and toelatingsbeschikking == \u0027Ja.\u0027"}, "nationaliteit": {"eu": {"NL": "herkomst_nationaliteit == \u0027NL\u0027", "non-NL": "herkomst_nationaliteit == \u0027EU/EER\u0027"}, "non-eu": "herkomst_nationaliteit == \u0027Non-EU/EER\u0027"}, "uitsluiten": {"bachelor": {"isa": {"niet_toegelaten": "not (statusbesluit_dipw_isa is null or statusbesluit_dipw_isa in [\u0027S\u0027, \u0027T\u0027])"}, "ucr": "opleiding != \u0027LASB-RA\u0027"}, "master": {"niet_toegelaten": "not (soort in [\u0027master\u0027, \u0027selma\u0027] and statusbesluit_ooa != \u0027T\u0027)"}}}
-
-// DATAMODEL
-let datamodel = document.querySelector(`section[data-component="datamodel"] div:last-child`)
-let filterDatamodel = document.querySelector(`section[data-component="datamodel"] input`)
-let clearFilter = document.querySelector(`section[data-component="datamodel"] button`)
-datamodel.innerHTML = renderMetaData(metadata)
-filterDatamodel.addEventListener("keyup", ({key}) => {
-    if (key === 'Enter') { datamodel.innerHTML = renderMetaData(metadata) }
-})
-clearFilter.addEventListener("click", () => {
-    filterDatamodel.value = ""
-    datamodel.innerHTML = renderMetaData(metadata)
-})
-
-// BOUWSTENEN
-let bouwstenen = document.querySelector(`section[data-component="bouwstenen"]`)
-// bouwstenen.innerHTML = '<pre>' + JSON.stringify(abstractions, null, 2) + '</pre>'
-bouwstenen.innerHTML = renderAbstractions(abstractions)
-
-// WERKVOORRAAD
-let output = []
-for (let [chapter, items] of Object.entries(data)) {
-    output.push(renderChapter(chapter, items))
-}
-let werkvoorraad = document.querySelector(`section[data-component="werkvoorraad"] div:last-child`)
-werkvoorraad.innerHTML = output.join("")
-werkvoorraad.addEventListener("click", copyData)
-document.getElementById("toonalles").addEventListener("click", function() {
-    document.querySelectorAll("section > details").forEach(node => node.setAttribute("open", ""))
-})
-document.getElementById("verbergalles").addEventListener("click", function() {
-   document.querySelectorAll("details").forEach(node => node.removeAttribute("open"))
-})
-document.getElementById("toonleeg").addEventListener("click", function() {
-    if (this.checked) {
-        werkvoorraad.querySelectorAll(".empty").forEach(node => node.classList.add("show"))
-    } else {
-        werkvoorraad.querySelectorAll(".empty").forEach(node => node.classList.remove("show"))
-    }
-})
-
-// NAVIGATION
-let navigation = document.querySelector("nav")
-navigation.addEventListener("click", function(event) {
-    let target = event.target.dataset.showTarget
-    if (target != undefined) {
-        let sections = document.querySelectorAll("section[data-component]")
-        sections.forEach(node => {
-            let component = node.dataset.component
-            if (component === target) {
-                node.classList.remove("empty")
-            } else {
-                node.classList.add("empty")
-            }
-        })
-        let buttons = navigation.querySelectorAll("button")
-        buttons.forEach(node => {
-            let component = node.dataset.showTarget
-            if (component === target) {
-                node.setAttribute("selected", "")
-            } else {
-                node.removeAttribute("selected", "")
-            }
-        })
-    }
-})
+    })
 </script>
+<script type="module">
+    function addBorderToRowspans(table) {
+        table.querySelectorAll("th[rowspan]").forEach(
+            th => {
+                const row = th.closest("tr")
+                if (row.matches(":first-child")) { return }
+                row.style.borderTop = "1px solid var(--color-text)"
+            }
+        )
+    }
+
+    function addBorderToColspans(table) {
+        const borderCols = []
+        table.querySelectorAll(`thead tr:first-child th.col_heading[colspan]`).forEach(
+            th => {
+                if (th.matches(".col_heading.col0")) { return }
+                const col = Array.from(th.classList).find(cls => /^col\d+$/.test(cls))
+                borderCols.push(col)
+            }
+        )
+        borderCols.forEach(col => {
+            table.querySelectorAll(`.${col}`).forEach(
+                col => col.style.borderLeft = "1px solid var(--color-text)"
+            )
+        })
+    }
+
+    document.querySelectorAll("table").forEach(addBorderToRowspans)
+    document.querySelectorAll("table").forEach(addBorderToColspans)
+</script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs/prism.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs/plugins/autoloader/prism-autoloader.min.js"></script>
+</body>
 </html>
