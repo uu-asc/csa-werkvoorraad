@@ -195,7 +195,7 @@ def as_markdown_to_html(item: str) -> str:
 def make_werkvoorraad(
     data_getter: Callable,
     sql_getter: Callable,
-    path_to_spec: Path|str,
+    spec: list[dict[str, Any]],
     outpath: Path|str,
     query_kwargs: dict|None = None,
     template: str = 'werkvoorraad.jinja.html',
@@ -207,7 +207,6 @@ def make_werkvoorraad(
     tpl_kwargs = {} if tpl_kwargs is None else tpl_kwargs
     transformers = {} if transformers is None else transformers
 
-    spec = load_spec_from_json(path_to_spec)
     processed_spec = process_spec(
         spec,
         data_getter = data_getter,
