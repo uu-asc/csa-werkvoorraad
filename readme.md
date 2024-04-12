@@ -19,9 +19,9 @@ Met json definieer je de items die in de werkvoorraad getoond moeten worden. De 
 }
 ```
 
-Een item heeft dus ten minste een label dat het item beschrijft en een `data` object. Het `data` object wordt in het [werkvoorraad script](./werkvoorraad/werkvoorraad.py) doorgestuurd naar een functie die de data ophaalt. Deze functie dien je zelf aan te leveren. Van belang is dat deze functie met behulp van de argumenten in `data` in staat is om de benodigde gegevens uit de database op te halen en te retourneren als een `dict[str, list]` waarbij de sleutels verwijzen naar de naam van de identifier en de lijst de waarde van de identifiers bevat die door de gebruiker bekeken/afgehandeld moeten worden. Aan het item kunnen overige velden worden toegevoegd. Deze worden ook in de werkvoorraad getoond. Zo is het mogelijk om instructies, toelichtingen en wat dies meer zij toe te voegen aan de output.
+Een *item* heeft dus ten minste een `label` dat het item beschrijft en een `data` object. Het `data` object wordt in het [werkvoorraad script](./werkvoorraad/werkvoorraad.py) doorgestuurd naar een functie die de data ophaalt. Deze functie dien je zelf aan te leveren. Van belang is hier dat de argumenten in `data` de functie in staat stellen om de benodigde gegevens uit de database op te halen en te retourneren als een `dict[str, list]`. De sleutels in de output verwijzen naar de naam van de identifier en de lijst bevat de identifiers die door de gebruiker moeten worden bekeken/afgehandeld. Aan het item kunnen overige velden worden toegevoegd. Deze worden ook in de werkvoorraad getoond. Zo is het mogelijk om bv. een `instructie` of `toelichting` veld toe te voegen aan de output.
 
-Een hoofdstuk is een container voor items. Een hoofdstuk kan ook weer andere hoofdstukken bevatten. Met hoofstukken kun je iaw structuur aanbrengen in de werkvoorraad. In de specificatie ziet een hoofdstuk er als volgt uit:
+Een *hoofdstuk* is een container voor items. Een hoofdstuk kan ook weer andere hoofdstukken bevatten. Met hoofstukken kun je iaw structuur aanbrengen in de werkvoorraad. In de specificatie ziet een hoofdstuk er als volgt uit:
 
 ```json
 {
