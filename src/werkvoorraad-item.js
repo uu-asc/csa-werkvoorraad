@@ -83,7 +83,12 @@ button:active {
 }
 :host([show-empty]) .empty {
     display: block;
-}`
+}
+.batches .clicked {
+    text-decoration: line-through;
+    font-style: italic;
+}
+`
 
 export class WerkvoorraadItem extends HTMLElement {
     static observedAttributes = ["open"]
@@ -134,6 +139,7 @@ export class WerkvoorraadItem extends HTMLElement {
             bubbles: true,
             composed: true,
         })
+        event.target.classList.add('clicked')
         this.dispatchEvent(clipboardWriteEvent)
     }
 
