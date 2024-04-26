@@ -1,4 +1,4 @@
-import { WerkvoorraadHoofdstuk } from "https://uu-asc.github.io/csa-werkvoorraad/src/werkvoorraad-hoofdstuk.js"
+import { WerkvoorraadHoofdstuk } from "./werkvoorraad-hoofdstuk.js"
 
 const style =
 `button {

@@ -1,4 +1,4 @@
-import { WerkvoorraadItem } from "https://uu-asc.github.io/csa-werkvoorraad/src/werkvoorraad-item.js"
+import { WerkvoorraadItem } from "./werkvoorraad-item.js"
 
 const style =
 `*, *::before, *::after {

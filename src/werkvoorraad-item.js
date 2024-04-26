@@ -129,6 +129,7 @@ export class WerkvoorraadItem extends HTMLElement {
 
     async handleClick(event) {
         if (!event.target.matches("[data-target]")) { return }
+        event.target.classList.add("clicked")
         const target = event.target.dataset.target
         const start = event.target.dataset.start
         const end = event.target.dataset.end
@@ -139,7 +140,6 @@ export class WerkvoorraadItem extends HTMLElement {
             bubbles: true,
             composed: true,
         })
-        event.target.classList.add('clicked')
         this.dispatchEvent(clipboardWriteEvent)
     }
 
