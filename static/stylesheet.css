@@ -16,7 +16,6 @@ body {
     width: min(calc(100% - 2em), 600px);
     margin-inline: auto;
     height: 100vh;
-    padding-bottom: 1em;
 }
 
 header {
@@ -34,7 +33,10 @@ h1 {
 }
 
 footer {
-    margin-top: 5rem;
+    display: grid;
+    border-top: 2px solid currentColor;
+    height: 5rem;
+    align-items: center;
 }
 
 /* LAYOUT */
