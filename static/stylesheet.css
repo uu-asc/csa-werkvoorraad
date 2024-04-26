@@ -33,6 +33,10 @@ h1 {
     padding-block: .75em;
 }
 
+footer {
+    margin-top: 5rem;
+}
+
 /* LAYOUT */
 summary {
     border-top: 4px solid;
