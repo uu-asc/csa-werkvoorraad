@@ -61,7 +61,7 @@ def load_spec_from_json(path: Path|str) -> Spec:
     """
     werkvoorraad = []
     for f in Path(path).glob('*.json'):
-        item = json.loads(f.read_text())
+        item = json.loads(f.read_text(encoding='utf8'))
         werkvoorraad.append(item)
     return werkvoorraad
 
@@ -223,4 +223,4 @@ def make_werkvoorraad(
         tabs = tabs,
         **tpl_kwargs,
     )
-    Path(outpath).expanduser().write_text(html)
+    Path(outpath).expanduser().write_text(html, encoding='utf8')
