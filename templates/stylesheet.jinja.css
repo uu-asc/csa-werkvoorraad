@@ -13,3 +13,21 @@
     --color-button-active: hsl({{ hue_button }}, {{ sat_button }}%, 40%);
     --color-text: hsl({{ hue_text}}, {{ sat_text }}%, 98%);
 }
+
+/* VEGA CHARTS */
+.vega-embed {
+    margin-bottom: 1.5em;
+}
+.vega-bind > label {
+    width: 100%;
+    padding-right: 1em;
+}
+.vega-bind, .vega-bind label {
+    display: flex;
+    justify-content: space-between;
+}
+
+.vega-bind-radio {
+    display: flex;
+    gap: 1em;
+}

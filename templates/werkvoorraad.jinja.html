@@ -26,6 +26,11 @@
     </style>
     <link rel="stylesheet" href="https://lcvriend.github.io/wc-multi-selector/static/prism.css">
     <link rel="stylesheet" href="https://uu-asc.github.io/csa-werkvoorraad/static/stylesheet.css">
+{% if embed_vega %}
+    <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+{% endif %}
 </head>
 <body>
     <header>
@@ -68,6 +73,65 @@
     import { WerkvoorraadComponent } from "https://uu-asc.github.io/csa-werkvoorraad/src/werkvoorraad-component.js"
     import { DarkModeToggle } from "https://uu-asc.github.io/csa-werkvoorraad/src/darkmode-toggle.js"
 
+{% if embed_vega %}
+    // Define the locale options
+    const timeFormatLocale = {
+        "dateTime": "%a %e %B %Y %X",
+        "date": "%d-%m-%Y",
+        "time": "%H:%M:%S",
+        "periods": ["AM", "PM"],
+        "days": ["zondag", "maandag", "dinsdag", "woensdag", "donderdag", "vrijdag", "zaterdag"],
+        "shortDays": ["zo", "ma", "di", "wo", "do", "vr", "za"],
+        "months": ["januari", "februari", "maart", "april", "mei", "juni", "juli", "augustus", "september", "oktober", "november", "december"],
+        "shortMonths": ["jan", "feb", "mrt", "apr", "mei", "jun", "jul", "aug", "sep", "okt", "nov", "dec"]
+    }
+
+    const formatLocale = {
+        "decimal": ",",
+        "thousands": ".",
+        "grouping": [3],
+        "currency": ["\u20ac\u00a0", ""]
+    }
+
+    // Apply the locale settings using Vega APIs
+    vega.timeFormatLocale(timeFormatLocale)
+    vega.formatLocale(formatLocale)
+
+
+    const datasets = {{ charts | tojson }}
+
+    function renderPlots(datasets) {
+        const background = window.getComputedStyle(document.body).getPropertyValue("background-color")
+        const color = window.getComputedStyle(document.body).getPropertyValue("color")
+        const embedOpt = {
+            "mode": "vega-lite",
+            "actions": false,
+            "config": {
+                "background": background,
+                "title": {
+                    "color": color,
+                },
+                "style": {
+                    "guide-label": {
+                        "fill": color,
+                    },
+                    "guide-title": {
+                        "fill": color,
+                    },
+                },
+                "axis": {
+                    "domainColor": color,
+                    "tickColor": color,
+                },
+            }
+        }
+        for (const chart of Object.values(datasets)) {
+            if (!document.getElementById(chart.id)) { continue }
+            vegaEmbed(`#${chart.id}`, chart.spec, embedOpt)
+        }
+    }
+{% endif %}
+
     const spec = {{ spec | tojson }}
     const config = {{ config | default('') | tojson }}
     const werkvoorraadComponent = new WerkvoorraadComponent(spec, config)
@@ -77,6 +141,9 @@
         event.detail.scheme === "dark"
         ? document.body.classList.add("dark-theme")
         : document.body.classList.remove("dark-theme")
+        {% if embed_vega %}
+        renderPlots(datasets)
+        {% endif %}
     })
     const darkModeToggle = new DarkModeToggle()
     document.querySelector("header").appendChild(darkModeToggle)
