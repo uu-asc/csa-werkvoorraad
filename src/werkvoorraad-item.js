@@ -1,10 +1,11 @@
 const style =
-`*, *::before, *::after {
+`/* CSS FOR ITEM */
+*, *::before, *::after {
     box-sizing: border-box;
     margin: 0;
 }
 
-/* LAYOUT */
+/* layout */
 summary {
     border-top: 1px solid;
     min-width: 200px;
@@ -14,6 +15,12 @@ summary {
     justify-content: space-between;
     align-items: center;
     gap: .5em;
+}
+summary div:first-child::before {
+    content: '•';
+    display: inline-block;
+    position: relative;
+    right: .25em;
 }
 summary > :first-child {
     flex-grow: 1;
@@ -56,7 +63,7 @@ details.has-details > div {
     margin-bottom: .5rem;
 }
 
-/* STYLING */
+/* styling */
 label {
     font-family: monospace;
 }
@@ -77,7 +84,7 @@ button:active {
     background-color: var(--color-button-active);
 }
 
-/* UTILITY */
+/* utility */
 .empty {
     display: none;
 }

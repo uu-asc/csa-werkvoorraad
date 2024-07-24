@@ -1,12 +1,13 @@
 import { WerkvoorraadItem } from "./werkvoorraad-item.js"
 
 const style =
-`*, *::before, *::after {
+`/* CSS FOR HOOFDSTUK */
+*, *::before, *::after {
     box-sizing: border-box;
     margin: 0;
 }
 
-/* LAYOUT */
+/* layout */
 summary {
     border-top: 4px solid;
     min-width: 200px;
@@ -39,12 +40,12 @@ details[open] > summary:after {
     transform: rotate(45deg);
 }
 
-/* STYLING */
+/* styling */
 h2, h3, h4, h5, h6 {
     font-variant: small-caps;
 }
 
-/* UTILITY */
+/* utility */
 .empty {
     display: none;
 }

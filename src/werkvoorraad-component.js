@@ -1,7 +1,8 @@
 import { WerkvoorraadHoofdstuk } from "./werkvoorraad-hoofdstuk.js"
 
 const style =
-`button {
+`/* CSS FOR COMPONENT */
+button {
     background-color: var(--color-button);
     color: inherit;
     cursor: pointer;
