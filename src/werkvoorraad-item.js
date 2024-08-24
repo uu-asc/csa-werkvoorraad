@@ -135,11 +135,32 @@ export class WerkvoorraadItem extends HTMLElement {
     }
 
     async handleClick(event) {
-        if (!event.target.matches("[data-target]")) { return }
-        event.target.classList.add("clicked")
-        const target = event.target.dataset.target
-        const start = event.target.dataset.start
-        const end = event.target.dataset.end
+        const elem = event.target
+
+        // collect information about any clicked element
+        const info = {
+            tagName: elem.tagName.toLowerCase(),
+            id: elem.id,
+            classes: Array.from(elem.classList),
+            dataset: {...elem.dataset}
+        };
+
+        // dispatch custom event with collected information
+        const clickEvent = new CustomEvent('wv-item-click', {
+            bubbles: true,
+            composed: true,
+            detail: info,
+        })
+        this.dispatchEvent(clickEvent)
+
+        // leave if not main data hook
+        if (!elem.matches("[data-target]")) { return }
+
+        // copy identifiers to clipboard
+        elem.classList.add("clicked")
+        const target = elem.dataset.target
+        const start = elem.dataset.start
+        const end = elem.dataset.end
 
         const data = this.data[target].slice(start, end).join(";")
         await navigator.clipboard.writeText(data)
