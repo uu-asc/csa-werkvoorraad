@@ -139,11 +139,12 @@ export class WerkvoorraadItem extends HTMLElement {
 
         // collect information about any clicked element
         const info = {
-            tagName: elem.tagName.toLowerCase(),
             id: elem.id,
+            tagName: elem.tagName.toLowerCase(),
             classes: Array.from(elem.classList),
-            dataset: {...elem.dataset}
-        };
+            dataset: {...elem.dataset},
+            content: elem.textContent.trim(),
+        }
 
         // dispatch custom event with collected information
         const clickEvent = new CustomEvent('wv-item-click', {
