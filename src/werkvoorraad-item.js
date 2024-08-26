@@ -84,6 +84,11 @@ button:active {
     background-color: var(--color-button-active);
 }
 
+.link:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
 /* utility */
 .empty {
     display: none;
