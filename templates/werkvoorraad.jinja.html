@@ -2,17 +2,17 @@
 {% set title = title | default('werkvoorraad') %}
 {% set tabs = tabs | default({}) %}
 {% set werkvoorraad_label = werkvoorraad_label | default('werkvoorraad') %}
-
+{#  #}
 {% set hue = hue | default(210) %}
 {% set hue_background = hue_background | default(hue) %}
 {% set hue_button = hue_button | default(hue) %}
 {% set hue_text = hue_text | default(hue) %}
-
+{#  #}
 {% set sat = sat | default(18) %}
 {% set sat_background = sat_background | default(sat) %}
 {% set sat_button = sat_button | default(sat) %}
 {% set sat_text = sat_text | default(sat) %}
-
+{#  #}
 <!DOCTYPE html>
 <html lang="{{ language }}">
 <head>
@@ -22,7 +22,9 @@
     <link rel="icon" type="image/svg+xml" href="https://uu-asc.github.io/csa-werkvoorraad/static/favicon.svg">
     <link rel="icon" type="image/png" href="https://uu-asc.github.io/csa-werkvoorraad/static/favicon.png">
     <style>
+    {% filter indent(width=8, first=True) %}
     {% include 'stylesheet.jinja.css' %}
+    {% endfilter %}
     </style>
     <link rel="stylesheet" href="https://lcvriend.github.io/wc-multi-selector/static/prism.css">
     <link rel="stylesheet" href="https://uu-asc.github.io/csa-werkvoorraad/static/stylesheet.css">
@@ -48,6 +50,7 @@
         {% endfor %}
         {% endif %}
     </nav>
+    <button class="back-to-top hidden">Back To Top</button>
     <section data-component="werkvoorraad"></section>
     {% if queries %}
     <section data-component="queries" class="hidden">
@@ -198,6 +201,57 @@
 
     document.querySelectorAll("table").forEach(addBorderToRowspans)
     document.querySelectorAll("table").forEach(addBorderToColspans)
+</script>
+<script>
+    const queryLabels = document.querySelectorAll(`[data-component="queries"] > details > summary`)
+    const queryTab = document.querySelector(`[data-show-target="queries"]`)
+
+    function scrollToQuery() {
+        const openedQuery = document.querySelector('[data-component="queries"] > details[open]');
+        const scrollProps = {behavior: 'smooth', block: 'start'}
+        if (openedQuery) { openedQuery.scrollIntoView(scrollProps) }
+        else { console.log('No matching query found') }
+    }
+
+    function openQueryLink(queryName) {
+        for (let label of queryLabels) {
+            label.parentNode.open = false
+            transformedLabel = label.textContent.replace(/\s/g, '')
+            if (transformedLabel === queryName) { label.parentNode.open = true }
+        }
+        queryTab.click()
+        scrollToQuery()
+    }
+
+    document.body.addEventListener('wv-item-click', event => {
+        const { tagName, id, classes, dataset, content } = event.detail
+        // open query when query link is clicked
+        if (classes.includes('query')) { openQueryLink(content) }
+    })
+</script>
+<script>
+    const showOnPx = 100
+    const backToTopButton = document.querySelector(".back-to-top")
+
+    const scrollContainer = () => {
+        return document.documentElement || document.body
+    }
+
+    const goToTop = () => {
+        document.body.scrollIntoView({
+            behavior: "smooth",
+        })
+    }
+
+    document.addEventListener("scroll", () => {
+        if (scrollContainer().scrollTop > showOnPx) {
+            backToTopButton.classList.remove("hidden")
+        } else {
+            backToTopButton.classList.add("hidden")
+        }
+    })
+
+    backToTopButton.addEventListener("click", goToTop)
 </script>
 <script src="https://cdn.jsdelivr.net/npm/prismjs/prism.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/prismjs/plugins/autoloader/prism-autoloader.min.js"></script>

@@ -225,7 +225,7 @@ if __name__ == '__main__':
         return "select * from x"
 
     transformers = {
-        'query': werkvoorraad.wrap_item_in_code_tags,
+        'query': werkvoorraad.as_query_link,
         'where': werkvoorraad.wrap_criteria_in_blockquotes,
     }
 

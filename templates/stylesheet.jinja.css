@@ -31,3 +31,30 @@
     display: flex;
     gap: 1em;
 }
+
+/* BACK TO TOP */
+.back-to-top {
+    position: fixed;
+    right: 2rem;
+    bottom: 2rem;
+    z-index: 999;
+    min-width: 5ch;
+    padding-inline: .25em;
+    background-color: var(--color-button);
+    color: inherit;
+    cursor: pointer;
+    font-family: monospace;
+    border: 1px solid;
+    border-radius: 4px;
+}
+
+.back-to-top:hover {
+    background-color: var(--color-button-hover);
+}
+.back-to-top:active {
+    background-color: var(--color-button-active);
+}
+
+.hidden {
+    display: none;
+}
