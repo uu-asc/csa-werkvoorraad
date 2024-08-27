@@ -10,7 +10,7 @@ from markdown import markdown
 from jinja2 import Environment, FileSystemLoader
 
 
-type Spec = list[dict[str, Any]]
+type Spec = list[dict[str, Any]] | dict[str, Any]
 type ItemTransformer = Callable[..., str]
 
 
@@ -48,7 +48,7 @@ class Ts:
 TS = Ts()
 
 
-# PROCES SPEC
+# MARK: PROCES SPEC
 def load_spec_from_json(path: Path|str) -> Spec:
     """
     Load specifications from JSON files in specified path.
@@ -117,7 +117,7 @@ def process_spec(
             return new_spec
 
 
-# SQL STATEMENTS
+# MARK: SQL STATEMENTS
 def gather_sql_from_spec(spec: Spec, sql_getter: Callable, **kwargs) -> dict:
     paths = extract_query_paths_from_spec(spec)
     return gather_sql(paths, sql_getter, **kwargs)
@@ -169,7 +169,7 @@ def gather_sql(paths: set[str], sql_getter: Callable, **kwargs) -> dict:
     return statements
 
 
-# TRANSFORMERS
+# MARK: TRANSFORMERS
 def wrap_criteria_in_blockquotes(criteria: list[str]) -> str:
     tpl = Template("""<blockquote style="background: var(--background-color); padding: .25em; border-radius: 3px;"><code>${criterium}</code></blockquote>""")
     blockquoted = [tpl.substitute(criterium=crit) for crit in criteria]
@@ -183,6 +183,11 @@ def wrap_item_in_code_tags(item: str) -> str:
     return wrapped
 
 
+def as_query_link(item: str) -> str:
+    wrapped = f'<code class="query link">{item}</code>'
+    return wrapped
+
+
 def as_markdown_to_html(item: str) -> str:
     replacements = {'\\n': '\n', '\\t': '\t', '\\r': '\r'}
     for old, new in replacements.items():
@@ -191,7 +196,7 @@ def as_markdown_to_html(item: str) -> str:
     return md
 
 
-# WERKVOORRAAD
+# MARK: WERKVOORRAAD
 def make_werkvoorraad(
     data_getter: Callable,
     sql_getter: Callable,
