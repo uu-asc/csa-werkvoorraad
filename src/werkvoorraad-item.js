@@ -120,7 +120,7 @@ export class WerkvoorraadItem extends HTMLElement {
         this.shadow = this.attachShadow({ mode: 'open' })
         this.handleClick = this.handleClick.bind(this)
         this.handleToggle = this.handleToggle.bind(this)
-        this.handleSearchLabel = this.handleSearchLabel.bind(this)
+        this.handleSearchItem = this.handleSearchItem.bind(this)
     }
 
     get n() { return Object.values(this.data).reduce((sum, arr) => sum + arr.length, 0) }
@@ -184,7 +184,7 @@ export class WerkvoorraadItem extends HTMLElement {
     handleClose() { this.removeAttribute("open")}
     handleToggle() { this._details.open ? this.handleOpen() : this.handleClose() }
 
-    handleSearchLabel(regex) {
+    handleSearchItem(regex) {
         return regex.test(this.label)
     }
 

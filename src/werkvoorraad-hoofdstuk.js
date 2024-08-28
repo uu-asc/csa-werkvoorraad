@@ -56,7 +56,7 @@ h2, h3, h4, h5, h6 {
 export class WerkvoorraadHoofdstuk extends HTMLElement {
     static observedAttributes = ["open", "show-empty"]
     config = {
-        clipboardWriteLabel: "naar klembord gekopieerd!",
+        clipboardWriteLabel: "gekopieerd!",
         offset: .5,
     }
 
@@ -69,7 +69,7 @@ export class WerkvoorraadHoofdstuk extends HTMLElement {
         this.shadow = this.attachShadow({ mode: "open" })
 
         this.handleToggle = this.handleToggle.bind(this)
-        this.handleSearchLabel = this.handleSearchLabel.bind(this)
+        this.handleSearchItem = this.handleSearchItem.bind(this)
         this.loadFromSpec = this.loadFromSpec.bind(this)
 
         this.items = spec.items.map(this.loadFromSpec)
@@ -148,12 +148,13 @@ export class WerkvoorraadHoofdstuk extends HTMLElement {
         localStorage.setItem("toggleState", JSON.stringify(toggleState))
     }
 
-    handleSearchLabel(regex) {
+    handleSearchItem(regex) {
         let wasFound = false
         const matchesLabel = regex.test(this.label)
 
         this.items.forEach(item => {
-            const isMatch = item.handleSearchLabel(matchesLabel ? /.*/ : regex)
+            const emptySearch = new RegExp("", "i")
+            const isMatch = item.handleSearchItem(matchesLabel ? emptySearch : regex)
             const isEmpty = !this.hasAttribute("show-empty") && (item.n === 0)
             const shouldShow = isMatch && !isEmpty
             item.classList.toggle("hide", !shouldShow)

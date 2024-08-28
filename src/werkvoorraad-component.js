@@ -27,9 +27,23 @@ button:active {
     margin-block: .75em;
 }
 
-#search-label {
-    height: 1.25em;
+.filter {
+    display: flex;
     margin-left: auto;
+}
+
+#search-item {
+    padding: .25rem .5em;
+    border: 1px solid;
+    border-right: none;
+    border-radius: .25em 0 0 .25em;
+}
+
+#clear-query {
+    display: grid;
+    place-items: center;
+    border: 1px solid;
+    border-radius: 0 .25em .25em 0;
 }
 
 .hide {
@@ -43,7 +57,7 @@ export class WerkvoorraadComponent extends HTMLElement {
             openAll: "Toon alles",
             closeAll: "Verberg alles",
             showEmpty: "queries zonder resultaten",
-            searchLabelPlaceholder: "Zoek item...",
+            searchLabelPlaceholder: "Zoek items...",
         }
     }
 
@@ -55,7 +69,8 @@ export class WerkvoorraadComponent extends HTMLElement {
         this.handleOpenAll = this.handleOpenAll.bind(this)
         this.handleCloseAll = this.handleCloseAll.bind(this)
         this.handleShowEmpty = this.handleShowEmpty.bind(this)
-        this.handleSearchLabel = this.handleSearchLabel.bind(this)
+        this.handleClearQuery = this.handleClearQuery.bind(this)
+        this.handleSearchItem = this.handleSearchItem.bind(this)
         this.loadFromSpec = this.loadFromSpec.bind(this)
 
         this.items = spec.map(this.loadFromSpec)
@@ -66,13 +81,16 @@ export class WerkvoorraadComponent extends HTMLElement {
         this._buttonOpenAll.addEventListener("click", this.handleOpenAll)
         this._buttonCloseAll.addEventListener("click", this.handleCloseAll)
         this._buttonShowEmpty.addEventListener("click", this.handleShowEmpty)
-        this._inputSearchLabel.addEventListener("keyup", this.handleSearchLabel)
+        this._buttonClearQuery.addEventListener("click", this.handleClearQuery)
+        this._inputSearchItem.addEventListener("keyup", this.handleSearchItem)
+        this.loadSearchValue()
     }
 
     get _buttonOpenAll() { return this.shadow.getElementById("open-all") }
     get _buttonCloseAll() { return this.shadow.getElementById("close-all") }
     get _buttonShowEmpty() { return this.shadow.getElementById("show-empty") }
-    get _inputSearchLabel() { return this.shadow.getElementById("search-label") }
+    get _buttonClearQuery() { return this.shadow.getElementById("clear-query") }
+    get _inputSearchItem() { return this.shadow.getElementById("search-item") }
 
     handleOpenAll() { this.items.forEach(item => item.handleOpenAll() ) }
     handleCloseAll() { this.items.forEach(item => item.handleCloseAll() ) }
@@ -80,12 +98,17 @@ export class WerkvoorraadComponent extends HTMLElement {
         event.target.checked
         ? this.items.forEach(el => el.setAttribute("show-empty", ""))
         : this.items.forEach(el => el.removeAttribute("show-empty"))
-        this.handleSearchLabel()
+        this.handleSearchItem()
     }
-    handleSearchLabel() {
-        const query = this._inputSearchLabel.value
-        const regex = new RegExp(query, "i")
-        this.items.forEach(item => { item.handleSearchLabel(regex) })
+    handleSearchItem(event) {
+        if (event.key === "Escape") { event.target.value = "" }
+        this.saveSearchValue()
+        const regex = new RegExp(event.target.value, "i")
+        this.items.forEach(item => { item.handleSearchItem(regex) })
+    }
+    handleClearQuery() {
+        const escapeEvent = new KeyboardEvent("keyup", { key: "Escape" })
+        this._inputSearchItem.dispatchEvent(escapeEvent)
     }
 
     render() {
@@ -96,13 +119,29 @@ export class WerkvoorraadComponent extends HTMLElement {
                 <button id="close-all">${this.config.labels.closeAll}</button>
                 <input type="checkbox" id="show-empty">
                 <label for="show-empty">${this.config.labels.showEmpty}</label>
-                <input type="text" placeholder="${this.config.labels.searchLabelPlaceholder}" id="search-label">
+                <div class="filter">
+                    <input type="text" placeholder="${this.config.labels.searchLabelPlaceholder}" id="search-item">
+                    <button id="clear-query">&Cross;</button>
+                </div>
             </div>`
         this.items.forEach(item => (this.shadow.appendChild(item)))
     }
 
     loadFromSpec(spec) {
         return new WerkvoorraadHoofdstuk(spec, this.config)
+    }
+
+    saveSearchValue() {
+        localStorage.setItem("lastSearchValue", this._inputSearchItem.value)
+    }
+
+    loadSearchValue() {
+        const lastSearchValue = localStorage.getItem("lastSearchValue")
+        if (lastSearchValue) {
+            this._inputSearchItem.value = lastSearchValue
+            const enterEvent = new KeyboardEvent("keyup", { key: "Enter" })
+            this._inputSearchItem.dispatchEvent(enterEvent)
+        }
     }
 }
 
