@@ -153,7 +153,7 @@ export class WerkvoorraadHoofdstuk extends HTMLElement {
         const matchesLabel = regex.test(this.label)
 
         this.items.forEach(item => {
-            const isMatch = matchesLabel || item.handleSearchLabel(regex)
+            const isMatch = item.handleSearchLabel(matchesLabel ? /.*/ : regex)
             const isEmpty = !this.hasAttribute("show-empty") && (item.n === 0)
             const shouldShow = isMatch && !isEmpty
             item.classList.toggle("hide", !shouldShow)

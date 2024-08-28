@@ -66,7 +66,7 @@ export class WerkvoorraadComponent extends HTMLElement {
         this._buttonOpenAll.addEventListener("click", this.handleOpenAll)
         this._buttonCloseAll.addEventListener("click", this.handleCloseAll)
         this._buttonShowEmpty.addEventListener("click", this.handleShowEmpty)
-        this._inputSearchLabel.addEventListener("change", this.handleSearchLabel)
+        this._inputSearchLabel.addEventListener("keyup", this.handleSearchLabel)
     }
 
     get _buttonOpenAll() { return this.shadow.getElementById("open-all") }
