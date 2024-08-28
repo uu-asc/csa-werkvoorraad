@@ -46,7 +46,7 @@ h2, h3, h4, h5, h6 {
 }
 
 /* utility */
-.empty {
+.empty, .hide {
     display: none;
 }
 :host([show-empty]) .empty {
@@ -66,9 +66,10 @@ export class WerkvoorraadHoofdstuk extends HTMLElement {
         this.depth = depth
         this.label = spec.label
         this.config = { ...this.config, ...config }
-        this.shadow = this.attachShadow({ mode: 'open' })
+        this.shadow = this.attachShadow({ mode: "open" })
 
         this.handleToggle = this.handleToggle.bind(this)
+        this.handleSearchLabel = this.handleSearchLabel.bind(this)
         this.loadFromSpec = this.loadFromSpec.bind(this)
 
         this.items = spec.items.map(this.loadFromSpec)
@@ -86,6 +87,7 @@ export class WerkvoorraadHoofdstuk extends HTMLElement {
         }
         return totals
     }
+    get n() { return Object.values(this.totals).reduce((sum, val) => sum + val, 0) }
 
     get _details() { return this.shadow.querySelector("details") }
     get _display() { return this.shadow.querySelector("summary div") }
@@ -146,6 +148,22 @@ export class WerkvoorraadHoofdstuk extends HTMLElement {
         localStorage.setItem("toggleState", JSON.stringify(toggleState))
     }
 
+    handleSearchLabel(regex) {
+        let wasFound = false
+        const matchesLabel = regex.test(this.label)
+
+        this.items.forEach(item => {
+            const isMatch = matchesLabel || item.handleSearchLabel(regex)
+            const isEmpty = !this.hasAttribute("show-empty") && (item.n === 0)
+            const shouldShow = isMatch && !isEmpty
+            item.classList.toggle("hide", !shouldShow)
+            if (shouldShow) { wasFound = true }
+        })
+
+        this.classList.toggle("hide", !wasFound)
+        return wasFound
+    }
+
     getToggleStateFromLocalStorage() {
         const json = localStorage.getItem("toggleState")
         return JSON.parse(json) ?? {}
@@ -156,11 +174,10 @@ export class WerkvoorraadHoofdstuk extends HTMLElement {
             Object.entries(this.totals)
             .map(([key, n]) => `${key}: ${n}`)
             .join(', ')
-        const n = Object.values(this.totals).reduce((sum, val) => sum + val, 0)
 
         this.shadow.innerHTML =
             `<style>${style}</style>
-            <section${n < 1 ? ' class="empty"' : ""}>
+            <section${this.n < 1 ? ' class="empty"' : ""}>
                 <details>
                     <summary>
                         <h${2 + this.depth}>${this.label}</h2>

@@ -21,8 +21,21 @@ button:active {
 }
 
 .acties {
+    display: flex;
+    gap: .25em;
+    align-items: center;
     margin-block: .75em;
-}`
+}
+
+#search-label {
+    height: 1.25em;
+    margin-left: auto;
+}
+
+.hide {
+    display: none;
+}
+`
 
 export class WerkvoorraadComponent extends HTMLElement {
     config = {
@@ -30,6 +43,7 @@ export class WerkvoorraadComponent extends HTMLElement {
             openAll: "Toon alles",
             closeAll: "Verberg alles",
             showEmpty: "queries zonder resultaten",
+            searchLabelPlaceholder: "Zoek item...",
         }
     }
 
@@ -41,6 +55,7 @@ export class WerkvoorraadComponent extends HTMLElement {
         this.handleOpenAll = this.handleOpenAll.bind(this)
         this.handleCloseAll = this.handleCloseAll.bind(this)
         this.handleShowEmpty = this.handleShowEmpty.bind(this)
+        this.handleSearchLabel = this.handleSearchLabel.bind(this)
         this.loadFromSpec = this.loadFromSpec.bind(this)
 
         this.items = spec.map(this.loadFromSpec)
@@ -51,11 +66,13 @@ export class WerkvoorraadComponent extends HTMLElement {
         this._buttonOpenAll.addEventListener("click", this.handleOpenAll)
         this._buttonCloseAll.addEventListener("click", this.handleCloseAll)
         this._buttonShowEmpty.addEventListener("click", this.handleShowEmpty)
+        this._inputSearchLabel.addEventListener("change", this.handleSearchLabel)
     }
 
     get _buttonOpenAll() { return this.shadow.getElementById("open-all") }
     get _buttonCloseAll() { return this.shadow.getElementById("close-all") }
     get _buttonShowEmpty() { return this.shadow.getElementById("show-empty") }
+    get _inputSearchLabel() { return this.shadow.getElementById("search-label") }
 
     handleOpenAll() { this.items.forEach(item => item.handleOpenAll() ) }
     handleCloseAll() { this.items.forEach(item => item.handleCloseAll() ) }
@@ -63,6 +80,12 @@ export class WerkvoorraadComponent extends HTMLElement {
         event.target.checked
         ? this.items.forEach(el => el.setAttribute("show-empty", ""))
         : this.items.forEach(el => el.removeAttribute("show-empty"))
+        this.handleSearchLabel()
+    }
+    handleSearchLabel() {
+        const query = this._inputSearchLabel.value
+        const regex = new RegExp(query, "i")
+        this.items.forEach(item => { item.handleSearchLabel(regex) })
     }
 
     render() {
@@ -73,6 +96,7 @@ export class WerkvoorraadComponent extends HTMLElement {
                 <button id="close-all">${this.config.labels.closeAll}</button>
                 <input type="checkbox" id="show-empty">
                 <label for="show-empty">${this.config.labels.showEmpty}</label>
+                <input type="text" placeholder="${this.config.labels.searchLabelPlaceholder}" id="search-label">
             </div>`
         this.items.forEach(item => (this.shadow.appendChild(item)))
     }

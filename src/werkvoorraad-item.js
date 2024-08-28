@@ -120,7 +120,10 @@ export class WerkvoorraadItem extends HTMLElement {
         this.shadow = this.attachShadow({ mode: 'open' })
         this.handleClick = this.handleClick.bind(this)
         this.handleToggle = this.handleToggle.bind(this)
+        this.handleSearchLabel = this.handleSearchLabel.bind(this)
     }
+
+    get n() { return Object.values(this.data).reduce((sum, arr) => sum + arr.length, 0) }
 
     get _details() { return this.shadow.querySelector("details") }
     get _stylesheet() { return this.shadowRoot.styleSheets[0] }
@@ -181,6 +184,10 @@ export class WerkvoorraadItem extends HTMLElement {
     handleClose() { this.removeAttribute("open")}
     handleToggle() { this._details.open ? this.handleOpen() : this.handleClose() }
 
+    handleSearchLabel(regex) {
+        return regex.test(this.label)
+    }
+
     render() {
         const buttons =
             Object.entries(this.data)
@@ -195,10 +202,9 @@ export class WerkvoorraadItem extends HTMLElement {
             Object.entries(this.rest)
             .map(([key, val]) => `<div><strong>${key}</strong> ${val}</div>`)
 
-        const n = Object.values(this.data).reduce((sum, arr) => sum + arr.length, 0)
         const hasDetails = batches.length > 0 || details.length > 0
         const classes = []
-        if (n < 1) { classes.push("empty") }
+        if (this.n < 1) { classes.push("empty") }
         if (hasDetails) { classes.push("has-details") }
 
         this.shadow.innerHTML =
