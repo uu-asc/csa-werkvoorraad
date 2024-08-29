@@ -30,11 +30,11 @@ button:active {
 .filter {
     display: flex;
     margin-left: auto;
-}
+    }
 
 #search-item {
     padding: .25rem .5em;
-    border: 1px solid;
+    border: 1px solid var(--color-text);
     border-right: none;
     border-radius: .25em 0 0 .25em;
 }
