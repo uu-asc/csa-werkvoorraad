@@ -153,8 +153,15 @@ export class WerkvoorraadHoofdstuk extends HTMLElement {
         const matchesLabel = regex.test(this.label)
 
         this.items.forEach(item => {
+            // if parent item matches than all children should match
+            // therefore when parent matches, we match children to an empty string
             const emptySearch = new RegExp("", "i")
-            const isMatch = item.handleSearchItem(matchesLabel ? emptySearch : regex)
+            const query = matchesLabel ? emptySearch : regex
+            const isMatch = item.handleSearchItem(query)
+
+            // if item is empty and we are not showing empty items
+            // then we do not want to show its parent either
+            // so empty items should be discounted in this case
             const isEmpty = !this.hasAttribute("show-empty") && (item.n === 0)
             const shouldShow = isMatch && !isEmpty
             item.classList.toggle("hide", !shouldShow)
