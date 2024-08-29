@@ -57,7 +57,7 @@ export class WerkvoorraadComponent extends HTMLElement {
             openAll: "Toon alles",
             closeAll: "Verberg alles",
             showEmpty: "queries zonder resultaten",
-            searchLabelPlaceholder: "Zoek items...",
+            searchItem: "Zoek items...",
         }
     }
 
@@ -120,7 +120,7 @@ export class WerkvoorraadComponent extends HTMLElement {
                 <input type="checkbox" id="show-empty">
                 <label for="show-empty">${this.config.labels.showEmpty}</label>
                 <div class="filter">
-                    <input type="text" placeholder="${this.config.labels.searchLabelPlaceholder}" id="search-item">
+                    <input type="text" placeholder="${this.config.labels.searchItem}" id="search-item">
                     <button id="clear-query">&Cross;</button>
                 </div>
             </div>`
