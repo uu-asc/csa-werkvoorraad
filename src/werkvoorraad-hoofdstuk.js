@@ -17,10 +17,10 @@ summary {
     display: flex;
     align-items: center;
     gap: .5em;
+    white-space: nowrap;
 }
 
 summary code {
-    flex-grow: 1;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
