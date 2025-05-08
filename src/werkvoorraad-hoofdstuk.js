@@ -15,13 +15,15 @@ summary {
     position: relative;
     cursor: pointer;
     display: flex;
-    flex-wrap: wrap;
     align-items: center;
     gap: .5em;
 }
 
 summary code {
     flex-grow: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 summary :last-child {
     margin-right: 2ch;
