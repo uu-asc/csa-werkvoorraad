@@ -185,13 +185,18 @@ export class WerkvoorraadHoofdstuk extends HTMLElement {
             .map(([key, n]) => `${key}: ${n}`)
             .join(', ')
 
+        const totalsTooltip =
+            Object.entries(this.totals)
+            .map(([key, n]) => `${key}: ${n}`)
+            .join('\n')
+
         this.shadow.innerHTML =
             `<style>${style}</style>
             <section${this.n < 1 ? ' class="empty"' : ""}>
                 <details>
                     <summary>
                         <h${2 + this.depth}>${this.label}</h2>
-                        <code title="${totals}">(${totals})</code>
+                        <code title="${totalsTooltip}">(${totals})</code>
                         <div></div>
                     </summary>
                 </details>
