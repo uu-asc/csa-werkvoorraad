@@ -191,7 +191,7 @@ export class WerkvoorraadHoofdstuk extends HTMLElement {
                 <details>
                     <summary>
                         <h${2 + this.depth}>${this.label}</h2>
-                        <code>(${totals})</code>
+                        <code title="${totals}">(${totals})</code>
                         <div></div>
                     </summary>
                 </details>
