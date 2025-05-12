@@ -38,7 +38,10 @@
     <header>
         <h1>{{ title }}</h1>
     </header>
+    <div class="timestamp-container">
     <div id="timestamp">{% if language == 'nl' %}Laatste update:{% else %}Last update:{% endif %} {{ ts.timestamp }}</div>
+        <div id="timestamp-warning"></div>
+    </div>
     <nav>
         <button data-show-target="werkvoorraad" selected>{{ werkvoorraad_label }}</button>
         {% if queries %}
@@ -72,6 +75,49 @@
     <footer>
         <a href="https://github.com/uu-asc/csa-werkvoorraad">github.com/uu-asc/csa-werkvoorraad</a>
     </footer>
+<script type="module">
+    const lastUpdateTimestamp = new Date("{{ ts.now.isoformat() }}")
+
+    function checkTimestampFreshness(thresholdHours = 4) {
+        // Get the warning element
+        const warningElem = document.getElementById("timestamp-warning")
+        if (!warningElem || !lastUpdateTimestamp) return
+
+        const now = new Date()
+
+        // Calculate the difference in hours
+        const diffMs = now - lastUpdateTimestamp
+        const diffHours = diffMs / (1000 * 60 * 60)
+
+        // Only proceed if data is stale
+        if (diffHours <= thresholdHours) return
+
+        // Format time difference for display
+        const timeAgo = diffHours < 24
+        {% if language == 'nl' %}
+            ? `${Math.round(diffHours)} uur`
+            : `${Math.floor(diffHours / 24)} ${Math.floor(diffHours / 24) === 1 ? "dag" : "dagen"}`
+        {% else %}
+            ? `${Math.round(diffHours)} hours`
+            : `${Math.floor(diffHours / 24)} ${Math.floor(diffHours / 24) === 1 ? "day" : "days"}`
+        {% endif %}
+
+        // Add warning content
+        {% if language == 'nl' %}
+        warningElem.textContent = `LET OP! Laatste update was ${timeAgo} geleden`
+        {% else %}
+        warningElem.textContent = `WARNING! Last update was ${timeAgo} ago`
+        {% endif %}
+
+        warningElem.classList.add(
+            diffHours > 24 ? "timestamp-warning-severe" :
+            diffHours > 8 ? "timestamp-warning-moderate" :
+            "timestamp-warning-mild"
+        )
+    }
+
+    checkTimestampFreshness(4)
+</script>
 <script type="module">
     import { WerkvoorraadComponent } from "https://uu-asc.github.io/csa-werkvoorraad/src/werkvoorraad-component.js"
     import { DarkModeToggle } from "https://uu-asc.github.io/csa-werkvoorraad/src/darkmode-toggle.js"
