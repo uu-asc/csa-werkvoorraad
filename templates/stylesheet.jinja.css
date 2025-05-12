@@ -35,7 +35,7 @@
 /* BACK TO TOP */
 .back-to-top {
     position: fixed;
-    right: 2rem;
+    right: 1.5rem;
     bottom: 2rem;
     z-index: 999;
     min-width: 5ch;

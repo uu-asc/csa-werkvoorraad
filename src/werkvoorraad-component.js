@@ -76,6 +76,19 @@ export class WerkvoorraadComponent extends HTMLElement {
         this.items = spec.map(this.loadFromSpec)
     }
 
+    get totalItemCount() {
+        return this.items.reduce((sum, item) => sum + item.totalItemCount, 0)
+    }
+    get itemsWithResultsCount() {
+        return this.items.reduce((sum, item) => sum + item.itemsWithResultsCount, 0)
+    }
+    getItemCounts() {
+        return {
+            total: this.totalItemCount,
+            withResults: this.itemsWithResultsCount
+        }
+    }
+
     connectedCallback() {
         this.render()
         this._buttonOpenAll.addEventListener("click", this.handleOpenAll)

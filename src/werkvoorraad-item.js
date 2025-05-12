@@ -124,6 +124,7 @@ export class WerkvoorraadItem extends HTMLElement {
     }
 
     get n() { return Object.values(this.data).reduce((sum, arr) => sum + arr.length, 0) }
+    get hasResults() { return this.n > 0 }
 
     get _details() { return this.shadow.querySelector("details") }
     get _stylesheet() { return this.shadowRoot.styleSheets[0] }

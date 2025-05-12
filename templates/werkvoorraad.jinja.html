@@ -74,6 +74,7 @@
     {% endif %}
     <footer>
         <a href="https://github.com/uu-asc/csa-werkvoorraad">github.com/uu-asc/csa-werkvoorraad</a>
+        <div></div>
     </footer>
 <script type="module">
     const lastUpdateTimestamp = new Date("{{ ts.now.isoformat() }}")
@@ -185,6 +186,9 @@
     const config = {{ config | default('') | tojson }}
     const werkvoorraadComponent = new WerkvoorraadComponent(spec, config)
     document.querySelector(`[data-component="werkvoorraad"]`).appendChild(werkvoorraadComponent)
+
+    const { total, withResults } = werkvoorraadComponent.getItemCounts()
+    document.querySelector("footer div").innerHTML = `items: ${withResults} / ${total}`
 
     document.addEventListener("color-scheme-change", event => {
         event.detail.scheme === "dark"

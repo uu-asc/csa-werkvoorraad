@@ -33,10 +33,11 @@ h1 {
 }
 
 footer {
-    display: grid;
-    border-top: 2px solid currentColor;
+    display: flex;
     height: 5rem;
     align-items: center;
+    justify-content: space-between;
+    border-top: 2px solid currentColor;
 }
 
 /* LAYOUT */

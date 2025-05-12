@@ -91,6 +91,26 @@ export class WerkvoorraadHoofdstuk extends HTMLElement {
     }
     get n() { return Object.values(this.totals).reduce((sum, val) => sum + val, 0) }
 
+    get totalItemCount() {
+        let count = 0
+        for (const item of this.items) {
+            count += item instanceof WerkvoorraadHoofdstuk
+                ? item.totalItemCount
+                : 1
+        }
+        return count
+    }
+
+    get itemsWithResultsCount() {
+        let count = 0
+        for (const item of this.items) {
+            count += item instanceof WerkvoorraadHoofdstuk
+                ? item.itemsWithResultsCount
+                : (item.hasResults ? 1 : 0)
+        }
+        return count
+    }
+
     get _details() { return this.shadow.querySelector("details") }
     get _display() { return this.shadow.querySelector("summary div") }
     get _stylesheet() { return this.shadowRoot.styleSheets[0] }
