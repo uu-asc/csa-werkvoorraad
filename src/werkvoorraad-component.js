@@ -64,7 +64,7 @@ export class WerkvoorraadComponent extends HTMLElement {
         labels: {
             openAll: "Toon alles",
             closeAll: "Verberg alles",
-            showEmpty: "Lege items",
+            showEmpty: "Toon lege items",
             searchItem: "Zoek items...",
             zenMode: "Zen",
         }
@@ -157,10 +157,10 @@ export class WerkvoorraadComponent extends HTMLElement {
             <div class="acties">
                 <button id="open-all">${this.config.labels.openAll}</button>
                 <button id="close-all">${this.config.labels.closeAll}</button>
-                <input type="checkbox" id="show-empty">
-                <label for="show-empty">${this.config.labels.showEmpty}</label>
                 <input type="checkbox" id="zen-mode">
                 <label for="zen-mode">${this.config.labels.zenMode}</label>
+                <input type="checkbox" id="show-empty">
+                <label for="show-empty">${this.config.labels.showEmpty}</label>
                 <div class="filter">
                     <input type="text" placeholder="${this.config.labels.searchItem}" id="search-item">
                     <button id="clear-query">&Cross;</button>
