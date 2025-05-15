@@ -111,7 +111,16 @@ export class WerkvoorraadComponent extends HTMLElement {
         event.target.checked
         ? this.items.forEach(el => el.setAttribute("show-empty", ""))
         : this.items.forEach(el => el.removeAttribute("show-empty"))
-        this.handleSearchItem()
+
+        // when toggling "show empty" we need to first reset all item visibility
+        // then reapply the current search filter, because previously filtered
+        // empty items won't become visible otherwise due to their hide state
+        // being determined by both the search match AND empty status conditions
+        // in handleSearchItem
+        const matchAllRegex = new RegExp("", "i")
+        this.items.forEach(item => { item.handleSearchItem(matchAllRegex) })
+        const enterEvent = new KeyboardEvent("keyup", { key: "Enter" })
+        this._inputSearchItem.dispatchEvent(enterEvent)
     }
     handleSearchItem(event) {
         if (event.key === "Escape") { event.target.value = "" }
