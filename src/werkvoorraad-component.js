@@ -2,6 +2,14 @@ import { WerkvoorraadHoofdstuk } from "./werkvoorraad-hoofdstuk.js"
 
 const style =
 `/* CSS FOR COMPONENT */
+:host {
+    --show-counts: block; /* Default: show counts */
+}
+
+:host([zen-mode]) {
+    --show-counts: none; /* When zen-mode attribute is set, hide counts */
+}
+
 button {
     background-color: var(--color-button);
     color: inherit;
@@ -56,8 +64,9 @@ export class WerkvoorraadComponent extends HTMLElement {
         labels: {
             openAll: "Toon alles",
             closeAll: "Verberg alles",
-            showEmpty: "queries zonder resultaten",
+            showEmpty: "Lege items",
             searchItem: "Zoek items...",
+            zenMode: "Zen",
         }
     }
 
@@ -71,6 +80,7 @@ export class WerkvoorraadComponent extends HTMLElement {
         this.handleShowEmpty = this.handleShowEmpty.bind(this)
         this.handleClearQuery = this.handleClearQuery.bind(this)
         this.handleSearchItem = this.handleSearchItem.bind(this)
+        this.handleToggleZenMode = this.handleToggleZenMode.bind(this)
         this.loadFromSpec = this.loadFromSpec.bind(this)
 
         this.items = spec.map(this.loadFromSpec)
@@ -96,7 +106,9 @@ export class WerkvoorraadComponent extends HTMLElement {
         this._buttonShowEmpty.addEventListener("click", this.handleShowEmpty)
         this._buttonClearQuery.addEventListener("click", this.handleClearQuery)
         this._inputSearchItem.addEventListener("keyup", this.handleSearchItem)
+        this._checkboxZenMode.addEventListener("change", this.handleToggleZenMode)
         this.loadSearchValue()
+        this.loadZenModeState()
     }
 
     get _buttonOpenAll() { return this.shadow.getElementById("open-all") }
@@ -104,6 +116,7 @@ export class WerkvoorraadComponent extends HTMLElement {
     get _buttonShowEmpty() { return this.shadow.getElementById("show-empty") }
     get _buttonClearQuery() { return this.shadow.getElementById("clear-query") }
     get _inputSearchItem() { return this.shadow.getElementById("search-item") }
+    get _checkboxZenMode() { return this.shadow.getElementById("zen-mode") }
 
     handleOpenAll() { this.items.forEach(item => item.handleOpenAll() ) }
     handleCloseAll() { this.items.forEach(item => item.handleCloseAll() ) }
@@ -132,6 +145,11 @@ export class WerkvoorraadComponent extends HTMLElement {
         const escapeEvent = new KeyboardEvent("keyup", { key: "Escape" })
         this._inputSearchItem.dispatchEvent(escapeEvent)
     }
+    handleToggleZenMode(event) {
+        const { checked } = event.target
+        this.toggleAttribute("zen-mode", checked)
+        localStorage.setItem("zenMode", event.target.checked)
+    }
 
     render() {
         this.shadow.innerHTML =
@@ -141,6 +159,8 @@ export class WerkvoorraadComponent extends HTMLElement {
                 <button id="close-all">${this.config.labels.closeAll}</button>
                 <input type="checkbox" id="show-empty">
                 <label for="show-empty">${this.config.labels.showEmpty}</label>
+                <input type="checkbox" id="zen-mode">
+                <label for="zen-mode">${this.config.labels.zenMode}</label>
                 <div class="filter">
                     <input type="text" placeholder="${this.config.labels.searchItem}" id="search-item">
                     <button id="clear-query">&Cross;</button>
@@ -163,6 +183,13 @@ export class WerkvoorraadComponent extends HTMLElement {
             this._inputSearchItem.value = lastSearchValue
             const enterEvent = new KeyboardEvent("keyup", { key: "Enter" })
             this._inputSearchItem.dispatchEvent(enterEvent)
+        }
+    }
+    loadZenModeState() {
+        const zenMode = localStorage.getItem("zenMode") === "true"
+        this._checkboxZenMode.checked = zenMode
+        if (zenMode) {
+            this.setAttribute("zen-mode", "")
         }
     }
 }

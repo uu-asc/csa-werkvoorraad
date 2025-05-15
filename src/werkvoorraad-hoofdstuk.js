@@ -21,6 +21,7 @@ summary {
 }
 
 summary code {
+    display: var(--show-counts);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
