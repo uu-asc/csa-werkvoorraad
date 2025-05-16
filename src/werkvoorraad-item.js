@@ -222,7 +222,7 @@ export class WerkvoorraadItem extends HTMLElement {
             </details>`
         this._stylesheet.insertRule(
             `summary > div, details > div {
-                margin-left: ${this.depth * this.config.offset}rem
+                margin-left: ${this.config.offset}rem
             }`
         )
     }

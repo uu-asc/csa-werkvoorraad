@@ -9,7 +9,7 @@ const style =
 
 /* layout */
 summary {
-    border-top: 4px solid;
+    /* border-top: 4px solid; */
     min-width: 200px;
     padding: 0.5em 0;
     position: relative;
@@ -54,13 +54,31 @@ h2, h3, h4, h5, h6 {
 }
 :host([show-empty]) .empty {
     display: block;
-}`
+}
+
+
+
+/* Tree structure */
+:host {
+    position: relative;
+    display: block;
+}
+
+details[open] > werkvoorraad-hoofdstuk::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0; /* Align with parent */
+    height: 100%;
+    border-left: 1px solid currentColor;
+}
+`
 
 export class WerkvoorraadHoofdstuk extends HTMLElement {
     static observedAttributes = ["open", "show-empty"]
     config = {
         clipboardWriteLabel: "gekopieerd!",
-        offset: .5,
+        offset: 1,
     }
 
     constructor(spec, config={}, depth=0) {
@@ -223,9 +241,25 @@ export class WerkvoorraadHoofdstuk extends HTMLElement {
                 </details>
             </section>`
         this.items.forEach(item => (this._details.appendChild(item)))
+        // this._stylesheet.insertRule(
+        //     `h2,h3,h4,h5,h6 {
+        //         margin-left: ${this.depth * this.config.offset}rem
+        //     }`
+        // )
         this._stylesheet.insertRule(
-            `h2,h3,h4,h5,h6 {
-                margin-left: ${this.depth * this.config.offset}rem
+            `details {
+                margin-left: ${this.depth > 0 ? this.config.offset : 0}rem;
+                border-top: ${this.depth === 0 ? "4px solid" : 0};
+            }`
+        )
+        this._stylesheet.insertRule(
+            `details[open] summary {
+                border-bottom: ${3 - this.depth}px solid;
+            }`
+        )
+        this._stylesheet.insertRule(
+            `werkvoorraad-hoofdstuk:not(:last-child) {
+                border-bottom: ${3 - this.depth}px solid;
             }`
         )
 
