@@ -11,7 +11,7 @@ const style =
 summary {
     border-top: 4px solid;
     min-width: 200px;
-    padding: 0.5em 0;
+    padding: 0.5em 0.5em;
     position: relative;
     cursor: pointer;
     display: flex;
@@ -228,6 +228,13 @@ export class WerkvoorraadHoofdstuk extends HTMLElement {
                 margin-left: ${this.depth * this.config.offset}rem
             }`
         )
+        if (this.depth === 0) {
+            this._stylesheet.insertRule(
+                `summary {
+                    background-color: color-mix(in srgb, var(--color-background) 90%, var(--color-text) 15%);
+                }`
+            )
+        }
 
         const toggleState = this.getToggleStateFromLocalStorage()
         const isOpen = toggleState[this.id] ? true : false
