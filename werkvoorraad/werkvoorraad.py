@@ -117,6 +117,64 @@ def process_spec(
         case _:
             return new_spec
 
+def spec_to_tabular(processed_spec, timestamp=None):
+    """
+    Convert a processed spec to a tabular format suitable for monitoring.
+    Only captures data from endpoints with actual data values.
+
+    Parameters:
+    - processed_spec: The processed specification with all data
+    - timestamp: Optional timestamp, defaults to current time if None
+
+    Returns:
+    - A list of dictionaries, each representing a row in the table
+    """
+    import datetime
+
+    if timestamp is None:
+        timestamp = datetime.datetime.now().isoformat()
+
+    rows = []
+
+    def traverse_spec(spec, path=''):
+        if isinstance(spec, list):
+            for item in spec:
+                traverse_spec(item, path)
+        elif isinstance(spec, dict):
+            if 'id' in spec and 'label' in spec and 'items' in spec:
+                current_id = spec['id']
+                current_path = f'{path}.{current_id}' if path else current_id
+
+                for item in spec['items']:
+                    traverse_spec(item, current_path)
+
+            elif 'label' in spec and 'data' in spec and isinstance(spec['data'], dict):
+                current_label = spec['label']
+
+                counts = {}
+                has_data = False
+
+                for id_type, values in spec['data'].items():
+                    if isinstance(values, list):
+                        counts[id_type] = len(values)
+                        has_data = True
+
+                if has_data:
+                    row = {
+                        'timestamp': timestamp,
+                        'path': path,  # Use the chapter path
+                        'label': current_label
+                    }
+                    row.update(counts)
+                    rows.append(row)
+
+            else:
+                for value in spec.values():
+                    traverse_spec(value, path)
+
+    traverse_spec(processed_spec)
+    return rows
+
 
 # MARK: SQL STATEMENTS
 def gather_sql_from_spec(spec: Spec, sql_getter: Callable, **kwargs) -> dict:
