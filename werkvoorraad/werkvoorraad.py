@@ -6,6 +6,7 @@ from pathlib import Path
 from string import Template
 from typing import Any, Callable
 
+import pandas as pd
 from markdown import markdown
 from jinja2 import Environment, FileSystemLoader
 
@@ -207,7 +208,10 @@ def make_werkvoorraad(
     tpl_kwargs: dict|None = None,
     tabs: dict| None = None,
     transformers: dict[str, Callable]|None = None,
-) -> None:
+    enable_monitoring: bool = True,
+    monitor_path: str = 'monitoring',
+    name: str = 'werkvoorraad',
+) -> Spec:
     query_kwargs = {} if query_kwargs is None else query_kwargs
     tpl_kwargs = {} if tpl_kwargs is None else tpl_kwargs
     transformers = {} if transformers is None else transformers
@@ -218,6 +222,13 @@ def make_werkvoorraad(
         transformers = transformers,
         **query_kwargs
     )
+    if enable_monitoring:
+        check_and_create_daily_monitoring(
+            processed_spec,
+            name = name,
+            monitor_path = monitor_path,
+        )
+
     queries = gather_sql_from_spec(spec, sql_getter, **query_kwargs)
 
     tpl = ENV.get_template(template)
@@ -229,3 +240,69 @@ def make_werkvoorraad(
         **tpl_kwargs,
     )
     Path(outpath).expanduser().write_text(html, encoding='utf8')
+    return processed_spec
+
+
+def store_monitoring_data(
+    tabular_data: list[dict],
+    name: str = 'werkvoorraad',
+    monitor_path: Path | str = 'monitoring'
+):
+    """
+    Store tabular monitoring data in a parquet file.
+
+    Parameters:
+    - tabular_data: List of dictionaries with monitoring data
+    - base_dir: Directory where monitoring files should be stored
+
+    Returns:
+    - Path to the created file
+    """
+
+    monitor_path = Path(monitor_path)
+    monitor_path.mkdir(exist_ok=True)
+
+    df = pd.DataFrame(tabular_data)
+
+    today = datetime.now().strftime('%Y%m%d')
+    filename = f"{name}_metrics_{today}.parquet"
+    file_path = monitor_path / filename
+
+    # Save to parquet
+    df.to_parquet(file_path, index=False)
+
+    return file_path
+
+
+def check_and_create_daily_monitoring(
+    spec,
+    name: str = 'werkvoorraad',
+    monitor_path: Path | str = 'monitoring',
+):
+    """
+    Check if monitoring data for today exists, and create it if not.
+
+    Parameters:
+    - spec: The processed specification
+    - base_dir: Directory where monitoring files are stored
+
+    Returns:
+    - Path to the file if created, None if already exists
+    """
+
+    # Get today's date for filename
+    today = datetime.now().strftime('%Y%m%d')
+    filename = f"{name}_metrics_{today}.parquet"
+    file_path = Path(monitor_path) / filename
+
+    # Check if file already exists
+    if file_path.exists():
+        return None  # File already exists, do nothing
+
+    # File doesn't exist, create the monitoring data
+    tabular_data = spec_to_tabular(spec)
+    return store_monitoring_data(
+        tabular_data,
+        name = name,
+        monitor_path = monitor_path,
+    )
