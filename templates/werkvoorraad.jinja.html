@@ -39,7 +39,7 @@
         <h1>{{ title }}</h1>
     </header>
     <div class="timestamp-container">
-    <div id="timestamp">{% if language == 'nl' %}Laatste update:{% else %}Last update:{% endif %} {{ ts.timestamp }}</div>
+        <div id="timestamp">{% if language == 'nl' %}Laatste update:{% else %}Last update:{% endif %} {{ ts.timestamp }}</div>
         <div id="timestamp-warning"></div>
     </div>
     <nav>
@@ -123,6 +123,14 @@
     import { WerkvoorraadComponent } from "https://uu-asc.github.io/csa-werkvoorraad/src/werkvoorraad-component.js"
     import { DarkModeToggle } from "https://uu-asc.github.io/csa-werkvoorraad/src/darkmode-toggle.js"
 
+    const spec = {{ spec | tojson }}
+    const config = {{ config | default('') | tojson }}
+    const werkvoorraadComponent = new WerkvoorraadComponent(spec, config)
+    document.querySelector(`[data-component="werkvoorraad"]`).appendChild(werkvoorraadComponent)
+
+    const { total, withResults } = werkvoorraadComponent.getItemCounts()
+    document.querySelector("footer div").innerHTML = `items: ${withResults} / ${total}`
+
 {% if embed_vega %}
     // Define the locale options
     const timeFormatLocale = {
@@ -147,10 +155,9 @@
     vega.timeFormatLocale(timeFormatLocale)
     vega.formatLocale(formatLocale)
 
+    const chartDatasets = {{ charts | tojson }}
 
-    const datasets = {{ charts | tojson }}
-
-    function renderPlots(datasets) {
+    const renderPlots = function (chartDatasets) {
         const background = window.getComputedStyle(document.body).getPropertyValue("background-color")
         const color = window.getComputedStyle(document.body).getPropertyValue("color")
         const embedOpt = {
@@ -175,27 +182,19 @@
                 },
             }
         }
-        for (const chart of Object.values(datasets)) {
+        for (const chart of Object.values(chartDatasets)) {
             if (!document.getElementById(chart.id)) { continue }
             vegaEmbed(`#${chart.id}`, chart.spec, embedOpt)
         }
     }
 {% endif %}
 
-    const spec = {{ spec | tojson }}
-    const config = {{ config | default('') | tojson }}
-    const werkvoorraadComponent = new WerkvoorraadComponent(spec, config)
-    document.querySelector(`[data-component="werkvoorraad"]`).appendChild(werkvoorraadComponent)
-
-    const { total, withResults } = werkvoorraadComponent.getItemCounts()
-    document.querySelector("footer div").innerHTML = `items: ${withResults} / ${total}`
-
     document.addEventListener("color-scheme-change", event => {
         event.detail.scheme === "dark"
         ? document.body.classList.add("dark-theme")
         : document.body.classList.remove("dark-theme")
         {% if embed_vega %}
-        renderPlots(datasets)
+        renderPlots(chartDatasets)
         {% endif %}
     })
     const darkModeToggle = new DarkModeToggle()
@@ -222,6 +221,51 @@
         }
     })
 </script>
+
+{% if embed_tables %}
+<script type="module">
+    import { DataViewer } from "https://flatbread-dataframes.github.io/flatbread-wc-table-display/src/viewer.js"
+    import { DatasetSelector } from "https://flatbread-dataframes.github.io/flatbread-wc-table-display/src/components/dataset-selector.js"
+
+    const tableDatasets = {{ tables | tojson }}
+
+    for (const [key, table] of Object.entries(tableDatasets)) {
+        const element = document.getElementById(key)
+        if (!element) { continue }
+        if (table.type === "datasets") {
+            const dataSelector = new DatasetSelector()
+            element.parentNode.replaceChild(dataSelector, element)
+            dataSelector.data = table.data
+        } else {
+            const viewer = new DataViewer()
+            element.parentNode.replaceChild(viewer, element)
+            viewer.data = table.data
+        }
+    }
+</script>
+{% endif %}
+{% if embed_calendar %}
+<script type="module">
+    import { Calendar } from "https://lcvriend.github.io/wc-simple-calendar/src/calendar.js"
+
+    const calendarDataset = {{ calendar | tojson }}
+
+    const calendarElement = document.querySelector("year-calendar")
+    calendarElement.setConfig({
+        locale: "nl-NL",
+        labels: {
+            filters: "Filters",
+            filtersAll: "Alles",
+            periods: "Perioden",
+            periodsAll: "Alle",
+            periodsActive: "Actueel",
+            events: "Gebeurtenissen",
+            eventsToday: "Vandaag"
+        }
+    })
+    calendarElement.setData(calendarDataset)
+</script>
+{% endif %}
 <script type="module">
     function addBorderToRowspans(table) {
         table.querySelectorAll("th[rowspan]").forEach(
