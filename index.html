@@ -44,21 +44,25 @@
         /* BACK TO TOP */
         .back-to-top {
             position: fixed;
-            right: 1.5rem;
+            right: 2rem;
             bottom: 2rem;
+            width: 2.5rem;
+            height: 2.5rem;
             z-index: 999;
-            min-width: 5ch;
-            padding-inline: .25em;
             background-color: var(--color-button);
             color: inherit;
+            font-size: 1.25rem;
             cursor: pointer;
             font-family: monospace;
             border: 1px solid;
-            border-radius: 4px;
+            border-radius: 50%;
+            line-height: 1;
+            opacity: .7;
         }
 
         .back-to-top:hover {
             background-color: var(--color-button-hover);
+            opacity: 1;
         }
         .back-to-top:active {
             background-color: var(--color-button-active);
@@ -68,7 +72,7 @@
             display: none;
         }    </style>
     <link rel="stylesheet" href="https://lcvriend.github.io/wc-multi-selector/static/prism.css">
-    <link rel="stylesheet" href="https://uu-asc.github.io/csa-werkvoorraad/static/stylesheet.css">
+    <link rel="stylesheet" href="./static/stylesheet.css">
 </head>
 <body>
     <header>
@@ -79,7 +83,7 @@
         <button data-show-target="werkvoorraad" selected>werkvoorraad</button>
         <button data-show-target="queries">queries</button>
     </nav>
-    <button class="back-to-top hidden">Back To Top</button>
+    <button class="back-to-top hidden">↑</button>
     <section data-component="werkvoorraad"></section>
     <section data-component="queries" class="hidden">
         <details>
