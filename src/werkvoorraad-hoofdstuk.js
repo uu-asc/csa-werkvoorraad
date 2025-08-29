@@ -1,4 +1,5 @@
 import { WerkvoorraadItem } from "./werkvoorraad-item.js"
+import { SelectionPreventionMixin } from "./mixins/selection-prevention.js"
 
 const style =
 `/* CSS FOR HOOFDSTUK */
@@ -71,7 +72,11 @@ export class WerkvoorraadHoofdstuk extends HTMLElement {
         this.config = { ...this.config, ...config }
         this.shadow = this.attachShadow({ mode: "open" })
 
+        Object.assign(this, SelectionPreventionMixin)
+        this.initSelectionPrevention()
+
         this.handleToggle = this.handleToggle.bind(this)
+        this.handleSummaryClick = this.handleSummaryClick.bind(this)
         this.handleSearchItem = this.handleSearchItem.bind(this)
         this.loadFromSpec = this.loadFromSpec.bind(this)
 
@@ -113,17 +118,22 @@ export class WerkvoorraadHoofdstuk extends HTMLElement {
     }
 
     get _details() { return this.shadow.querySelector("details") }
+    get _summary() { return this.shadow.querySelector("summary") }
     get _display() { return this.shadow.querySelector("summary div") }
     get _stylesheet() { return this.shadowRoot.styleSheets[0] }
 
     connectedCallback() {
         this.render()
         this._details.addEventListener("toggle", this.handleToggle)
+        this._summary.addEventListener("click", this.handleSummaryClick)
         this.addEventListener("clipboardWriteEvent", event => {
             event.stopPropagation()
             this._display.innerHTML = this.config.clipboardWriteLabel
             setTimeout(() => { this._display.innerHTML = "" }, 1000)
         })
+
+        this._summary.addEventListener("mousedown", this.handleMouseDown)
+        this._summary.addEventListener("mouseup", this.handleMouseUp)
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
@@ -146,6 +156,18 @@ export class WerkvoorraadHoofdstuk extends HTMLElement {
         }
     }
 
+    handleSummaryClick(event) {
+        if (this.checkShouldPreventClick(event)) return
+
+        if (event.shiftKey) {
+            event.preventDefault()
+            if (window.getSelection) {
+                window.getSelection().removeAllRanges()
+            }
+            const isCurrentlyOpen = this._details.open
+            isCurrentlyOpen ? this.handleCloseAll() : this.handleOpenAll()
+        }
+    }
     handleOpen() { this.setAttribute("open", "") }
     handleClose() { this.removeAttribute("open") }
     handleOpenAll() {
@@ -193,6 +215,23 @@ export class WerkvoorraadHoofdstuk extends HTMLElement {
 
         this.classList.toggle("hide", !wasFound)
         return wasFound
+    }
+
+    handleMouseDown(event) {
+        this.mouseDownTime = Date.now()
+        this.mouseDownPos = { x: event.clientX, y: event.clientY }
+        this.shouldPreventClick = false
+    }
+    handleMouseUp(event) {
+        const holdTime = Date.now() - this.mouseDownTime
+        const distance = Math.sqrt(
+            Math.pow(event.clientX - this.mouseDownPos.x, 2) +
+            Math.pow(event.clientY - this.mouseDownPos.y, 2)
+        )
+        // when selecting text prevent click behavior on details element
+        if (holdTime > 300 || distance > 5) {
+            this.shouldPreventClick = true
+        }
     }
 
     getToggleStateFromLocalStorage() {

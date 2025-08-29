@@ -1,3 +1,5 @@
+import { SelectionPreventionMixin } from "./mixins/selection-prevention.js"
+
 const style =
 `/* CSS FOR ITEM */
 *, *::before, *::after {
@@ -115,6 +117,10 @@ export class WerkvoorraadItem extends HTMLElement {
         this.config = { ...this.config, ...config }
         this.depth = depth
         this.shadow = this.attachShadow({ mode: 'open' })
+
+        Object.assign(this, SelectionPreventionMixin)
+        this.initSelectionPrevention()
+
         this.handleClick = this.handleClick.bind(this)
         this.handleToggle = this.handleToggle.bind(this)
         this.handleSearchItem = this.handleSearchItem.bind(this)
@@ -130,6 +136,8 @@ export class WerkvoorraadItem extends HTMLElement {
         this.render()
         this._details.addEventListener("toggle", this.handleToggle)
         this.shadow.addEventListener("click", this.handleClick)
+        this._details.addEventListener("mousedown", this.handleMouseDown)
+        this._details.addEventListener("mouseup", this.handleMouseUp)
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
@@ -141,6 +149,7 @@ export class WerkvoorraadItem extends HTMLElement {
     }
 
     async handleClick(event) {
+        if (this.checkShouldPreventClick(event)) return
         const elem = event.target
 
         // collect information about any clicked element
@@ -161,7 +170,7 @@ export class WerkvoorraadItem extends HTMLElement {
         this.dispatchEvent(clickEvent)
 
         // leave if not main data hook
-        if (!elem.matches("[data-target]")) { return }
+        if (!elem.matches("[data-target]")) return
 
         // copy identifiers to clipboard
         elem.classList.add("clicked")

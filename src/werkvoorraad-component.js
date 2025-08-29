@@ -65,7 +65,7 @@ export class WerkvoorraadComponent extends HTMLElement {
             openAll: "Toon alles",
             closeAll: "Verberg alles",
             showEmpty: "Toon lege items",
-            searchItem: "Zoek items...",
+            searchItem: "Filter items...",
             zenMode: "Zen",
         }
     }
