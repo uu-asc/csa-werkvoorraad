@@ -10,9 +10,8 @@ summary {
     border-top: 1px solid;
     min-width: 200px;
     padding: 0.5em 0;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr auto;
     align-items: center;
     gap: .5em;
 }
@@ -22,13 +21,11 @@ summary div:first-child::before {
     position: relative;
     right: .25em;
 }
-summary > :first-child {
-    flex-grow: 1;
-}
 summary > :last-child {
     display: grid;
     grid-template-columns: 1fr auto;
     gap: .25em;
+    justify-items: end;
     margin-right: 2ch;
 }
 
