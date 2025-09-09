@@ -44,9 +44,6 @@
     </div>
     <nav>
         <button data-show-target="werkvoorraad" selected>{{ werkvoorraad_label }}</button>
-        {% if queries %}
-        <button data-show-target="queries">queries</button>
-        {% endif %}
         {% if tabs %}
         {% for tab in tabs %}
         <button data-show-target="{{ tab }}">{{ tab }}</button>
@@ -55,22 +52,29 @@
     </nav>
     <button class="back-to-top hidden">↑</button>
     <section data-component="werkvoorraad"></section>
-    {% if queries %}
-    <section data-component="queries" class="hidden">
-    {% for title, sql in queries.items() %}
-        <details>
-            <summary>{{ title }}</summary>
-            <pre><code class="language-sql">{{ sql }}</code></pre>
-        </details>
-    {% endfor %}
-    </section>
-    {% endif %}
     {% if tabs %}
     {% for tab, content in tabs.items() %}
     <section data-component="{{ tab }}" class="hidden">
         {{ content }}
     </section>
     {% endfor %}
+    {% endif %}
+    {% if queries %}
+    <dialog id="query-modal">
+        <div class="modal-wrapper">
+            <div class="modal-header">
+                <h3 id="modal-title"></h3>
+                <button id="modal-close">&times;</button>
+            </div>
+            <div id="modal-content">
+                {% for query_path, sql in queries.items() %}
+                <div data-query="{{ query_path }}" class="query-content" style="display: none;">
+                <pre><code class="language-sql">{{ sql }}</code></pre>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </dialog>
     {% endif %}
     <footer>
         <a href="https://github.com/uu-asc/csa-werkvoorraad">github.com/uu-asc/csa-werkvoorraad</a>
@@ -297,30 +301,36 @@
     document.querySelectorAll("table").forEach(addBorderToColspans)
 </script>
 <script>
-    const queryLabels = document.querySelectorAll(`[data-component="queries"] > details > summary`)
-    const queryTab = document.querySelector(`[data-show-target="queries"]`)
+    function showQueryInModal(queryName) {
+        const modal = document.getElementById("query-modal")
+        const title = document.getElementById("modal-title")
 
-    function scrollToQuery() {
-        const openedQuery = document.querySelector('[data-component="queries"] > details[open]');
-        const scrollProps = {behavior: 'smooth', block: 'start'}
-        if (openedQuery) { openedQuery.scrollIntoView(scrollProps) }
-        else { console.log('No matching query found') }
+        const templateKey = queryName.replaceAll("/", " / ")
+        const content = document.querySelector(`[data-query="${templateKey}"]`)
+
+        // Hide all query content
+        document.querySelectorAll(".query-content").forEach(el => el.style.display = "none")
+
+        // Show selected query
+        title.textContent = queryName
+        content.style.display = "block"
+        modal.showModal()
     }
 
-    function openQueryLink(queryName) {
-        for (let label of queryLabels) {
-            label.parentNode.open = false
-            transformedLabel = label.textContent.replace(/\s/g, '')
-            if (transformedLabel === queryName) { label.parentNode.open = true }
-        }
-        queryTab.click()
-        scrollToQuery()
+    const modal = document.getElementById("query-modal")
+
+    // X button
+    document.getElementById("modal-close").onclick = () => modal.close()
+
+    // Backdrop click (click outside content area)
+    modal.onclick = (e) => {
+        if (e.target === modal) modal.close()
     }
 
-    document.body.addEventListener('wv-item-click', event => {
+    document.body.addEventListener("wv-item-click", event => {
         const { tagName, id, classes, dataset, content } = event.detail
         // open query when query link is clicked
-        if (classes.includes('query')) { openQueryLink(content) }
+        if (classes.includes("query")) { showQueryInModal(content) }
     })
 </script>
 <script>

@@ -62,3 +62,70 @@
 .hidden {
     display: none;
 }
+
+/* MODAL */
+#query-modal {
+    border: none;
+    border-radius: 8px;
+    background: var(--color-background);
+    color: var(--color-text);
+    margin: auto;
+    max-width: 60vw;
+    max-height: 90vh;
+    overflow: hidden;
+}
+#query-modal::backdrop {
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(2px);
+}
+.modal-wrapper {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    max-height: 90vh;
+}
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-inline: 1.5rem;
+    padding-block: .75rem;
+    border-bottom: 1px solid var(--color-text);
+    background: var(--color-button);
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-family: monospace;
+    font-size: 1rem;
+}
+
+#modal-close {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--color-text);
+    padding: 0.25rem;
+    border-radius: 4px;
+}
+
+#modal-close:hover {
+    background: var(--color-button-hover);
+}
+
+#modal-content {
+    display: grid;
+    overflow: hidden;
+}
+
+.query-content {
+    padding-inline: 2rem;
+    padding-block: 2rem;
+    overflow: hidden;
+}
+.query-content pre {
+    overflow: auto;
+    margin: 0 !important;
+    overscroll-behavior: contain;
+    height: 100%;
+}
