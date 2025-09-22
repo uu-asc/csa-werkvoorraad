@@ -74,12 +74,15 @@ details[open] > summary:after {
 }
 
 .timestamp-container {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr auto;
     align-items: center;
     font-family: monospace;
+
+    :nth-child(2) {
+        justify-self: end;
+    }
 }
-#timestamp {}
 
 nav {
     display: flex;
@@ -132,7 +135,108 @@ a {
     display: none;
 }
 
-/* TABLES */
+/* MARK: BACK TO TOP */
+.back-to-top {
+    position: fixed;
+    right: 2rem;
+    bottom: 2rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    z-index: 999;
+    background-color: var(--color-button);
+    color: inherit;
+    font-size: 1.25rem;
+    cursor: pointer;
+    font-family: monospace;
+    border: 1px solid;
+    border-radius: 50%;
+    line-height: 1;
+    opacity: .7;
+}
+
+.back-to-top:hover {
+    background-color: var(--color-button-hover);
+    opacity: 1;
+}
+.back-to-top:active {
+    background-color: var(--color-button-active);
+}
+
+/* MARK: MODAL */
+#query-modal {
+    border: none;
+    border-radius: 8px;
+    background: var(--color-background);
+    color: var(--color-text);
+    margin: auto;
+    max-width: 60vw;
+    max-height: 90vh;
+    overflow: hidden;
+}
+#query-modal::backdrop {
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(2px);
+}
+.modal-wrapper {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    max-height: 90vh;
+}
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-inline: 1.5rem;
+    padding-block: .75rem;
+    border-bottom: 1px solid var(--color-text);
+    background: var(--color-button);
+}
+.modal-header h3 {
+    margin: 0;
+    font-family: monospace;
+    font-size: 1rem;
+}
+#modal-close {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--color-text);
+    padding: 0.25rem;
+    border-radius: 4px;
+}
+#modal-close:hover {
+    background: var(--color-button-hover);
+}
+#modal-content {
+    display: grid;
+    overflow: hidden;
+}
+.query-content {
+    padding-inline: 2rem;
+    padding-block: 2rem;
+    overflow: hidden;
+}
+.query-content pre {
+    overflow: auto;
+    margin: 0 !important;
+    overscroll-behavior: contain;
+    height: 100%;
+}
+.copy-button {
+    position: absolute;
+    top: 2.5rem;
+    right: 3rem;
+    background: transparent;
+    width: 2rem;
+    border: none;
+    padding: 0.25rem 0.5rem;
+    cursor: pointer;
+    font-size: 0.875rem;
+    color: inherit;
+}
+
+/* MARK: TABLES */
 table {
     border-collapse: collapse;
     border-spacing: 0;
@@ -166,4 +270,22 @@ caption {
     padding: 0 0.25em 0.25em;
     width: 100%;
     margin-left: 0;
+}
+
+/* MARK:  VEGA CHARTS */
+.vega-embed {
+    margin-bottom: 1.5em;
+}
+.vega-bind > label {
+    width: 100%;
+    padding-right: 1em;
+}
+.vega-bind, .vega-bind label {
+    display: flex;
+    justify-content: space-between;
+}
+
+.vega-bind-radio {
+    display: flex;
+    gap: 1em;
 }
