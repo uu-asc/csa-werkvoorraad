@@ -90,6 +90,7 @@ dialog::backdrop {
 }
 
 .sql-section {
+    position: relative;
     overflow: auto;
     padding: 1.5rem;
 }
@@ -101,6 +102,18 @@ dialog::backdrop {
 
 .sql-section code {
     font-size: 0.9em;
+}
+
+.copy-button {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    background: transparent;
+    border: none;
+    padding: 0.25rem 0.5rem;
+    cursor: pointer;
+    font-size: 0.875rem;
+    color: inherit;
 }
 `
 
@@ -190,6 +203,21 @@ export class QueryDetailsModal extends HTMLElement {
 
         // Set SQL with syntax highlighting
         this._sqlSection.innerHTML = `<pre><code class="language-sql">${this.escapeHtml(sqlText)}</code></pre>`
+
+    // Add copy button
+    if (!this._sqlSection.querySelector('.copy-button')) {
+        const copyButton = document.createElement('button')
+        copyButton.className = 'copy-button'
+        copyButton.innerHTML = '⧉'
+        copyButton.onclick = async (event) => {
+            event.stopPropagation()
+            const codeText = this._sqlSection.querySelector('pre code').textContent
+            await navigator.clipboard.writeText(codeText)
+            copyButton.textContent = '✓'
+            setTimeout(() => copyButton.innerHTML = '⧉', 1500)
+        }
+        this._sqlSection.appendChild(copyButton)
+    }
 
         // Apply Prism highlighting if available
         if (window.Prism) {
