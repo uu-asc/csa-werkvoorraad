@@ -39,8 +39,18 @@
         <h1>{{ title }}</h1>
     </header>
     <div class="timestamp-container">
-        <div id="timestamp">{% if language == 'nl' %}Laatste update:{% else %}Last update:{% endif %} {{ ts.timestamp }}</div>
-        <div id="timestamp-warning"></div>
+        <div>
+            Update {% if language == 'nl' %}werkvoorraad{% else %}Pending work{% endif %}:
+            <span class="timestamp" data-timestamp="{{ ts }}"></span>
+        </div>
+        <div class="timestamp-warning" data-timestamp="{{ ts }}" data-threshold="4"></div>
+    {% if ts_db %}
+        <div>
+            Update database:
+            <span class="timestamp" data-timestamp="{{ ts_db }}"></span>
+        </div>
+        <div class="timestamp-warning" data-timestamp="{{ ts_db }}" data-threshold="2"></div>
+    {% endif %}
     </div>
     <nav>
         <button data-show-target="werkvoorraad" selected>{{ werkvoorraad_label }}</button>
@@ -81,54 +91,95 @@
         <div></div>
     </footer>
 <script type="module">
-    const lastUpdateTimestamp = new Date("{{ ts.now.isoformat() }}")
-
-    function checkTimestampFreshness(thresholdHours = 4) {
-        // Get the warning element
-        const warningElem = document.getElementById("timestamp-warning")
-        if (!warningElem || !lastUpdateTimestamp) return
-
-        const now = new Date()
-
-        // Calculate the difference in hours
-        const diffMs = now - lastUpdateTimestamp
-        const diffHours = diffMs / (1000 * 60 * 60)
-
-        // Only proceed if data is stale
-        if (diffHours <= thresholdHours) return
-
-        // Format time difference for display
-        const timeAgo = diffHours < 24
-        {% if language == 'nl' %}
-            ? `${Math.round(diffHours)} uur`
-            : `${Math.floor(diffHours / 24)} ${Math.floor(diffHours / 24) === 1 ? "dag" : "dagen"}`
-        {% else %}
-            ? `${Math.round(diffHours)} hours`
-            : `${Math.floor(diffHours / 24)} ${Math.floor(diffHours / 24) === 1 ? "day" : "days"}`
-        {% endif %}
-
-        // Add warning content
-        {% if language == 'nl' %}
-        warningElem.textContent = `LET OP! Laatste update was ${timeAgo} geleden`
-        {% else %}
-        warningElem.textContent = `WARNING! Last update was ${timeAgo} ago`
-        {% endif %}
-
-        warningElem.classList.add(
-            diffHours > 24 ? "timestamp-warning-severe" :
-            diffHours > 8 ? "timestamp-warning-moderate" :
-            "timestamp-warning-mild"
-        )
+    function processTimestamps() {
+        document.querySelectorAll(".timestamp").forEach(processTimestamp)
+        document.querySelectorAll(".timestamp-warning").forEach(processTimestampWarning)
     }
 
-    checkTimestampFreshness(4)
+    function formatTimestamp(date, locale = "nl-NL") {
+        return date.toLocaleString(locale, {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit"
+        }).replace(",", "")
+    }
+
+    function processTimestamp(element) {
+        const isoTime = element.getAttribute("data-timestamp")
+        const locale = element.getAttribute("data-locale") ?? "nl-NL"
+
+        if (!isoTime) return
+
+        const date = new Date(isoTime)
+        const formatted = formatTimestamp(date, locale)
+        element.textContent = formatted
+    }
+
+    function processTimestampWarning(element) {
+        const isoTime = element.getAttribute("data-timestamp")
+        const thresholdHours = parseFloat(element.getAttribute("data-threshold") ?? "4")
+
+        if (!isoTime) return
+
+        const date = new Date(isoTime)
+        const warningInfo = calculateWarning(date, thresholdHours)
+
+        if (warningInfo.shouldWarn) {
+            element.textContent = warningInfo.message
+            element.className = `timestamp-warning ${warningInfo.severity}`
+        }
+    }
+
+    function calculateWarning(date, thresholdHours) {
+        {% if language == 'nl' %}
+        const labels = {
+            hour: "uur",
+            hours: "uren",
+            day: "dag",
+            days: "dagen",
+        }
+        {% else %}
+        const labels = {
+            hour: "hour",
+            hours: "hours",
+            day: "day",
+            days: "days",
+        }
+        {% endif %}
+
+        const now = new Date()
+        const diffMs = now - date
+        const diffHours = diffMs / (1000 * 60 * 60)
+
+        if (diffHours <= thresholdHours) {
+            return { shouldWarn: false }
+        }
+
+        const timeAgo = diffHours < 24
+            ? `${Math.round(diffHours)} ${diffHours === 1 ? labels.hour : labels.hours}`
+            : `${Math.floor(diffHours / 24)} ${Math.floor(diffHours / 24) === 1 ? labels.day : labels.days}`
+
+        const severity =
+            diffHours > 24 ? "severe" :
+            diffHours > 8 ? "moderate" : "mild"
+
+        return {
+            shouldWarn: true,
+            message: `{% if language == 'nl' %}LET OP! Laatste update was ${timeAgo} geleden{% else %}WARNING! Last update was ${timeAgo} ago{% endif %}`,
+            severity: `timestamp-warning-${severity}`
+        }
+    }
+
+    processTimestamps()
 </script>
 <script type="module">
     import { WerkvoorraadComponent } from "https://uu-asc.github.io/csa-werkvoorraad/src/werkvoorraad-component.js"
     import { DarkModeToggle } from "https://uu-asc.github.io/csa-werkvoorraad/src/darkmode-toggle.js"
 
     const spec = {{ spec | tojson }}
-    const config = {{ config | default('') | tojson }}
+    const config = {{ config | default("") | tojson }}
     const werkvoorraadComponent = new WerkvoorraadComponent(spec, config)
     document.querySelector(`[data-component="werkvoorraad"]`).appendChild(werkvoorraadComponent)
 
@@ -307,6 +358,21 @@
 
         const templateKey = queryName.replaceAll("/", " / ")
         const content = document.querySelector(`[data-query="${templateKey}"]`)
+
+        if (!content.querySelector(".copy-button")) {
+            const copyButton = document.createElement("button")
+            copyButton.className = "copy-button"
+            copyButton.innerHTML = "⧉"
+            copyButton.onclick = async (event) => {
+                event.stopPropagation()
+                const codeText = content.querySelector("pre code").textContent
+                await navigator.clipboard.writeText(codeText)
+                copyButton.textContent = "✓"
+                setTimeout(() => copyButton.innerHTML = "⧉", 1000)
+            }
+            content.style.position = "relative"
+            content.appendChild(copyButton)
+        }
 
         // Hide all query content
         document.querySelectorAll(".query-content").forEach(el => el.style.display = "none")

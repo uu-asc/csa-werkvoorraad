@@ -24,31 +24,6 @@ ENV = Environment(
 )
 
 
-class Ts:
-    @property
-    def timestamp(self):
-        return f"{self.now:%d-%m-%Y %H:%M}"
-
-    @property
-    def datum(self):
-        return f"{self.now:%d-%m-%Y}"
-
-    @property
-    def ymd(self):
-        return f"{self.now:%Y%m%d}"
-
-    @property
-    def daymonth(self):
-        return f"{self.now:%d %B}"
-
-    @property
-    def now(self):
-        return datetime.now()
-
-
-TS = Ts()
-
-
 # MARK: PROCES SPEC
 def load_spec_from_json(path: Path|str) -> Spec:
     """
@@ -293,7 +268,7 @@ def make_werkvoorraad(
     html = tpl.render(
         spec = processed_spec,
         queries = queries,
-        ts = TS,
+        ts = datetime.now().isoformat(),
         tabs = tabs,
         **tpl_kwargs,
     )
