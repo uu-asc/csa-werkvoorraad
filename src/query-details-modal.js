@@ -59,6 +59,10 @@ dialog::backdrop {
     border-bottom: 1px solid var(--color-text);
     display: grid;
     gap: 0.5rem;
+
+    &:empty {
+        display: none;
+    }
 }
 
 .metadata-item {
@@ -71,13 +75,13 @@ dialog::backdrop {
     font-family: monospace;
 }
 
-.where-list {
+.metadata-list {
     display: grid;
     gap: 0.25rem;
     margin-left: 1rem;
 }
 
-.where-item {
+.metadata-item-list {
     background: var(--color-button);
     padding: 0.25rem 0.5rem;
     border-radius: 3px;
@@ -156,27 +160,30 @@ export class QueryDetailsModal extends HTMLElement {
         // Build metadata section
         const metadataHTML = []
         for (const [key, value] of Object.entries(data)) {
-            if (key === 'query') continue // Skip query as it's in title
+            if (key === 'query') continue
 
-            if (key === 'where' && Array.isArray(value)) {
-                const whereItems = value
-                    .map(clause => `<div class="where-item">${clause}</div>`)
+            // Skip empty values
+            if (value === null || value === undefined) continue
+            if (Array.isArray(value) && value.length === 0) continue
+            if (typeof value === 'string' && value.trim() === '') continue
+
+            // Format based on type
+            let displayValue
+            if (Array.isArray(value)) {
+                const items = value
+                    .map(item => `<div class="metadata-item-list">${item}</div>`)
                     .join('')
-                metadataHTML.push(`
-                    <div class="metadata-item">
-                        <strong>${key}:</strong>
-                        <div class="where-list">${whereItems}</div>
-                    </div>
-                `)
+                displayValue = `<div class="metadata-list">${items}</div>`
             } else {
-                const displayValue = Array.isArray(value) ? value.join(', ') : value
-                metadataHTML.push(`
-                    <div class="metadata-item">
-                        <strong>${key}:</strong>
-                        <span>${displayValue}</span>
-                    </div>
-                `)
+                displayValue = `<span>${value}</span>`
             }
+
+            metadataHTML.push(`
+                <div class="metadata-item">
+                    <strong>${key}:</strong>
+                    ${displayValue}
+                </div>
+            `)
         }
 
         this._metadataSection.innerHTML = metadataHTML.join('')
