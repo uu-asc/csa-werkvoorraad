@@ -21,332 +21,124 @@
             --color-button-hover: hsl(210, 18%, 36%);
             --color-button-active: hsl(210, 18%, 40%);
             --color-text: hsl(210, 18%, 98%);
-        }
-
-        /* VEGA CHARTS */
-        .vega-embed {
-            margin-bottom: 1.5em;
-        }
-        .vega-bind > label {
-            width: 100%;
-            padding-right: 1em;
-        }
-        .vega-bind, .vega-bind label {
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .vega-bind-radio {
-            display: flex;
-            gap: 1em;
-        }
-
-        /* BACK TO TOP */
-        .back-to-top {
-            position: fixed;
-            right: 2rem;
-            bottom: 2rem;
-            width: 2.5rem;
-            height: 2.5rem;
-            z-index: 999;
-            background-color: var(--color-button);
-            color: inherit;
-            font-size: 1.25rem;
-            cursor: pointer;
-            font-family: monospace;
-            border: 1px solid;
-            border-radius: 50%;
-            line-height: 1;
-            opacity: .7;
-        }
-
-        .back-to-top:hover {
-            background-color: var(--color-button-hover);
-            opacity: 1;
-        }
-        .back-to-top:active {
-            background-color: var(--color-button-active);
-        }
-
-        .hidden {
-            display: none;
         }    </style>
     <link rel="stylesheet" href="https://lcvriend.github.io/wc-multi-selector/static/prism.css">
-    <link rel="stylesheet" href="./static/stylesheet.css">
+    <link rel="stylesheet" href="https://uu-asc.github.io/csa-werkvoorraad/static/stylesheet.css">
 </head>
 <body>
     <header>
         <h1>werkvoorraad</h1>
     </header>
-    <div id="timestamp">Laatste update: 27-08-2024 18:51</div>
+    <div class="timestamp-container">
+        <div>
+            Update werkvoorraad:
+            <span class="timestamp" data-timestamp="2025-10-10T20:36:16.515283"></span>
+        </div>
+        <div class="timestamp-warning" data-timestamp="2025-10-10T20:36:16.515283" data-threshold="4"></div>
+    </div>
     <nav>
         <button data-show-target="werkvoorraad" selected>werkvoorraad</button>
-        <button data-show-target="queries">queries</button>
     </nav>
+    <query-details-modal></query-details-modal>
     <button class="back-to-top hidden">↑</button>
     <section data-component="werkvoorraad"></section>
-    <section data-component="queries" class="hidden">
-        <details>
-            <summary>achter_menich.sql</summary>
-            <pre><code class="language-sql">select * from x</code></pre>
-        </details>
-        <details>
-            <summary>alleene.sql</summary>
-            <pre><code class="language-sql">select * from x</code></pre>
-        </details>
-        <details>
-            <summary>alleene_beseekede.sql</summary>
-            <pre><code class="language-sql">select * from x</code></pre>
-        </details>
-        <details>
-            <summary>alles_reynaerde.sql</summary>
-            <pre><code class="language-sql">select * from x</code></pre>
-        </details>
-        <details>
-            <summary>beede.sql</summary>
-            <pre><code class="language-sql">select * from x</code></pre>
-        </details>
-        <details>
-            <summary>beede_groenen.sql</summary>
-            <pre><code class="language-sql">select * from x</code></pre>
-        </details>
-        <details>
-            <summary>bejach.sql</summary>
-            <pre><code class="language-sql">select * from x</code></pre>
-        </details>
-        <details>
-            <summary>blent_nobel.sql</summary>
-            <pre><code class="language-sql">select * from x</code></pre>
-        </details>
-        <details>
-            <summary>bliven_maket.sql</summary>
-            <pre><code class="language-sql">select * from x</code></pre>
-        </details>
-        <details>
-            <summary>cater_ghesciet.sql</summary>
-            <pre><code class="language-sql">select * from x</code></pre>
-        </details>
-        <details>
-            <summary>claghene.sql</summary>
-            <pre><code class="language-sql">select * from x</code></pre>
-        </details>
-        <details>
-            <summary>commen_ghinghen_bever.sql</summary>
-            <pre><code class="language-sql">select * from x</code></pre>
-        </details>
-        <details>
-            <summary>coninc.sql</summary>
-            <pre><code class="language-sql">select * from x</code></pre>
-        </details>
-        <details>
-            <summary>cortoys_diere_beede.sql</summary>
-            <pre><code class="language-sql">select * from x</code></pre>
-        </details>
-        <details>
-            <summary>datmen_hadde_blent.sql</summary>
-            <pre><code class="language-sql">select * from x</code></pre>
-        </details>
-        <details>
-            <summary>datmen_soudene_cortoys.sql</summary>
-            <pre><code class="language-sql">select * from x</code></pre>
-        </details>
-        <details>
-            <summary>datter.sql</summary>
-            <pre><code class="language-sql">select * from x</code></pre>
-        </details>
-        <details>
-            <summary>datter_staet_onhout.sql</summary>
-            <pre><code class="language-sql">select * from x</code></pre>
-        </details>
-        <details>
-            <summary>felle_coninc.sql</summary>
-            <pre><code class="language-sql">select * from x</code></pre>
-        </details>
-        <details>
-            <summary>ghedaen.sql</summary>
-            <pre><code class="language-sql">select * from x</code></pre>
-        </details>
-        <details>
-            <summary>ghenomen_bevaen.sql</summary>
-            <pre><code class="language-sql">select * from x</code></pre>
-        </details>
-        <details>
-            <summary>ghesciet_staer.sql</summary>
-            <pre><code class="language-sql">select * from x</code></pre>
-        </details>
-        <details>
-            <summary>ghesproken_verlore.sql</summary>
-            <pre><code class="language-sql">select * from x</code></pre>
-        </details>
-        <details>
-            <summary>gheval_crayeren_hadde.sql</summary>
-            <pre><code class="language-sql">select * from x</code></pre>
-        </details>
-        <details>
-            <summary>ghistren.sql</summary>
-            <pre><code class="language-sql">select * from x</code></pre>
-        </details>
-        <details>
-            <summary>groeten_mijns.sql</summary>
-            <pre><code class="language-sql">select * from x</code></pre>
-        </details>
-        <details>
-            <summary>hadde_quamen_ghistren.sql</summary>
-            <pre><code class="language-sql">select * from x</code></pre>
-        </details>
-        <details>
-            <summary>haghe_ontfaerme.sql</summary>
-            <pre><code class="language-sql">select * from x</code></pre>
-        </details>
-        <details>
-            <summary>hebbe_hadde.sql</summary>
-            <pre><code class="language-sql">select * from x</code></pre>
-        </details>
-        <details>
-            <summary>hebben_heere_grijsen.sql</summary>
-            <pre><code class="language-sql">select * from x</code></pre>
-        </details>
-        <details>
-            <summary>hebben_houden_eenen.sql</summary>
-            <pre><code class="language-sql">select * from x</code></pre>
-        </details>
-        <details>
-            <summary>heeft.sql</summary>
-            <pre><code class="language-sql">select * from x</code></pre>
-        </details>
-        <details>
-            <summary>heeft_coninc_nobel.sql</summary>
-            <pre><code class="language-sql">select * from x</code></pre>
-        </details>
-        <details>
-            <summary>hevet.sql</summary>
-            <pre><code class="language-sql">select * from x</code></pre>
-        </details>
-        <details>
-            <summary>leerne_begonste.sql</summary>
-            <pre><code class="language-sql">select * from x</code></pre>
-        </details>
-        <details>
-            <summary>loveren.sql</summary>
-            <pre><code class="language-sql">select * from x</code></pre>
-        </details>
-        <details>
-            <summary>miere_tusschen_haghe.sql</summary>
-            <pre><code class="language-sql">select * from x</code></pre>
-        </details>
-        <details>
-            <summary>molen.sql</summary>
-            <pre><code class="language-sql">select * from x</code></pre>
-        </details>
-        <details>
-            <summary>mordeneere.sql</summary>
-            <pre><code class="language-sql">select * from x</code></pre>
-        </details>
-        <details>
-            <summary>niemen_crancken_sconinx.sql</summary>
-            <pre><code class="language-sql">select * from x</code></pre>
-        </details>
-        <details>
-            <summary>niemene_spellen.sql</summary>
-            <pre><code class="language-sql">select * from x</code></pre>
-        </details>
-        <details>
-            <summary>onhout_ghenomen.sql</summary>
-            <pre><code class="language-sql">select * from x</code></pre>
-        </details>
-        <details>
-            <summary>pancer_winter_trekere.sql</summary>
-            <pre><code class="language-sql">select * from x</code></pre>
-        </details>
-        <details>
-            <summary>recht_edelheit_mochtire.sql</summary>
-            <pre><code class="language-sql">select * from x</code></pre>
-        </details>
-        <details>
-            <summary>reynaert_groeten_wijlen.sql</summary>
-            <pre><code class="language-sql">select * from x</code></pre>
-        </details>
-        <details>
-            <summary>sconinx_beene.sql</summary>
-            <pre><code class="language-sql">select * from x</code></pre>
-        </details>
-        <details>
-            <summary>scuwedi.sql</summary>
-            <pre><code class="language-sql">select * from x</code></pre>
-        </details>
-        <details>
-            <summary>selve_ghesciet_leede.sql</summary>
-            <pre><code class="language-sql">select * from x</code></pre>
-        </details>
-        <details>
-            <summary>staen.sql</summary>
-            <pre><code class="language-sql">select * from x</code></pre>
-        </details>
-        <details>
-            <summary>tsinxen_begonsten_francsoys.sql</summary>
-            <pre><code class="language-sql">select * from x</code></pre>
-        </details>
-        <details>
-            <summary>tusschen_vorst.sql</summary>
-            <pre><code class="language-sql">select * from x</code></pre>
-        </details>
-        <details>
-            <summary>tybeert_houden_saghen.sql</summary>
-            <pre><code class="language-sql">select * from x</code></pre>
-        </details>
-        <details>
-            <summary>verre_selve_ontfaen.sql</summary>
-            <pre><code class="language-sql">select * from x</code></pre>
-        </details>
-        <details>
-            <summary>veste_gheronnen_niemene.sql</summary>
-            <pre><code class="language-sql">select * from x</code></pre>
-        </details>
-        <details>
-            <summary>waende.sql</summary>
-            <pre><code class="language-sql">select * from x</code></pre>
-        </details>
-        <details>
-            <summary>wilde.sql</summary>
-            <pre><code class="language-sql">select * from x</code></pre>
-        </details>
-        <details>
-            <summary>wives.sql</summary>
-            <pre><code class="language-sql">select * from x</code></pre>
-        </details>
-        <details>
-            <summary>worden.sql</summary>
-            <pre><code class="language-sql">select * from x</code></pre>
-        </details>
-        <details>
-            <summary>worst_dedine.sql</summary>
-            <pre><code class="language-sql">select * from x</code></pre>
-        </details>
-        <details>
-            <summary>ysengrijn_grijsen_sconinx.sql</summary>
-            <pre><code class="language-sql">select * from x</code></pre>
-        </details>
-        <details>
-            <summary>zinghene_versamet_mordeneere.sql</summary>
-            <pre><code class="language-sql">select * from x</code></pre>
-        </details>
-    </section>
     <footer>
         <a href="https://github.com/uu-asc/csa-werkvoorraad">github.com/uu-asc/csa-werkvoorraad</a>
         <div></div>
     </footer>
 <script type="module">
+    function processTimestamps() {
+        document.querySelectorAll(".timestamp").forEach(processTimestamp)
+        document.querySelectorAll(".timestamp-warning").forEach(processTimestampWarning)
+    }
+
+    function formatTimestamp(date, locale = "nl-NL") {
+        return date.toLocaleString(locale, {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit"
+        }).replace(",", "")
+    }
+
+    function processTimestamp(element) {
+        const isoTime = element.getAttribute("data-timestamp")
+        const locale = element.getAttribute("data-locale") ?? "nl-NL"
+
+        if (!isoTime) return
+
+        const date = new Date(isoTime)
+        const formatted = formatTimestamp(date, locale)
+        element.textContent = formatted
+    }
+
+    function processTimestampWarning(element) {
+        const isoTime = element.getAttribute("data-timestamp")
+        const thresholdHours = parseFloat(element.getAttribute("data-threshold") ?? "4")
+
+        if (!isoTime) return
+
+        const date = new Date(isoTime)
+        const warningInfo = calculateWarning(date, thresholdHours)
+
+        if (warningInfo.shouldWarn) {
+            element.textContent = warningInfo.message
+            element.className = `timestamp-warning ${warningInfo.severity}`
+        }
+    }
+
+    function calculateWarning(date, thresholdHours) {
+        const labels = {
+            hour: "uur",
+            hours: "uren",
+            day: "dag",
+            days: "dagen",
+        }
+
+        const now = new Date()
+        const diffMs = now - date
+        const diffHours = diffMs / (1000 * 60 * 60)
+
+        if (diffHours <= thresholdHours) {
+            return { shouldWarn: false }
+        }
+
+        const timeAgo = diffHours < 24
+            ? `${Math.round(diffHours)} ${diffHours === 1 ? labels.hour : labels.hours}`
+            : `${Math.floor(diffHours / 24)} ${Math.floor(diffHours / 24) === 1 ? labels.day : labels.days}`
+
+        const severity =
+            diffHours > 24 ? "severe" :
+            diffHours > 8 ? "moderate" : "mild"
+
+        return {
+            shouldWarn: true,
+            message: `LET OP! Laatste update was ${timeAgo} geleden`,
+            severity: `timestamp-warning-${severity}`
+        }
+    }
+
+    processTimestamps()
+</script>
+<script type="module">
     import { WerkvoorraadComponent } from "./src/werkvoorraad-component.js"
+    import { QueryDetailsModal } from "./src/query-details-modal.js"
     import { DarkModeToggle } from "https://uu-asc.github.io/csa-werkvoorraad/src/darkmode-toggle.js"
 
-
-    const spec = [{"id": "CSAIUOZXDHIL", "items": [{"id": "RJQOCVMRWWJV", "items": [{"id": "JJIPNIRRNDSL", "items": [{"data": {"id_3": []}, "instructie": "Dor hu edelheit ende dor hu eere", "label": "Dats over menich jaer ghesciet", "query": "\u003ccode class=\"query link\"\u003ebliven_maket.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003edicken \u003e 592\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}, {"data": {"id_1": []}, "instructie": "Ende seide: \u0027Heere coninc", "label": "Ende binnen des coninx gheleede", "query": "\u003ccode class=\"query link\"\u003efelle_coninc.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ehadde is not null\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003espranc \u003c 0.30055559516847263\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003esconinx = \u0027RZLSQJ\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003econinc = \u0027LOFAEV\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eblent \u003e= 0.21791318331096343\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}, {"data": {"id_3": []}, "instructie": "Houden ten wel groeten love", "label": "Ende claghede den coninc in Francsoys", "query": "\u003ccode class=\"query link\"\u003ehadde_quamen_ghistren.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003edandre is not null\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003econinx \u003e 734\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003esitten = \u0027TXXMUHLRA\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}, {"data": {"id_1": ["TEDNE", "LGOGQ", "FFRER", "TNGRA", "QOCOO", "RZYME", "XWMZA", "EZLTH", "NQNGI", "VYJWM", "CWDIX", "OSBSX", "KSHDX", "RJIBO", "BIGXJ"]}, "instructie": "Ende seide: \u0027Heere coninc", "label": "Ghinghen voer den coninc staen", "query": "\u003ccode class=\"query link\"\u003epancer_winter_trekere.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ealleene is null\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003econinc \u003e 947\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003esonder = \u0027DEWMOGZ\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003estaet = \u0027NQAQBR\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ewroughene != 503\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}, {"data": {"id_2": []}, "instructie": "Was hi ander sins bedocht", "label": "Ne mach niet bliven achter", "query": "\u003ccode class=\"query link\"\u003everre_selve_ontfaen.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003evaste \u003c 0.8580602205753066\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003egroenen = \u0027UAWVPE\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}], "label": "Het was in eenen tsinxen daghe"}, {"id": "ORAJAHRHVZGX", "items": [{"data": {"id_3": ["A472559", "G817650"]}, "instructie": "Een vet morzeel van eere hinnen", "label": "Dan was bi niemene dan bi mi", "query": "\u003ccode class=\"query link\"\u003ealleene_beseekede.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003etybeert = \u0027GDWJYZRAX\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eoverdaet = \u0027AFWRPPTWY\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eheleghe = \u0027TLLPFEMY\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ehinnen \u003c= 328\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}], "label": "Ende dor recht ende dor ghenade"}, {"id": "NLZMPTLPHFWV", "items": [{"data": {"id_1": ["MYEJE"]}, "instructie": "Dat Cortoys claghet nu", "label": "Hoet so arem was wijlen eere", "query": "\u003ccode class=\"query link\"\u003ereynaert_groeten_wijlen.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003esitten = \u0027ZUAKNTRT\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eedelheit \u003c 0.6547457590786262\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eworst = \u0027PCEHWWXHF\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eghedaen = 853\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}, {"data": {"id_1": ["DWGTV", "FYOLG", "VRVVD", "KEWDP", "QBKVU", "XDZUQ", "SPBGX", "GRNWV", "JAFYK", "DCOZQ", "LRFNN", "NMNRO", "IHFRH", "TWKIM", "CUFDI", "BJYPL", "KDYCV", "WRMNC", "FCZXC", "YWQTP"]}, "instructie": "Daer ic bi nachte quam gheronnen", "label": "Doe dedine sitten gaen", "query": "\u003ccode class=\"query link\"\u003eheeft_coninc_nobel.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ebeede = \u0027MVRHWXAM\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eeenich is not null\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ewinter = 106\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}, {"data": {"id_3": ["T618867", "F633202", "V010098", "D616845", "V221233", "Y105839", "T505150", "R248515", "S442268", "I020908", "Y344915", "Y174936", "M059195", "U887313", "J203479", "P285260"]}, "instructie": "Nu gaet hier up eene claghe", "label": "Dat Cortoys claghet nu", "query": "\u003ccode class=\"query link\"\u003edatmen_hadde_blent.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ereynaert = \u0027FIWCB\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003everlies \u003e= 330\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ebosch \u003c 0.23684522150464138\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eghescreeft is null\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ecortoys = \u0027BHITEATET\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}], "label": "Hets recht dat omberecht zi"}, {"id": "FSZSYROFTORP", "items": [{"data": {"id_3": ["A398978", "O882297", "O885499", "H303658", "V207984", "F782085", "H786518", "A419226", "N532069", "L911783", "X257064", "T385024", "F610324", "T744011", "K596141", "F016669", "P854646", "T645903", "F814081"]}, "instructie": "Sonder vos Reynaert alleene", "label": "Hine hebbe te wroughene jeghen hu", "query": "\u003ccode class=\"query link\"\u003eghesciet_staer.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eonversweghen \u003c 0.6717079382816352\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ezinghene \u003e= 0.45053374883315944\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}, {"data": {"id_1": []}, "instructie": "Groeten lachter ende verlies", "label": "Dor dat ghi Reynaerde zijt onhout", "query": "\u003ccode class=\"query link\"\u003edatter.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003c/div\u003e"}, {"data": {"id_2": ["0200057", "5947665", "2196549", "0771434", "3602795", "2280892", "1824304", "5991963", "9732874", "6627294", "2952765", "4890998", "8226721", "5342387", "3106854", "5776022", "6878892", "6771861", "4051195", "8615931", "1613571", "0049433", "5464412", "4858131", "9940439", "7989274", "6019085"]}, "instructie": "Daer ic bi nachte quam gheronnen", "label": "Ic weet wel al sonder waen", "query": "\u003ccode class=\"query link\"\u003eheeft.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003emiere is null\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eghent = \u0027YVZFQ\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eminen = \u0027DVTDWPFYJ\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}, {"data": {"id_2": ["5102302", "7666183", "5194240", "9214210", "9316888", "1405635", "6781974", "7670111", "9659673", "2631034", "2746239", "4365032", "1363991", "9018460", "6173493", "3408822", "4741039", "1742979"]}, "instructie": "Die claghe die Cortoys doet.\u0027", "label": "Hadder Cortoys yewet an", "query": "\u003ccode class=\"query link\"\u003estaen.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003c/div\u003e"}], "label": "Nochtan hoendi mi sent"}, {"id": "OVYPBPPEMAXB", "items": [{"data": {"id_1": ["KBOIO", "MVAHX", "SHQZN"]}, "instructie": "Dats over menich jaer ghesciet", "label": "Dies zwijghics nochtan", "query": "\u003ccode class=\"query link\"\u003eniemene_spellen.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003escade \u003e= 763\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eeenen is not null\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ehadde \u003c= 902\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}, {"data": {"id_2": ["8308272", "6055343"]}, "instructie": "Sonder vos Reynaert alleene", "label": "Ende claghede den coninc in Francsoys", "query": "\u003ccode class=\"query link\"\u003eghenomen_bevaen.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003emijns \u003e 0.34827409854806757\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003estaet \u003c= 0.045057882410587946\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}, {"data": {"id_2": ["8853449", "2119348", "5353089", "9301814", "8919290", "3866700"]}, "instructie": "Ic weet wel al sonder waen", "label": "Den fellen metten grijsen baerde", "query": "\u003ccode class=\"query link\"\u003emiere_tusschen_haghe.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ecrede = 835\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eghesciet = \u0027VFRHXD\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eclaghede \u003c= 0.353649334274328\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ebegan \u003c 0.05770332417977997\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eversamet = 0.5021650117963019\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}, {"data": {"id_1": ["HHCUU", "VTFUL", "VEIAQ", "RGWSP", "PRCMK", "UUJLE", "HUPHO", "SKSTI", "SPQTW", "KEKUI", "BMLNG", "JNETO", "UGDZH", "YNPRH", "MQWCZ", "WBCQA", "KKBEB", "QKBDH", "RZSQG", "YNSPO", "RCZQC", "ZWXTJ", "BMEVM", "KLWNK", "NVXPF", "IBXUI"]}, "instructie": "Ende spranc midden in den rinc", "label": "Verlore, mochtire an winnen", "query": "\u003ccode class=\"query link\"\u003ewaende.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003c/div\u003e"}], "label": "Dat alles goets en hadde meere"}], "label": "Die mi Reynaert heeft ghedaen"}, {"id": "WNZBPQCVNICI", "items": [{"id": "TLJBJGKTHZXY", "items": [{"data": {"id_3": ["P578400", "R109042", "C894124", "R389674", "E480840", "K778823", "Y318723", "H663476", "B190297", "E934149", "J618021", "M820778", "B057101", "J653140", "M382661", "C116852", "A862404", "D533875", "I510928", "D723344", "G030280", "P666747", "Q864216", "Z612994", "G738739", "Q718089", "B552072", "U684663", "F146161"]}, "instructie": "Ghelovede te leerne sinen crede", "label": "Ghinghen voer den coninc staen", "query": "\u003ccode class=\"query link\"\u003eveste_gheronnen_niemene.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003emordeneere is null\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}, {"data": {"id_1": []}, "instructie": "Nochtan hoendi mi sent", "label": "Dat Cortoys claghet nu", "query": "\u003ccode class=\"query link\"\u003ehebbe_hadde.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003econinc is null\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003elachter = 0.3952937733920583\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ewroughene \u003c 363\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ebeste = \u0027IQVNJKGZN\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eombeere \u003c= 0.9465832147014891\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}, {"data": {"id_3": ["P775468", "S537367"]}, "instructie": "An Cuwaerde den hase die hier staet", "label": "Dat hise beseekede daer si laghen", "query": "\u003ccode class=\"query link\"\u003erecht_edelheit_mochtire.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003egroenen \u003e= 10\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ehoendi is not null\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ewives = \u0027GQPCID\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eghedaen is not null\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003edatmen \u003c= 0.47645298729435814\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}, {"data": {"id_1": ["RJZJS", "WHHMA", "CEKPO", "YPSNM", "QFXQJ", "KLJGT", "HNJTO", "TOLEX", "RQTMW", "XXBAL", "IJXRK", "CNUJC", "EGJRV", "FKLUH", "BCREF", "OHJPG", "NWVOM", "SSMNG", "DBCXN", "SXOCE", "MGCZB", "KKGAY", "CKADF", "UPFEW", "JAACQ", "KHWPU", "BKEFV", "QUHGZ"]}, "instructie": "Doe begonsten si over eene", "label": "Groeten lachter ende verlies", "query": "\u003ccode class=\"query link\"\u003egroeten_mijns.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eclaghe \u003e= 401\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003elachter is not null\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003efrancsoys \u003e 999\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}], "label": "Dan alleene eene worst"}, {"id": "FTXWPIVNDDSY", "items": [{"data": {"id_3": ["O903731", "O843863", "P250068", "H568493", "G640645", "M921250", "A620591", "F424517", "L944374", "B446459", "C931856", "W550205", "C294435", "M480553", "E555711", "G529830", "K437811", "N761073", "Q983479", "H335721", "E171314", "E430172", "D300806", "Z131108", "E075583", "J660274", "O676992", "W210173", "U431038"]}, "instructie": "Wat sechdi van eere laghe?", "label": "Datter twee noint ne saghen", "query": "\u003ccode class=\"query link\"\u003eblent_nobel.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eheleghe = \u0027XJIWAAWU\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eheere \u003c= 0.7956184590048214\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003emijns = 203\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}], "label": "An Cuwaerde den hase die hier staet"}, {"id": "EWOMVCKQMIEO", "items": [{"data": {"id_1": []}, "instructie": "Daer hi in hadde crancken lof", "label": "Dats over menich jaer ghesciet", "query": "\u003ccode class=\"query link\"\u003edatter_staet_onhout.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003estaet = \u0027VWHQGD\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eghent is not null\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eselve = \u0027RSGKO\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ehaghe \u003c 0.9821289180197422\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003efelle = 0.3438942520640882\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}, {"data": {"id_3": ["Y867285", "M355775", "S242913", "X554592", "L105263", "L967845", "U297877", "H499977", "C869575", "G906073", "N254999", "N255072", "F717140", "N956745", "G050836", "G845486", "B140546", "L045993", "S920403"]}, "instructie": "Die hem besculdich kent, ontsiet!", "label": "Nobel, die coninc, hadde ghedaen", "query": "\u003ccode class=\"query link\"\u003etybeert_houden_saghen.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003c/div\u003e"}, {"data": {"id_1": ["WGCUQ", "LDGVF", "NUCQZ", "GSEYZ", "ZSDAG", "VQGAV", "OWGDR", "SVQSX", "KATEQ", "AQRTE", "QHWOA", "AWEFK", "KUOMQ", "FHZCH", "PAYWM"]}, "instructie": "hem Reynaert, die felle man", "label": "Dan alleene eene worst", "query": "\u003ccode class=\"query link\"\u003escuwedi.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003emolen = 0.02320689707329837\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ereynaerde is not null\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ecleene = \u0027LBLGLAV\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003escade \u003c= 616\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}], "label": "Met groenen loveren waren bevaen"}, {"id": "HQCWUYKUCVYI", "items": [{"data": {"id_1": []}, "instructie": "Ysengrijn begonste saen", "label": "Ende binnen des coninx gheleede", "query": "\u003ccode class=\"query link\"\u003ebeede.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ewijlen \u003c 545\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003esprac \u003e= 0.09413097937787096\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003emorzeel \u003e= 150\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ecortoys = \u0027AUGFWFYZN\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}, {"data": {"id_2": ["8929402", "4333825", "1050532", "6438136", "0659227", "3085290", "5760313", "1556633", "9586023"]}, "instructie": "Sonder vos Reynaert alleene", "label": "Die hem besculdich kent, ontsiet!", "query": "\u003ccode class=\"query link\"\u003ealles_reynaerde.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003c/div\u003e"}], "label": "Tybeert, datmen die claghe ombeere?"}], "label": "Sonder vos Reynaert alleene"}], "label": "Dor hu edelheit ende dor hu eere"}, {"id": "TOSOTXLKBGIV", "items": [{"id": "KCQZQMMGAPCD", "items": [{"data": {"id_2": ["6618663"]}, "instructie": "Houden ten wel groeten love", "label": "Aldus hi sine tale began", "query": "\u003ccode class=\"query link\"\u003ecommen_ghinghen_bever.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ebinnen = \u0027VLZAS\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}, {"data": {"id_1": ["QUZPY", "LOECG", "QPKOD", "VRIMA", "QDANJ", "WCIQN", "DHOXK", "OQNZN", "NUJIV", "HISIX", "MTIEQ", "YBQGD", "AZDRG", "KFDUP", "XVVUB", "GJTBR", "VBKBV", "EEWBW", "WALFD", "OGJLF", "PNUPF", "IWODM", "ENCQF", "ZXMUI", "UYBQW", "BLVPI", "AKYSW", "KWFJS"]}, "instructie": "Spellen ende lesen beede", "label": "Dat hi mijn wijf hevet verhoert", "query": "\u003ccode class=\"query link\"\u003etusschen_vorst.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003efelle \u003c 576\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}, {"data": {"id_1": []}, "instructie": "En dedi ghistren in den daghe", "label": "Hine wilde dat hi lijf ende eere", "query": "\u003ccode class=\"query link\"\u003ebejach.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eclaghede is null\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003emesdaen is null\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003emorzeel \u003e 39\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}, {"data": {"id_2": []}, "instructie": "Ende soudene maken capelaen", "label": "Ic weet wel al sonder waen", "query": "\u003ccode class=\"query link\"\u003eleerne_begonste.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eonversweghen = 429\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eeenen is null\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003emordeneere = \u0027AVQKEE\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}, {"data": {"id_2": ["8028616", "3608183", "3900835", "4786019", "6276073", "5074474", "8138467", "9813778", "3621565", "6764186", "6484254", "6849422", "3703810", "3817827", "9543652", "6876747", "0400625", "2565553", "3715897", "2426973", "5858285"]}, "instructie": "Hine wilde dat hi lijf ende eere", "label": "Ende claghede den coninc in Francsoys", "query": "\u003ccode class=\"query link\"\u003etsinxen_begonsten_francsoys.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eleerne = 0.09733637677276441\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ehondekijn = 868\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}], "label": "Omme bejach in eene molen"}, {"id": "BAQPAMUMLFUG", "items": [{"data": {"id_1": ["DMWYR", "HCSEA"]}, "instructie": "Die te hove zijn commen hier", "label": "Hoet so arem was wijlen eere", "query": "\u003ccode class=\"query link\"\u003ehevet.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003esconinx = \u0027KYVKUXX\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ebrocht is not null\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eclaghene = \u0027ZYDNG\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ehadde is not null\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}, {"data": {"id_1": ["QGJQH", "ANTCE", "RVAON", "PQFEF", "GEOCP", "RJWMB", "NRIIE", "BXHPK", "PSSDY", "PQBJH", "NFJTU", "RHKTX"]}, "instructie": "Dat hi waende, hadde hijs gheval", "label": "Dor hu edelheit ende dor hu eere", "query": "\u003ccode class=\"query link\"\u003eghesproken_verlore.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003emesvoert is null\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eghesciet \u003e= 860\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ehevet = \u0027UTDLUO\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ebejach is null\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003emorzeel is null\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}, {"data": {"id_3": []}, "instructie": "Tybeert, datmen die claghe ombeere?", "label": "Hine hebbe te wroughene jeghen hu", "query": "\u003ccode class=\"query link\"\u003eonhout_ghenomen.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ehadse = \u0027NCKRQ\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eghestolen is not null\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ecleene \u003e 0.8844084519531714\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eysengrijn is not null\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}, {"data": {"id_3": ["I773895", "B658544"]}, "instructie": "Hine hadde te claghene over Reynaerde", "label": "Ic hadse bi miere lust ghewonnen", "query": "\u003ccode class=\"query link\"\u003ecater_ghesciet.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003esinen \u003e= 146\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ewroughene != 201\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ehadse is not null\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}, {"data": {"id_1": []}, "instructie": "Alle die diere, groet ende cleene", "label": "Ne mach niet bliven achter", "query": "\u003ccode class=\"query link\"\u003ecortoys_diere_beede.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003c/div\u003e"}], "label": "Ende soudene maken capelaen"}], "label": "Ende seide: \u0027Heere coninc"}, {"id": "SGCPDOQZCRSE", "items": [{"id": "PKMPAHJHQUUL", "items": [{"id": "GBAJNHLIWUPC", "items": [{"data": {"id_1": ["CNELK", "KHCSK", "HWURK", "LBDLE", "AXKGU", "MUSBT", "IYVWX", "PJNGS", "MHRBH", "DIIST", "EJHMP", "ITDDN", "QNQAG", "BKHVR", "KRAIC", "VVIZX", "HRYSV", "VFBWM", "CQREV", "RHVRN", "QIXAV", "XMJJZ", "SLILR", "GAYGT", "EHQXK", "VJQNY", "MAOBR", "SBBAD"]}, "instructie": "Eenen slapenden molen man", "label": "Hine hadde te claghene over Reynaerde", "query": "\u003ccode class=\"query link\"\u003emolen.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003efrancsoys is not null\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003efelle is not null\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ewroughene \u003e= 755\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eslapenden = \u0027YQBSBBQLA\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003econinc \u003e 858\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}, {"data": {"id_1": ["CVQNN", "RNMAE", "ZTKRF", "KNAGV", "OVBBC", "YBYID", "ZTPQS", "BRRYG", "PIEDL", "BIGEA"]}, "instructie": "Daer ic bi nachte quam gheronnen", "label": "Die noyt eenich dier ghedede?", "query": "\u003ccode class=\"query link\"\u003emordeneere.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ehouden = 0.6031595549959632\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eontfoer = 0.45574116355082495\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003emiere \u003e= 158\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ehadse = \u0027HJMVHTBUP\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}], "label": "Hoet so arem was wijlen eere"}, {"id": "XTNVBMPIUMHV", "items": [{"data": {"id_1": ["WBECE", "XYFOL", "YSTYY", "WHHWT", "VKBSA", "ERQKJ", "IKDBZ", "TKGKC", "EEJFB", "BELON", "QUQNN", "ANLUE", "HUKKR", "OCQAE", "DKGOC", "LILKL", "RZGHI", "HZWCB", "ELLEW", "JTPPS", "TOWTL", "YKDKG", "UQXGM", "GQGOM", "MOBMN", "PYSRV", "KFJPF"]}, "instructie": "Dan alleene eene worst", "label": "Aldus hi sine tale began", "query": "\u003ccode class=\"query link\"\u003eloveren.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eander is not null\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eghedede \u003e 0.3568897042900354\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ealdus = \u0027LJXWPIKWB\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003emolen = 972\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ediere \u003e= 0.6881190202587091\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}, {"data": {"id_2": ["7476326", "4887623", "1315581", "0805643", "1648817", "1524260", "3721601", "1240257", "0967349", "3922779"]}, "instructie": "Isingrijn ende sine maghe", "label": "Dat alles goets en hadde meere", "query": "\u003ccode class=\"query link\"\u003ewilde.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ebeede is null\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ealdus = \u0027UPVOXJ\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eyewet is null\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}], "label": "Die worst was mine, al en claghic niet"}], "label": "Pancer de bever sprac: \u0027Dinct hu goet"}, {"id": "PZJRAOQKTMHJ", "items": [{"id": "UPKCIFEUIJII", "items": [{"data": {"id_1": []}, "instructie": "Sijn hof crayeren over al", "label": "Ende dor recht ende dor ghenade", "query": "\u003ccode class=\"query link\"\u003egheval_crayeren_hadde.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ebever is null\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003escuwedi is not null\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003epaerkement = \u0027BESGI\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}, {"data": {"id_1": ["HMFIH", "SBNKE", "XUNJO", "DUNTF", "UAJYH", "YVKVS", "ZMJVR", "HCUNU", "CKABO", "PRFJN", "AQIPG", "SFOMU", "FTXIQ"]}, "instructie": "Doe begonsten si over eene", "label": "Dats over menich jaer ghesciet", "query": "\u003ccode class=\"query link\"\u003edatmen_soudene_cortoys.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ewaren is null\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}, {"data": {"id_2": ["6937389", "6661355", "5926256", "1756325", "0483768", "3418684", "5404495"]}, "instructie": "Die claghe die Cortoys doet.\u0027", "label": "Den fellen metten grijsen baerde", "query": "\u003ccode class=\"query link\"\u003ealleene.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ehoendi = \u0027OTNGA\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eontfaerme = \u0027ZMCCTY\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003egheval \u003e= 309\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}, {"data": {"id_2": ["9537512", "2941593", "8870395", "9326951", "3938995", "9224229", "8160503", "2107309"]}, "instructie": "Hi hadde te hove so vele mesdaen", "label": "Datmen maket nu te Ghent", "query": "\u003ccode class=\"query link\"\u003eghedaen.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eachter is null\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ehadde \u003c= 497\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eonghewroken is null\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eonsculde is null\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}], "label": "Voer al dandre ontfaerme hu dies"}, {"id": "WLDCMISWZAWY", "items": [{"data": {"id_3": ["K762264", "C457381"]}, "instructie": "Ic hadse bi miere lust ghewonnen", "label": "Sijn hof crayeren over al", "query": "\u003ccode class=\"query link\"\u003econinc.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ekennen = 616\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003estaer = \u0027JXBDFDAQ\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}, {"data": {"id_2": ["4690560", "9574978", "0871807", "9489381", "4225958", "3760167", "9499647", "2815508", "8972885", "4461234", "1872128", "3734006", "8153575"]}, "instructie": "Dor hu edelheit ende dor hu eere", "label": "Voer al dandre ontfaerme hu dies", "query": "\u003ccode class=\"query link\"\u003eworden.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003efellen = 417\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ededine \u003c 817\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ebever is null\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003esonder = 0.936703420476479\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003erecht is not null\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}, {"data": {"id_2": ["8333596", "0842098", "2841862", "2421412", "5837385", "9379680", "1838448", "1108414", "8062426", "8968412", "2886323", "3339694", "5464196", "1610142", "3053962", "3620972", "3288548", "8184986", "3390281"]}, "instructie": "Die mi Reynaert heeft ghedaen", "label": "Datter twee noint ne saghen", "query": "\u003ccode class=\"query link\"\u003eysengrijn_grijsen_sconinx.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003erecht = \u0027ZXKXSFGP\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ehadde is null\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ehadde = 964\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003esoude \u003e 22\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}], "label": "Doe begonsten si over eene"}, {"id": "RFZFNGRTTQCR", "items": [{"data": {"id_2": ["5699757", "6074498", "7343902", "3075914", "5196926", "8373410", "6871574", "9765045", "7250428", "1436526", "6907812", "9520467", "5776492", "9344820", "8569218"]}, "instructie": "Ende hier omme scuwedi sconinx hof", "label": "Dies zwijghics nochtan", "query": "\u003ccode class=\"query link\"\u003ehebben_heere_grijsen.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003esaghen != 0.14407894182124092\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003enochtan = 0.47436401676098927\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eworst \u003e 971\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eniemene = \u0027EJNVTTBX\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ereynaert is null\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}, {"data": {"id_1": []}, "instructie": "Dat hire niet dorste gaen", "label": "Den fellen metten grijsen baerde", "query": "\u003ccode class=\"query link\"\u003esconinx_beene.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ereynaert is not null\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}], "label": "Ende Reynaerd soude hebben ghedaen"}, {"id": "NBIZNTGGXPLW", "items": [{"data": {"id_3": ["E874035"]}, "instructie": "Vaste tusschen sine beene", "label": "Ende mine kindre so mesvoert", "query": "\u003ccode class=\"query link\"\u003eghedaen.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ejeghen \u003c= 0.3381945633688034\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eghistren = \u0027LVKWDKSA\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ecrede \u003e 0.7127370138238615\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}], "label": "Tybeert die cater die wart gram"}, {"id": "LAFJYWJTPITZ", "items": [{"data": {"id_1": []}, "instructie": "Omme bejach in eene molen", "label": "Het was in eenen tsinxen daghe", "query": "\u003ccode class=\"query link\"\u003ewives.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eworst = \u0027ZYUPLO\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ecortoys = \u0027ZOJYGKW\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003everhoert is null\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ecuwaerde != 913\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003emiere is null\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}, {"data": {"id_3": ["S926024", "M656358", "O153201", "D424820", "H710879", "O335360", "L472103", "I930787", "H913641", "D428966", "J473633", "L030799", "O762341", "F636467", "M745638", "Z070932", "P999622", "R130628", "Z205990", "Z527200", "H134126", "L227308", "M101302", "I616293", "X626847", "U220840", "H611799", "M035682"]}, "instructie": "Houden ten wel groeten love", "label": "Reynaert es een recht mordeneere", "query": "\u003ccode class=\"query link\"\u003ezinghene_versamet_mordeneere.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003esinen = \u0027NMKFZ\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003edinct = \u0027IAJWGQ\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ewives = \u0027OOIZL\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}, {"data": {"id_3": ["O719669", "B962323", "Z375169", "R406205", "D289235", "N306948", "J631392", "G976052", "Q538500", "J497285"]}, "instructie": "Sine onsculde. Ende also saen", "label": "Tybeert die cater die wart gram", "query": "\u003ccode class=\"query link\"\u003eghistren.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003c/div\u003e"}, {"data": {"id_3": ["Q227277", "Q985107", "N916876", "Q128147", "Y578982", "V576251", "N069294", "Z901823", "R392015", "A084132", "B877923", "M660942", "P272404", "L094900", "Q068930", "X400317", "H894779", "W956095", "I644501"]}, "instructie": "Stont up een hondekijn, hiet Cortoys", "label": "Doe begonsten si over eene", "query": "\u003ccode class=\"query link\"\u003ebeede_groenen.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eheere \u003e= 0.814176855919457\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ecomen = \u0027RRGTKL\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}, {"data": {"id_1": []}, "instructie": "Sijn hof crayeren over al", "label": "Die noyt eenich dier ghedede?", "query": "\u003ccode class=\"query link\"\u003eselve_ghesciet_leede.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003everhoert is null\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eclaghe \u003c 504\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}], "label": "Dat hi waende, hadde hijs gheval"}], "label": "Dor dat ghi Reynaerde zijt onhout"}], "label": "Datter twee noint ne saghen"}, {"id": "XEPFOHEYPDMG", "items": [{"id": "ENHROVLTFFYT", "items": [{"data": {"id_2": ["6850343", "8993312", "9914181"]}, "instructie": "Tybeert die cater die wart gram", "label": "Nu gaet hier up eene claghe", "query": "\u003ccode class=\"query link\"\u003eniemen_crancken_sconinx.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003c/div\u003e"}], "label": "Die te hove zijn commen hier"}, {"id": "CZNGQVIHMWWG", "items": [{"data": {"id_1": []}, "instructie": "Ghinghen voer den coninc staen", "label": "Die te hove zijn commen hier", "query": "\u003ccode class=\"query link\"\u003ehebben_houden_eenen.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eghelovede \u003e= 0.5086763750210124\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}, {"data": {"id_1": ["LOANR", "VQMCV", "QPKVS", "XRVOL", "ZMPWM", "HIZWV", "FDUAO", "CWJFF"]}, "instructie": "Ne mach niet bliven achter", "label": "Den fellen metten grijsen baerde", "query": "\u003ccode class=\"query link\"\u003econinc.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003c/div\u003e"}, {"data": {"id_1": []}, "instructie": "Omme bejach in eene molen", "label": "Hine hebbe te wroughene jeghen hu", "query": "\u003ccode class=\"query link\"\u003ehaghe_ontfaerme.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003c/div\u003e"}], "label": "Dan was bi niemene dan bi mi"}, {"id": "HUTALJOHYWXL", "items": [{"data": {"id_1": ["LQCKM", "EWNZA", "PXUFP", "SEQJM", "RKYMI", "IUEAD", "JXTOJ", "HMOLR", "NIIZS", "DTXOG", "YZVKZ", "BFHJN", "XCNMP", "AFCXX", "EVLGP", "ILJFU", "SFLOG", "ORMPW", "WMENA", "MJFTF", "BFVEQ", "NEVGP", "JVENK", "GYDHR", "YVDVD"]}, "instructie": "Het was sint so verre comen", "label": "Het was in eenen tsinxen daghe", "query": "\u003ccode class=\"query link\"\u003econinc.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ebosch = \u0027REVIGKG\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eclaghede is null\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ewroughene \u003e= 0.3268809113212814\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003eghenade = \u0027XMSRQWUJP\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003emesdaen = \u0027DZBUJV\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}, {"data": {"id_1": []}, "instructie": "Ende si worden staer blent", "label": "No den coninc, minen heere", "query": "\u003ccode class=\"query link\"\u003eworst_dedine.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003c/div\u003e"}, {"data": {"id_3": []}, "instructie": "Ic weet wel al sonder waen", "label": "Voer al dandre ontfaerme hu dies", "query": "\u003ccode class=\"query link\"\u003eachter_menich.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003esprac != 0.043617814188903314\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ebevaen \u003c 614\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ehadde \u003e 532\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ecleene = \u0027FYYTUHE\u0027\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}, {"data": {"id_1": []}, "instructie": "Ende claghede den coninc in Francsoys", "label": "Nu gaet hier up eene claghe", "query": "\u003ccode class=\"query link\"\u003eclaghene.sql\u003c/code\u003e", "where": "\u003cdiv style=\"display: grid; gap: .25em;\"\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003emochtire \u003c 632\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003evaste is null\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ebosch = 884\u003c/code\u003e\u003c/blockquote\u003e\u003cblockquote style=\"background: var(--background-color); padding: .25em; border-radius: 3px;\"\u003e\u003ccode\u003ezwijghics \u003e 0.3704222227782126\u003c/code\u003e\u003c/blockquote\u003e\u003c/div\u003e"}], "label": "Hoet so arem was wijlen eere"}], "label": "Tybeert die cater die wart gram"}]
+    const spec = [{"id": "EXKQHMWUTLLR", "items": [{"id": "KVZBXVTZXRQX", "items": [{"data": {"query": "dandre_cortoys.sql", "where": ["hadde is null", "eenen is null", "dorste is null", "binnen != 673"]}, "ids": {"record_id": ["SDSCE", "OVSHG", "VQPLC", "BLAFR", "CRFBK", "NGHJI", "TWLXA", "DHZOY", "RVOYO", "UBFOE", "YVBLH", "NPKTW", "FTHOB", "BKCCP", "MRMUP", "LUOJM", "LDCUY", "KEWWW", "YECFX", "RUGTZ", "KXPFB", "GLETJ", "OMMBS", "VLPCK", "AZAZG", "VHRZG", "JWDTJ", "HKFKX", "HGSBU"]}, "instructie": "Mi hevet Reynaert, dat felle dier", "label": "Hi hadde te hove so vele mesdaen"}, {"data": {"query": "groeten_begonsten_ontfoer.sql", "where": ["paerkement \u003e= 463"]}, "ids": {"char_id": ["9408520", "7619771", "1621461", "4276147", "3743136", "0841277", "3636564", "1390684", "7507620", "5183127"]}, "instructie": "Was daer niemen, sonder die das", "label": "An Cuwaerde den hase die hier staet"}, {"data": {"query": "versamet.sql", "where": ["ghenomen = 772", "ghinghen = 155", "lachter = \u0027JOKNN\u0027"]}, "ids": {"char_id": ["7232853", "9560882", "3466996", "9265963", "1544051", "5856894", "2380827", "4847592", "4483911", "8487885", "9114212", "6951657", "9415160", "6348030", "1872648", "4194499", "4332435", "5063526", "0886991", "9269695", "9725438", "5190548", "1777230", "8866692", "2749796", "9300553", "5524798", "9042673"]}, "instructie": "Houden ten wel groeten love", "label": "Daer hi in hadde crancken lof"}, {"data": {"query": "niemene_diere_sconinx.sql", "where": ["sprac != 431", "eenich = \u0027UCPMPHTLO\u0027"]}, "ids": {"char_id": ["0130865", "7395922", "9500446", "8952287", "1441360", "4973624"]}, "instructie": "Dat hi waende, hadde hijs gheval", "label": "Die mi Reynaert heeft ghedaen"}], "label": "Die noyt eenich dier ghedede?"}], "label": "Tybeert die cater die wart gram"}, {"id": "ELTIGRYGFADN", "items": [{"id": "GWDHGGNJTRTP", "items": [{"data": {"query": "aldus_hadde_claghet.sql", "where": ["wilde \u003e 271", "nochtan = 486", "onghewroken != 716", "edelheit is not null"]}, "ids": {"record_id": ["NSNHG", "NNFJC", "VJBEF", "PYKGP", "GUXPE", "UBBIE", "ONIMX", "EWUPF", "YNMOO", "EEXWM", "AFYFE", "RWKWN", "JUSEG", "NGTUR", "PXIEZ", "RGRCK", "LVQEZ", "FSSJX", "GKITJ", "LVALL", "BBHNH", "XGCMX", "ROCPJ", "DAMYO", "FQITX", "NWNRG", "UYCEQ"]}, "instructie": "Eenen slapenden molen man", "label": "Dat Cortoys claghet nu"}, {"data": {"query": "meere.sql", "where": ["miere = \u0027MEDYE\u0027"]}, "ids": {"char_id": ["1708649", "4751624", "5694451", "0501851", "6522263", "6762370", "4347230", "5233898", "7054418", "9277582", "4838530", "1987280", "9215010", "5414515", "1306102", "6886871", "0749472"]}, "instructie": "Hine hadde te claghene over Reynaerde", "label": "Also was Reynaerde ghesciet"}, {"data": {"query": "dandre_sconinx_ontfoer.sql", "where": ["cortoys = \u0027NRXAJ\u0027", "hadde = 939"]}, "ids": {"record_id": ["MJEPU", "CDAYD", "KRRMV", "HEXVT", "JHQWT", "MDHIF", "GGISL", "JSIQL", "IVELL", "XTPOW", "YXZME", "YDJYR"]}, "instructie": "Daer ic die worst in hadde ghestolen", "label": "Dat alles goets en hadde meere"}], "label": "Tybeert die cater die wart gram"}], "label": "Verlore, mochtire an winnen"}, {"id": "NYXFXVCEBWEA", "items": [{"id": "PXJDLURXXWSK", "items": [{"data": {"query": "nachte_tsinxen.sql", "where": ["soudene != 0.8887793108004947", "crede \u003c= 835"]}, "ids": {"record_id": ["QMFAW", "OAYWQ", "NUKDA", "EPBER", "KQLTU", "XZEPR", "FWYOT", "OVOSE", "CNQWY", "JRSNT", "SJVBW", "OWOEX", "TRSDM", "JKRYG", "JZSOS", "UGZYP", "BSZIA", "RNCLN", "UXAUS", "XEYSF", "KNGPS", "MFCBQ", "XHBEQ", "PZWMF", "XFISC", "FQDCU", "EIPNJ", "CGXST"]}, "instructie": "Nochtan hoendi mi sent", "label": "Dat hire niet dorste gaen"}], "label": "Al ware al tlaken paerkement"}, {"id": "JAMMHDIICSAY", "items": [{"data": {"query": "hebben_molen.sql", "where": ["ontfaen \u003e 373", "heleghe \u003e= 0.8361280961596134", "maghe is not null", "binnen is null", "hadse is null"]}, "ids": {"auth_id": []}, "instructie": "Dor hu edelheit ende dor hu eere", "label": "No den coninc, minen heere"}, {"data": {"query": "felle_slapenden.sql", "where": ["winter = \u0027NYBKDVY\u0027", "hebbe is not null", "hondekijn is not null", "claghet = \u0027QMLYUUL\u0027", "onghewroken = 0.40182024663869853"]}, "ids": {"auth_id": ["F785608", "Q383009", "D505522", "B348360"]}, "instructie": "Ende hier omme scuwedi sconinx hof", "label": "Ende spranc midden in den rinc"}, {"data": {"query": "comen_daghe.sql", "where": ["ontfaerme = \u0027AJGMYVEG\u0027", "waren is null", "claghene is null"]}, "ids": {"char_id": []}, "instructie": "Pancer de bever sprac: \u0027Dinct hu goet", "label": "Isingrijn ende sine maghe"}, {"data": {"query": "gheleede.sql", "where": ["lesen \u003c 28"]}, "ids": {"record_id": []}, "instructie": "Dor hu edelheit ende dor hu eere", "label": "Daer hi in hadde crancken lof"}, {"data": {"query": "loveren_sonder_dedine.sql", "where": ["spellen != 0.15723820147964274", "waren \u003c= 0.9457968347862035", "brocht \u003e 896"]}, "ids": {"char_id": ["1111141", "6990932", "2509778", "6612276", "1168127", "0166472", "0718947", "6443087", "8406017", "1417707", "8566581", "2324660", "3128072", "4938287", "8424676", "0409290", "4527585", "2751629", "7373874", "8468738", "9854751"]}, "instructie": "Stont up een hondekijn, hiet Cortoys", "label": "No den coninc, minen heere"}], "label": "Hets recht dat omberecht zi"}, {"id": "RWHIZKDHJAKM", "items": [{"data": {"query": "heere.sql", "where": ["loveren = \u0027YWCDGS\u0027", "ysengrijn is not null"]}, "ids": {"record_id": []}, "instructie": "En dedi ghistren in den daghe", "label": "En dedi ghistren in den daghe"}], "label": "Den fellen metten grijsen baerde"}], "label": "Een vet morzeel van eere hinnen"}, {"id": "LROWSHJBZTKP", "items": [{"data": {"query": "onghewroken_ontfoer_worst.sql", "where": []}, "ids": {"char_id": ["9499396", "4611010", "0050265", "2419537", "3472780", "4157797", "0850022", "2643676", "2753499", "3365366", "7348134", "1564691", "2539296", "9199029", "3186635", "4994033", "2254017", "6633298", "5400800", "1393479"]}, "instructie": "Doe begonsten si over eene", "label": "Dan was bi niemene dan bi mi"}, {"data": {"query": "bosch_ghent_staet.sql", "where": ["claghe = \u0027ZETVLF\u0027"]}, "ids": {"char_id": ["3229528", "4500862", "7338431", "8714641", "8544976", "6623456", "4550687", "2552748", "6133546", "5143449", "7331110", "6767636", "6956341", "3312000", "3209250", "8559462", "6503708", "9259740", "5689443", "8559630", "8383717", "5726715"]}, "instructie": "Heere, dit kennen noch die beste", "label": "Doe al dat hof versamet was"}, {"data": {"query": "comen_selve_dinct.sql", "where": ["waende != 451", "baerde is not null", "heeft != 174", "jeghen = \u0027BSMPBCE\u0027", "dicken = \u0027VBTOYITIH\u0027"]}, "ids": {"auth_id": ["S419414", "G323609", "R724454", "L772184", "T379547", "X669583", "O088765", "D569925", "D785245", "D731119"]}, "instructie": "Tybeert die cater die wart gram", "label": "Ende dor recht ende dor ghenade"}], "label": "Ende si worden staer blent"}]
+    const sqlMap = {"aldus_hadde_claghet.sql": "SELECT\n    trekere,\n    hadde,\n    recht,\n    leede,\n    spellen\nFROM ghesciet\nLEFT JOIN maken USING (zinghene)\nWHERE 1=1", "bosch_ghent_staet.sql": "SELECT\n    wilde,\n    mesdaen,\n    recht,\n    maghe,\n    bevaen\nFROM veste\nLEFT JOIN ghedaen USING (capelaen)\nWHERE 1=1", "comen_daghe.sql": "SELECT\n    claghe,\n    wroughene,\n    reynaert,\n    worst,\n    gheleede\nFROM gheval\nWHERE 1=1", "comen_selve_dinct.sql": "SELECT\n    kindre,\n    reynaert,\n    gheval,\n    heere,\n    wroughene\nFROM trekere\nWHERE 1=1", "dandre_cortoys.sql": "SELECT\n    ysengrijn,\n    ghinghen,\n    ghenomen,\n    bliven,\n    reynaert,\n    trekere\nFROM niemene\nLEFT JOIN kindre USING (sprac)\nWHERE 1=1", "dandre_sconinx_ontfoer.sql": "SELECT\n    winter,\n    heeft,\n    hebbe,\n    hadde,\n    ghesproken\nFROM dinct\nLEFT JOIN miere USING (worst)\nWHERE 1=1", "felle_slapenden.sql": "SELECT\n    capelaen,\n    heeft,\n    mesvoert,\n    hondekijn\nFROM cleene\nLEFT JOIN bejach USING (coninc)\nLEFT JOIN sprac USING (isingrijn)\nWHERE 1=1", "gheleede.sql": "SELECT\n    maken,\n    datmen,\n    hadde\nFROM ysengrijn\nWHERE 1=1", "groeten_begonsten_ontfoer.sql": "SELECT\n    dorste,\n    commen,\n    besculdich\nFROM gheval\nWHERE 1=1", "hebben_molen.sql": "SELECT\n    tlaken,\n    gheronnen,\n    ghesciet,\n    reynaerde\nFROM ghelovede\nWHERE 1=1", "heere.sql": "SELECT\n    sonder,\n    tlaken,\n    baerde\nFROM niemene\nLEFT JOIN versamet USING (heere)\nWHERE 1=1", "loveren_sonder_dedine.sql": "SELECT\n    staer,\n    beene,\n    cortoys\nFROM hadde\nLEFT JOIN beste USING (ghenade)\nWHERE 1=1", "meere.sql": "SELECT\n    reynaerde,\n    dedine,\n    ander,\n    nobel,\n    comen\nFROM coninc\nLEFT JOIN diere USING (ghedaen)\nWHERE 1=1", "nachte_tsinxen.sql": "SELECT\n    ghesproken,\n    noint,\n    niemene,\n    datter,\n    leerne,\n    jeghen\nFROM cortoys\nWHERE 1=1", "niemene_diere_sconinx.sql": "SELECT\n    vrede,\n    dorste,\n    hebben,\n    hebbe,\n    cortoys\nFROM ghenade\nLEFT JOIN sconinx USING (worst)\nWHERE 1=1", "onghewroken_ontfoer_worst.sql": "SELECT\n    loveren,\n    claghe,\n    zinghene,\n    trekere\nFROM selve\nWHERE 1=1", "versamet.sql": "SELECT\n    recht,\n    daghe,\n    verlies,\n    soudene,\n    coninc\nFROM datmen\nWHERE 1=1"}
     const config = ""
+
+    const modal = document.querySelector("query-details-modal")
+    modal.setSqlMap(sqlMap)
+
     const werkvoorraadComponent = new WerkvoorraadComponent(spec, config)
     document.querySelector(`[data-component="werkvoorraad"]`).appendChild(werkvoorraadComponent)
 
     const { total, withResults } = werkvoorraadComponent.getItemCounts()
     document.querySelector("footer div").innerHTML = `items: ${withResults} / ${total}`
+
 
     document.addEventListener("color-scheme-change", event => {
         event.detail.scheme === "dark"
@@ -377,6 +169,7 @@
         }
     })
 </script>
+
 <script type="module">
     function addBorderToRowspans(table) {
         table.querySelectorAll("th[rowspan]").forEach(
@@ -406,33 +199,6 @@
 
     document.querySelectorAll("table").forEach(addBorderToRowspans)
     document.querySelectorAll("table").forEach(addBorderToColspans)
-</script>
-<script>
-    const queryLabels = document.querySelectorAll(`[data-component="queries"] > details > summary`)
-    const queryTab = document.querySelector(`[data-show-target="queries"]`)
-
-    function scrollToQuery() {
-        const openedQuery = document.querySelector('[data-component="queries"] > details[open]');
-        const scrollProps = {behavior: 'smooth', block: 'start'}
-        if (openedQuery) { openedQuery.scrollIntoView(scrollProps) }
-        else { console.log('No matching query found') }
-    }
-
-    function openQueryLink(queryName) {
-        for (let label of queryLabels) {
-            label.parentNode.open = false
-            transformedLabel = label.textContent.replace(/\s/g, '')
-            if (transformedLabel === queryName) { label.parentNode.open = true }
-        }
-        queryTab.click()
-        scrollToQuery()
-    }
-
-    document.body.addEventListener('wv-item-click', event => {
-        const { tagName, id, classes, dataset, content } = event.detail
-        // open query when query link is clicked
-        if (classes.includes('query')) { openQueryLink(content) }
-    })
 </script>
 <script>
     const showOnPx = 100

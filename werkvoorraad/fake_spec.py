@@ -146,12 +146,12 @@ def fake_data(
     **kwargs,
 ) -> dict[list]:
     randomizers = {
-        'id_1': lambda: fake_str(LETTERS, 5),
-        'id_2': lambda: fake_str(NUMS, 7),
-        'id_3': lambda: fake_str(LETTERS, 1) + fake_str(NUMS, 6),
+        'record_id': lambda: fake_str(LETTERS, 5),
+        'char_id': lambda: fake_str(NUMS, 7),
+        'auth_id': lambda: fake_str(LETTERS, 1) + fake_str(NUMS, 6),
     }
 
-    id_names = ['id_1', 'id_2', 'id_3']
+    id_names = ['record_id', 'char_id', 'auth_id']
     weights = [0.6, 0.3, 0.1]
     k = random.choices([1, 2, 3], weights=weights)[0]
     items = random.sample(id_names, k=k)
@@ -221,20 +221,23 @@ if __name__ == '__main__':
     json_file.write_text(as_json)
     pprint.pprint(fake_spec)
 
-    def sql_getter(*args, **kwargs):
-        return "select * from x"
+    def sql_getter(path, *args, **kwargs):
+        tables = random.sample(TOKENS, k=random.randint(1, 3))
+        columns = random.sample(TOKENS, k=random.randint(3, 6))
 
-    transformers = {
-        'query': werkvoorraad.as_query_link,
-        'where': werkvoorraad.wrap_criteria_in_blockquotes,
-    }
+        sql = f"SELECT\n    " + ",\n    ".join(columns)
+        sql += f"\nFROM {tables[0]}"
+        if len(tables) > 1:
+            for table in tables[1:]:
+                sql += f"\nLEFT JOIN {table} USING ({random.choice(TOKENS)})"
+        sql += "\nWHERE 1=1"
+        return sql
 
     werkvoorraad.make_werkvoorraad(
         data_getter = fake_data,
         sql_getter = sql_getter,
         spec = fake_spec,
         outpath = werkvoorraad.PATH / 'index.html',
-        transformers = transformers,
     )
 
     print('\n', '-' * 72)

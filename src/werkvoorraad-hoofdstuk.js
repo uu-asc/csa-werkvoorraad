@@ -87,7 +87,7 @@ export class WerkvoorraadHoofdstuk extends HTMLElement {
         const totals = {}
         for (const item of this.items) {
             const isChapter = item instanceof WerkvoorraadHoofdstuk
-            const source = isChapter ? item.totals : item.data
+            const source = isChapter ? item.totals : item.ids
             for (const [key, val] of Object.entries(source)) {
                 const n = Array.isArray(val) ? val.length : val
                 totals[key] = (totals[key] ?? 0) + n

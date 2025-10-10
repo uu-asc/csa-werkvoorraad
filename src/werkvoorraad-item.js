@@ -16,19 +16,20 @@ summary {
     grid-template-columns: 1fr auto;
     align-items: center;
     gap: .5em;
-}
-summary div:first-child::before {
-    content: '•';
-    display: inline-block;
-    position: relative;
-    right: .25em;
-}
-summary > :last-child {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: .25em;
-    justify-items: end;
-    margin-right: 2ch;
+
+    .label::before {
+        content: '•';
+        display: inline-block;
+        position: relative;
+        right: .25em;
+    }
+    .buttons {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: .25em;
+        justify-items: end;
+        margin-right: 2ch;
+    }
 }
 
 .has-details summary {
@@ -50,11 +51,22 @@ details.has-details[open] > summary {
     border-bottom: 1px dotted;
     margin-bottom: .5em;
 }
-details.has-details > div {
-    display: grid;
+
+.item-details {
+    position: relative;
+    display: flex;
+    flex-direction: column;
     gap: .5em;
     padding-bottom: .75em;
+    padding-right: 5em;
+
+    > [data-action="show-query-details"] {
+        position: absolute;
+        top: 0;
+        right: 2ch;
+    }
 }
+
 .batches {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(15ch, 1fr));
@@ -75,12 +87,13 @@ button {
     font-family: monospace;
     border: 1px solid;
     border-radius: 4px;
-}
-button:hover {
-    background-color: var(--color-button-hover);
-}
-button:active {
-    background-color: var(--color-button-active);
+
+    &:hover {
+        background-color: var(--color-button-hover);
+    }
+    &:active {
+        background-color: var(--color-button-active);
+    }
 }
 
 .link:hover {
@@ -106,13 +119,15 @@ export class WerkvoorraadItem extends HTMLElement {
     config = {
         batchSize: 500,
         offset: .5,
+        queryDetailsLabel: "ⓘ",
     }
 
     constructor(spec, config={}, depth=0) {
         super()
-        const { id, type, label, data, ...rest } = spec
+        const { id, type, label, data, ids, ...rest } = spec
         this.label = label
         this.data = data
+        this.ids = ids
         this.rest = rest
         this.config = { ...this.config, ...config }
         this.depth = depth
@@ -126,7 +141,7 @@ export class WerkvoorraadItem extends HTMLElement {
         this.handleSearchItem = this.handleSearchItem.bind(this)
     }
 
-    get n() { return Object.values(this.data).reduce((sum, arr) => sum + arr.length, 0) }
+    get n() { return Object.values(this.ids).reduce((sum, arr) => sum + arr.length, 0) }
     get hasResults() { return this.n > 0 }
 
     get _details() { return this.shadow.querySelector("details") }
@@ -161,6 +176,11 @@ export class WerkvoorraadItem extends HTMLElement {
             content: elem.textContent.trim(),
         }
 
+        // attach data object if showing query details
+        if (elem.dataset.action === 'show-query-details') {
+            info.data = this.data
+        }
+
         // dispatch custom event with collected information
         const clickEvent = new CustomEvent('wv-item-click', {
             bubbles: true,
@@ -178,7 +198,7 @@ export class WerkvoorraadItem extends HTMLElement {
         const start = elem.dataset.start
         const end = elem.dataset.end
 
-        const data = this.data[target].slice(start, end).join(";")
+        const data = this.ids[target].slice(start, end).join(";")
         await navigator.clipboard.writeText(data)
         const clipboardWriteEvent = new CustomEvent("clipboardWriteEvent", {
             bubbles: true,
@@ -197,19 +217,23 @@ export class WerkvoorraadItem extends HTMLElement {
 
     render() {
         const buttons =
-            Object.entries(this.data)
+            Object.entries(this.ids)
             .map(([key, arr]) => `<label>${key}</label>${this.renderButton(key, 0, arr.length)}`)
 
         const batches =
-            Object.entries(this.data)
+            Object.entries(this.ids)
             .filter(([key, arr]) => arr.length > this.config.batchSize)
             .map(([key, arr]) => this.renderBatches(key, arr))
+
+        const queryDetailsButton = this.data?.query
+            ? `<button data-action="show-query-details">${this.config.queryDetailsLabel}</button>`
+            : ''
 
         const details =
             Object.entries(this.rest)
             .map(([key, val]) => `<div><strong>${key}</strong> ${val}</div>`)
 
-        const hasDetails = batches.length > 0 || details.length > 0
+        const hasDetails = batches.length > 0 || details.length > 0 || queryDetailsButton
         const classes = []
         if (this.n < 1) { classes.push("empty") }
         if (hasDetails) { classes.push("has-details") }
@@ -218,12 +242,13 @@ export class WerkvoorraadItem extends HTMLElement {
             `<style>${style}</style>
             <details class="${classes.join(" ")}">
                 <summary>
-                    <div>${this.label}</div>
-                    <div>${buttons.join("")}</div>
+                    <div class="label">${this.label}</div>
+                    <div class="buttons">${buttons.join("")}</div>
                 </summary>
-                <div>
-                ${details.join("")}
-                ${batches.join("")}
+                <div class="item-details">
+                    ${queryDetailsButton}
+                    ${details.join("")}
+                    ${batches.join("")}
                 </div>
             </details>`
         this._stylesheet.insertRule(

@@ -78,17 +78,20 @@ def process_spec(
                 for item in new_spec
             ]
         case dict():
-            # get data and then merge results into `spec`
-            if result := new_spec.get('data'):
-                result['data'] = data_getter(**result, **kwargs)
-                new_spec = new_spec | result
+            # get data and separate IDs from query metadata
+            if data_config := new_spec.get('data'):
+                fetched_ids = data_getter(**data_config, **kwargs)
+                new_spec['ids'] = fetched_ids
 
             transform_items(new_spec)
 
-            return {
-                key: process_spec(value, data_getter, transformers, **kwargs)
-                for key, value in new_spec.items()
-            }
+            processed = {}
+            for key, value in new_spec.items():
+                if key == 'data':
+                    processed[key] = value  # Keep as-is, already processed
+                else:
+                    processed[key] = process_spec(value, data_getter, transformers, **kwargs)
+            return processed
         case _:
             return new_spec
 
@@ -153,8 +156,14 @@ def spec_to_tabular(processed_spec, timestamp=None):
 
 # MARK: SQL STATEMENTS
 def gather_sql_from_spec(spec: Spec, sql_getter: Callable, **kwargs) -> dict:
+    """
+    Extract unique query filenames from spec and fetch their SQL statements.
+
+    Returns:
+    - dict[str, str]: A dict mapping query filename to SQL text.
+    """
     paths = extract_query_paths_from_spec(spec)
-    return gather_sql(paths, sql_getter, **kwargs)
+    return {path: sql_getter(path, **kwargs) for path in paths}
 
 
 def extract_query_paths_from_spec(spec: Spec) -> set[str]:
@@ -181,28 +190,6 @@ def extract_query_paths_from_spec(spec: Spec) -> set[str]:
     return paths
 
 
-def gather_sql(paths: set[str], sql_getter: Callable, **kwargs) -> dict:
-    """
-    Gather SQL statements from files specified in the provided set of paths.
-
-    Parameters:
-    - paths (set[str]): A set of file paths containing SQL statements.
-    - **kwargs: Additional keyword arguments to be passed to osiris.get_sql().
-
-    Returns:
-    - dict[str, str]: A dict mapping file stem to SQL query. Sorted by key.
-    """
-    statements = {}
-    sorter = lambda i: (-i.count('/'), *i.split('/'))
-
-    for path in sorted(paths, key=sorter):
-        key = path.replace('/', ' / ')
-        query = sql_getter(path, **kwargs)
-        statements[key] = query
-
-    return statements
-
-
 # MARK: TRANSFORMERS
 def wrap_criteria_in_blockquotes(criteria: list[str]) -> str:
     tpl = Template("""<blockquote style="background: var(--background-color); padding: .25em; border-radius: 3px;"><code>${criterium}</code></blockquote>""")
@@ -214,11 +201,6 @@ def wrap_criteria_in_blockquotes(criteria: list[str]) -> str:
 
 def wrap_item_in_code_tags(item: str) -> str:
     wrapped = f"<code>{item}</code>"
-    return wrapped
-
-
-def as_query_link(item: str) -> str:
-    wrapped = f'<code class="query link">{item}</code>'
     return wrapped
 
 
@@ -262,12 +244,12 @@ def make_werkvoorraad(
             monitor_path = monitor_path,
         )
 
-    queries = gather_sql_from_spec(spec, sql_getter, **query_kwargs)
+    sql_map = gather_sql_from_spec(spec, sql_getter, **query_kwargs)
 
     tpl = ENV.get_template(template)
     html = tpl.render(
         spec = processed_spec,
-        queries = queries,
+        sql_map = sql_map,
         ts = datetime.now().isoformat(),
         tabs = tabs,
         **tpl_kwargs,
