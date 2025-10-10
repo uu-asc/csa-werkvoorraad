@@ -200,7 +200,10 @@ export class QueryDetailsModal extends HTMLElement {
 
     render() {
         this.shadow.innerHTML = `
-            <style>${style}</style>
+            <style>
+                @import url('https://lcvriend.github.io/wc-multi-selector/static/prism.css');
+                ${style}
+            </style>
             <dialog>
                 <div class="modal-wrapper">
                     <div class="modal-header">
