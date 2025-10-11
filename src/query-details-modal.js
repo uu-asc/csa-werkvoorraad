@@ -12,53 +12,50 @@ dialog {
     max-width: 80vw;
     max-height: 90vh;
     padding: 0;
+
+    &[open] {
+        display: grid;
+        grid-template-rows: auto auto 1fr;
+    }
+    &::backdrop {
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(2px);
+    }
 }
 
-dialog::backdrop {
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(2px);
-}
-
-.modal-wrapper {
-    display: grid;
-    grid-template-rows: auto auto 1fr;
-    max-height: 90vh;
-}
-
-.modal-header {
+header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 1.5rem;
+    padding: .25rem .5rem;
     border-bottom: 1px solid var(--color-text);
     background: var(--color-button);
+
+    h3  {
+        margin: 0;
+        font-family: monospace;
+        font-size: 1rem;
+    }
+
+    #close-button {
+        background: transparent;
+        border: none;
+        font-size: 1rem;
+        cursor: pointer;
+        color: var(--color-text);
+        border-radius: 4px;
+
+        &:hover {
+            background: var(--color-button-hover);
+        }
+    }
 }
 
-.modal-header h3 {
-    margin: 0;
-    font-family: monospace;
-    font-size: 1rem;
-}
-
-#close-button {
-    background: transparent;
-    border: none;
-    font-size: 1.5rem;
-    cursor: pointer;
-    color: var(--color-text);
-    padding: 0.25rem;
-    border-radius: 4px;
-}
-
-#close-button:hover {
-    background: var(--color-button-hover);
-}
-
-.metadata-section {
-    padding: 1rem 1.5rem;
-    border-bottom: 1px solid var(--color-text);
+.metadata {
     display: grid;
     gap: 0.5rem;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--color-text);
 
     &:empty {
         display: none;
@@ -69,39 +66,52 @@ dialog::backdrop {
     display: grid;
     grid-template-columns: auto 1fr;
     gap: 1rem;
+
+    strong {
+        font-family: monospace;
+    }
 }
 
-.metadata-item strong {
-    font-family: monospace;
-}
-
-.metadata-list {
+.metadata-item-list {
     display: grid;
     gap: 0.25rem;
     margin-left: 1rem;
 }
 
-.metadata-item-list {
+.metadata-item-list-value {
+    display: flex;
+    align-items: center;
+    min-height: 1.5em;
     background: var(--color-button);
-    padding: 0.25rem 0.5rem;
+    padding: .5em 1em;
     border-radius: 3px;
     font-family: monospace;
     font-size: 0.9em;
+    cursor: pointer;
+    user-select: none;
+
+    &:hover {
+        background: var(--color-button-hover);
+    }
+
+    &:active {
+        background: var(--color-button-active);
+    }
 }
 
-.sql-section {
+.sql {
     position: relative;
     overflow: auto;
     padding: 1.5rem;
-}
 
-.sql-section pre {
-    margin: 0;
-    overflow: auto;
-}
+    pre {
+        margin: 0;
+        overflow: auto;
+    }
 
-.sql-section code {
-    font-size: 0.9em;
+    code {
+        font-size: 0.9em;
+    }
 }
 
 .copy-button {
@@ -120,33 +130,36 @@ dialog::backdrop {
 export class QueryDetailsModal extends HTMLElement {
     constructor() {
         super()
-        this.shadow = this.attachShadow({ mode: 'open' })
+        this.shadow = this.attachShadow({ mode: "open" })
         this.sqlMap = {}
 
         this.handleClose = this.handleClose.bind(this)
         this.handleItemClick = this.handleItemClick.bind(this)
+        this.handleDialogClick = this.handleDialogClick.bind(this)
         this.show = this.show.bind(this)
     }
 
     connectedCallback() {
         this.render()
-        this._dialog.addEventListener('click', (e) => {
-            if (e.target === this._dialog) this.handleClose()
+        this._dialog.addEventListener("click", this.handleDialogClick)
+        this._dialog.addEventListener("click", event => {
+            if (event.target === this._dialog) this.handleClose()
         })
-        this._closeButton.addEventListener('click', this.handleClose)
+        this._closeButton.addEventListener("click", this.handleClose)
 
-        document.addEventListener('wv-item-click', this.handleItemClick)
+        document.addEventListener("wv-item-click", this.handleItemClick)
     }
 
     disconnectedCallback() {
-        document.removeEventListener('wv-item-click', this.handleItemClick)
+        this._dialog.removeEventListener("click", this.handleDialogClick)
+        document.removeEventListener("wv-item-click", this.handleItemClick)
     }
 
-    get _dialog() { return this.shadow.querySelector('dialog') }
-    get _closeButton() { return this.shadow.getElementById('close-button') }
-    get _title() { return this.shadow.getElementById('modal-title') }
-    get _metadataSection() { return this.shadow.querySelector('.metadata-section') }
-    get _sqlSection() { return this.shadow.querySelector('.sql-section') }
+    get _dialog() { return this.shadow.querySelector("dialog") }
+    get _closeButton() { return this.shadow.getElementById("close-button") }
+    get _title() { return this.shadow.getElementById("modal-title") }
+    get _metadataSection() { return this.shadow.querySelector(".metadata") }
+    get _sqlSection() { return this.shadow.querySelector(".sql") }
 
     setSqlMap(map) {
         this.sqlMap = map
@@ -154,9 +167,23 @@ export class QueryDetailsModal extends HTMLElement {
 
     handleItemClick(event) {
         const { dataset, data } = event.detail
-        if (dataset.action === 'show-query-details' && data) {
+        if (dataset.action === "show-query-details" && data) {
             this.show(data)
         }
+    }
+
+    async handleDialogClick(event) {
+        const target = event.target
+        const copyValue = target.dataset.copy
+
+        if (!copyValue) return
+
+        const originalText = target.textContent
+        await navigator.clipboard.writeText(copyValue)
+        target.textContent = "✓"
+        setTimeout(() => {
+            target.textContent = originalText
+        }, 1000)
     }
 
     handleClose() {
@@ -165,56 +192,50 @@ export class QueryDetailsModal extends HTMLElement {
 
     show(data) {
         const queryFilename = data.query
-        const sqlText = this.sqlMap[queryFilename] ?? '-- SQL not found'
+        const sqlText = this.sqlMap[queryFilename] ?? "-- SQL not found"
 
         // Set title
-        this._title.textContent = queryFilename
+        // this._title.textContent = queryFilename
 
         // Build metadata section
         const metadataHTML = []
         for (const [key, value] of Object.entries(data)) {
-            if (key === 'query') continue
 
             // Skip empty values
             if (value === null || value === undefined) continue
             if (Array.isArray(value) && value.length === 0) continue
-            if (typeof value === 'string' && value.trim() === '') continue
+            if (typeof value === "string" && value.trim() === "") continue
 
-            // Format based on type
-            let displayValue
-            if (Array.isArray(value)) {
-                const items = value
-                    .map(item => `<div class="metadata-item-list">${item}</div>`)
-                    .join('')
-                displayValue = `<div class="metadata-list">${items}</div>`
-            } else {
-                displayValue = `<span>${value}</span>`
-            }
+            // Format
+            const array = Array.isArray(value) ? value : [value]
+            const items = array
+                .map(item => `<div class="metadata-item-list-value" data-copy="${this.escapeHtml(item)}">${item}</div>`)
+                .join("")
 
             metadataHTML.push(`
                 <div class="metadata-item">
                     <strong>${key}:</strong>
-                    ${displayValue}
+                    <div class="metadata-item-list">${items}</div>
                 </div>
             `)
         }
 
-        this._metadataSection.innerHTML = metadataHTML.join('')
+        this._metadataSection.innerHTML = metadataHTML.join("")
 
         // Set SQL with syntax highlighting
         this._sqlSection.innerHTML = `<pre><code class="language-sql">${this.escapeHtml(sqlText)}</code></pre>`
 
     // Add copy button
-    if (!this._sqlSection.querySelector('.copy-button')) {
-        const copyButton = document.createElement('button')
-        copyButton.className = 'copy-button'
-        copyButton.innerHTML = '⧉'
+    if (!this._sqlSection.querySelector(".copy-button")) {
+        const copyButton = document.createElement("button")
+        copyButton.className = "copy-button"
+        copyButton.innerHTML = "⧉"
         copyButton.onclick = async (event) => {
             event.stopPropagation()
-            const codeText = this._sqlSection.querySelector('pre code').textContent
+            const codeText = this._sqlSection.querySelector("pre code").textContent
             await navigator.clipboard.writeText(codeText)
-            copyButton.textContent = '✓'
-            setTimeout(() => copyButton.innerHTML = '⧉', 1500)
+            copyButton.textContent = "✓"
+            setTimeout(() => copyButton.innerHTML = "⧉", 1500)
         }
         this._sqlSection.appendChild(copyButton)
     }
@@ -228,7 +249,7 @@ export class QueryDetailsModal extends HTMLElement {
     }
 
     escapeHtml(text) {
-        const div = document.createElement('div')
+        const div = document.createElement("div")
         div.textContent = text
         return div.innerHTML
     }
@@ -236,21 +257,19 @@ export class QueryDetailsModal extends HTMLElement {
     render() {
         this.shadow.innerHTML = `
             <style>
-                @import url('https://lcvriend.github.io/wc-multi-selector/static/prism.css');
+                @import url("https://lcvriend.github.io/wc-multi-selector/static/prism.css");
                 ${style}
             </style>
             <dialog>
-                <div class="modal-wrapper">
-                    <div class="modal-header">
-                        <h3 id="modal-title"></h3>
-                        <button id="close-button">&times;</button>
-                    </div>
-                    <div class="metadata-section"></div>
-                    <div class="sql-section"></div>
-                </div>
+                <header>
+                    <h3>Query</h3>
+                    <button id="close-button">&times;</button>
+                </header>
+                <div class="metadata"></div>
+                <div class="sql"></div>
             </dialog>
         `
     }
 }
 
-customElements.define('query-details-modal', QueryDetailsModal)
+customElements.define("query-details-modal", QueryDetailsModal)
