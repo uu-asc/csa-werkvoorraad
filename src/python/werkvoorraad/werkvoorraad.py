@@ -11,9 +11,9 @@ from markdown import markdown
 from jinja2 import Environment, FileSystemLoader
 
 
-# type Spec = list[dict[str, Any]] | dict[str, Any]
+# type Spec = list[Any] | dict[str, Any]
 # type ItemTransformer = Callable[..., str]
-Spec = list[dict[str, Any]] | dict[str, Any]
+Spec = list[Any] | dict[str, Any]
 ItemTransformer = Callable[..., str]
 
 
@@ -96,6 +96,7 @@ def process_spec(
             return processed
         case _:
             return new_spec
+
 
 def spec_to_tabular(processed_spec, timestamp=None):
     """
