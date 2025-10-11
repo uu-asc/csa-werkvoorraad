@@ -32,24 +32,31 @@ summary {
     }
 }
 
-.has-details summary {
-    position: relative;
-    cursor: pointer;
-}
-.has-details summary:after {
-    content: "+";
-    position: absolute;
-    font-size: 1.25em;
-    right: 0;
-    transform-origin: center;
-    transition: 40ms linear;
-}
-details.has-details[open] > summary:after {
-    transform: rotate(45deg);
-}
-details.has-details[open] > summary {
-    border-bottom: 1px dotted;
-    margin-bottom: .5em;
+.has-details {
+    summary {
+        position: relative;
+        cursor: pointer;
+
+        &:after {
+            content: "+";
+            position: absolute;
+            font-size: 1.25em;
+            right: 0;
+            transform-origin: center;
+            transition: 40ms linear;
+        }
+    }
+
+    &[open] {
+        summary {
+            border-bottom: 1px dotted;
+            margin-bottom: .5em;
+
+            &:after {
+                transform: rotate(45deg);
+            }
+        }
+    }
 }
 
 .item-details {
@@ -64,6 +71,13 @@ details.has-details[open] > summary {
         position: absolute;
         top: 0;
         right: 2ch;
+
+        font-size: .75rem;
+        line-height: 2;
+        min-width: 0;
+        width: 1.5rem;
+        height: 1.5rem;
+        border-radius: 50%;
     }
 }
 
@@ -119,7 +133,7 @@ export class WerkvoorraadItem extends HTMLElement {
     config = {
         batchSize: 500,
         offset: .5,
-        queryDetailsLabel: "ⓘ",
+        queryDetailsLabel: "Ｑ",
     }
 
     constructor(spec, config={}, depth=0) {
