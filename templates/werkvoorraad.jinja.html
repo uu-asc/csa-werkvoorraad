@@ -60,6 +60,7 @@
         {% endfor %}
         {% endif %}
     </nav>
+    <query-details-modal></query-details-modal>
     <button class="back-to-top hidden">↑</button>
     <section data-component="werkvoorraad"></section>
     {% if tabs %}
@@ -68,23 +69,6 @@
         {{ content }}
     </section>
     {% endfor %}
-    {% endif %}
-    {% if queries %}
-    <dialog id="query-modal">
-        <div class="modal-wrapper">
-            <div class="modal-header">
-                <h3 id="modal-title"></h3>
-                <button id="modal-close">&times;</button>
-            </div>
-            <div id="modal-content">
-                {% for query_path, sql in queries.items() %}
-                <div data-query="{{ query_path }}" class="query-content" style="display: none;">
-                <pre><code class="language-sql">{{ sql }}</code></pre>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
-    </dialog>
     {% endif %}
     <footer>
         <a href="https://github.com/uu-asc/csa-werkvoorraad">github.com/uu-asc/csa-werkvoorraad</a>
@@ -176,10 +160,16 @@
 </script>
 <script type="module">
     import { WerkvoorraadComponent } from "https://uu-asc.github.io/csa-werkvoorraad/src/werkvoorraad-component.js"
+    import { QueryDetailsModal } from "https://uu-asc.github.io/csa-werkvoorraad/src/query-details-modal.js"
     import { DarkModeToggle } from "https://uu-asc.github.io/csa-werkvoorraad/src/darkmode-toggle.js"
 
     const spec = {{ spec | tojson }}
+    const sqlMap = {{ sql_map | tojson }}
     const config = {{ config | default("") | tojson }}
+
+    const modal = document.querySelector("query-details-modal")
+    modal.setSqlMap(sqlMap)
+
     const werkvoorraadComponent = new WerkvoorraadComponent(spec, config)
     document.querySelector(`[data-component="werkvoorraad"]`).appendChild(werkvoorraadComponent)
 
@@ -350,54 +340,6 @@
 
     document.querySelectorAll("table").forEach(addBorderToRowspans)
     document.querySelectorAll("table").forEach(addBorderToColspans)
-</script>
-<script>
-    function showQueryInModal(queryName) {
-        const modal = document.getElementById("query-modal")
-        const title = document.getElementById("modal-title")
-
-        const templateKey = queryName.replaceAll("/", " / ")
-        const content = document.querySelector(`[data-query="${templateKey}"]`)
-
-        if (!content.querySelector(".copy-button")) {
-            const copyButton = document.createElement("button")
-            copyButton.className = "copy-button"
-            copyButton.innerHTML = "⧉"
-            copyButton.onclick = async (event) => {
-                event.stopPropagation()
-                const codeText = content.querySelector("pre code").textContent
-                await navigator.clipboard.writeText(codeText)
-                copyButton.textContent = "✓"
-                setTimeout(() => copyButton.innerHTML = "⧉", 1000)
-            }
-            content.style.position = "relative"
-            content.appendChild(copyButton)
-        }
-
-        // Hide all query content
-        document.querySelectorAll(".query-content").forEach(el => el.style.display = "none")
-
-        // Show selected query
-        title.textContent = queryName
-        content.style.display = "block"
-        modal.showModal()
-    }
-
-    const modal = document.getElementById("query-modal")
-
-    // X button
-    document.getElementById("modal-close").onclick = () => modal.close()
-
-    // Backdrop click (click outside content area)
-    modal.onclick = (e) => {
-        if (e.target === modal) modal.close()
-    }
-
-    document.body.addEventListener("wv-item-click", event => {
-        const { tagName, id, classes, dataset, content } = event.detail
-        // open query when query link is clicked
-        if (classes.includes("query")) { showQueryInModal(content) }
-    })
 </script>
 <script>
     const showOnPx = 100
