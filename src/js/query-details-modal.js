@@ -53,6 +53,7 @@ header {
 
 .metadata {
     display: grid;
+    grid-template-columns: auto 1fr;
     gap: 0.5rem;
     padding: 1rem 1.5rem;
     border-bottom: 1px solid var(--color-text);
@@ -60,25 +61,12 @@ header {
     &:empty {
         display: none;
     }
-}
-
-.metadata-item {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 1rem;
-
     strong {
         font-family: monospace;
     }
 }
 
-.metadata-item-list {
-    display: grid;
-    gap: 0.25rem;
-    margin-left: 1rem;
-}
-
-.metadata-item-list-value {
+.metadata-value {
     display: flex;
     align-items: center;
     min-height: 1.5em;
@@ -209,14 +197,12 @@ export class QueryDetailsModal extends HTMLElement {
             // Format
             const array = Array.isArray(value) ? value : [value]
             const items = array
-                .map(item => `<div class="metadata-item-list-value" data-copy="${this.escapeHtml(item)}">${item}</div>`)
+                .map(item => `<div class="metadata-value" data-copy="${this.escapeHtml(item)}">${item}</div>`)
                 .join("")
 
             metadataHTML.push(`
-                <div class="metadata-item">
-                    <strong>${key}:</strong>
-                    <div class="metadata-item-list">${items}</div>
-                </div>
+                <strong>${key}:</strong>
+                <div class="metadata-values">${items}</div>
             `)
         }
 

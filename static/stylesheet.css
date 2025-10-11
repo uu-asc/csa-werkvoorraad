@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Bungee+Hairline&family=Lato&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bungee+Hairline&display=swap');
 
 * {
     padding: 0;
@@ -74,8 +74,7 @@ details[open] > summary:after {
 }
 
 .timestamp-container {
-    display: grid;
-    grid-template-columns: 1fr auto;
+    display: flex;
     align-items: center;
 }
 
