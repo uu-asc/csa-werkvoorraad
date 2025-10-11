@@ -73,7 +73,6 @@ summary {
         right: 2ch;
 
         font-size: .75rem;
-        line-height: 2;
         min-width: 0;
         width: 1.5rem;
         height: 1.5rem;

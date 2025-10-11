@@ -77,11 +77,6 @@ details[open] > summary:after {
     display: grid;
     grid-template-columns: 1fr auto;
     align-items: center;
-    font-family: monospace;
-
-    :nth-child(2) {
-        justify-self: end;
-    }
 }
 
 nav {

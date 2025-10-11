@@ -1,33 +1,36 @@
+{# -------------------------------------------------------------------------------- #}
 {% set language = language | default('nl') %}
+{% set local = local | default(false) %}
+{% set src = '.' if local else 'https://uu-asc.github.io/csa-werkvoorraad' %}
 {% set title = title | default('werkvoorraad') %}
 {% set tabs = tabs | default({}) %}
 {% set werkvoorraad_label = werkvoorraad_label | default('werkvoorraad') %}
-{#  #}
+{# -------------------------------------------------------------------------------- #}
 {% set hue = hue | default(210) %}
 {% set hue_background = hue_background | default(hue) %}
 {% set hue_button = hue_button | default(hue) %}
 {% set hue_text = hue_text | default(hue) %}
-{#  #}
+{# -------------------------------------------------------------------------------- #}
 {% set sat = sat | default(18) %}
 {% set sat_background = sat_background | default(sat) %}
 {% set sat_button = sat_button | default(sat) %}
 {% set sat_text = sat_text | default(sat) %}
-{#  #}
+{# -------------------------------------------------------------------------------- #}
 <!DOCTYPE html>
 <html lang="{{ language }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ title }}</title>
-    <link rel="icon" type="image/svg+xml" href="https://uu-asc.github.io/csa-werkvoorraad/static/favicon.svg">
-    <link rel="icon" type="image/png" href="https://uu-asc.github.io/csa-werkvoorraad/static/favicon.png">
+    <link rel="icon" type="image/svg+xml" href="{{ src }}/static/favicon.svg">
+    <link rel="icon" type="image/png" href="{{ src }}/static/favicon.png">
     <style>
     {% filter indent(width=8, first=True) %}
     {% include 'stylesheet.jinja.css' %}
     {% endfilter %}
     </style>
     <link rel="stylesheet" href="https://lcvriend.github.io/wc-multi-selector/static/prism.css">
-    <link rel="stylesheet" href="https://uu-asc.github.io/csa-werkvoorraad/static/stylesheet.css">
+    <link rel="stylesheet" href="{{ src }}/static/stylesheet.css">
 {% if embed_vega %}
     <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
@@ -41,15 +44,23 @@
     <div class="timestamp-container">
         <div>
             Update {% if language == 'nl' %}werkvoorraad{% else %}Pending work{% endif %}:
-            <span class="timestamp" data-timestamp="{{ ts }}"></span>
+            <timestamp-display
+                timestamp="{{ ts }}"
+                threshold="4"
+                locale="{{ language }}-NL"
+                show-warning>
+            </timestamp-display>
         </div>
-        <div class="timestamp-warning" data-timestamp="{{ ts }}" data-threshold="4"></div>
     {% if ts_db %}
         <div>
             Update database:
-            <span class="timestamp" data-timestamp="{{ ts_db }}"></span>
+            <timestamp-display
+                timestamp="{{ ts_db }}"
+                threshold="2"
+                locale="{{ language }}-NL"
+                show-warning>
+            </timestamp-display>
         </div>
-        <div class="timestamp-warning" data-timestamp="{{ ts_db }}" data-threshold="2"></div>
     {% endif %}
     </div>
     <nav>
@@ -74,94 +85,16 @@
         <a href="https://github.com/uu-asc/csa-werkvoorraad">github.com/uu-asc/csa-werkvoorraad</a>
         <div></div>
     </footer>
+
+<!-- MARK: TIMESTAMPS -->
 <script type="module">
-    function processTimestamps() {
-        document.querySelectorAll(".timestamp").forEach(processTimestamp)
-        document.querySelectorAll(".timestamp-warning").forEach(processTimestampWarning)
-    }
-
-    function formatTimestamp(date, locale = "nl-NL") {
-        return date.toLocaleString(locale, {
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric",
-            hour: "2-digit",
-            minute: "2-digit"
-        }).replace(",", "")
-    }
-
-    function processTimestamp(element) {
-        const isoTime = element.getAttribute("data-timestamp")
-        const locale = element.getAttribute("data-locale") ?? "nl-NL"
-
-        if (!isoTime) return
-
-        const date = new Date(isoTime)
-        const formatted = formatTimestamp(date, locale)
-        element.textContent = formatted
-    }
-
-    function processTimestampWarning(element) {
-        const isoTime = element.getAttribute("data-timestamp")
-        const thresholdHours = parseFloat(element.getAttribute("data-threshold") ?? "4")
-
-        if (!isoTime) return
-
-        const date = new Date(isoTime)
-        const warningInfo = calculateWarning(date, thresholdHours)
-
-        if (warningInfo.shouldWarn) {
-            element.textContent = warningInfo.message
-            element.className = `timestamp-warning ${warningInfo.severity}`
-        }
-    }
-
-    function calculateWarning(date, thresholdHours) {
-        {% if language == 'nl' %}
-        const labels = {
-            hour: "uur",
-            hours: "uren",
-            day: "dag",
-            days: "dagen",
-        }
-        {% else %}
-        const labels = {
-            hour: "hour",
-            hours: "hours",
-            day: "day",
-            days: "days",
-        }
-        {% endif %}
-
-        const now = new Date()
-        const diffMs = now - date
-        const diffHours = diffMs / (1000 * 60 * 60)
-
-        if (diffHours <= thresholdHours) {
-            return { shouldWarn: false }
-        }
-
-        const timeAgo = diffHours < 24
-            ? `${Math.round(diffHours)} ${diffHours === 1 ? labels.hour : labels.hours}`
-            : `${Math.floor(diffHours / 24)} ${Math.floor(diffHours / 24) === 1 ? labels.day : labels.days}`
-
-        const severity =
-            diffHours > 24 ? "severe" :
-            diffHours > 8 ? "moderate" : "mild"
-
-        return {
-            shouldWarn: true,
-            message: `{% if language == 'nl' %}LET OP! Laatste update was ${timeAgo} geleden{% else %}WARNING! Last update was ${timeAgo} ago{% endif %}`,
-            severity: `timestamp-warning-${severity}`
-        }
-    }
-
-    processTimestamps()
+    import { TimestampDisplay } from "{{ src }}/src/js/timestamp-display.js"
 </script>
+
+<!-- MARK: WERKVRRAAD -->
 <script type="module">
-    import { WerkvoorraadComponent } from "https://uu-asc.github.io/csa-werkvoorraad/src/werkvoorraad-component.js"
-    import { QueryDetailsModal } from "https://uu-asc.github.io/csa-werkvoorraad/src/query-details-modal.js"
-    import { DarkModeToggle } from "https://uu-asc.github.io/csa-werkvoorraad/src/darkmode-toggle.js"
+    import { WerkvoorraadComponent } from "{{ src }}/src/js/werkvoorraad-component.js"
+    import { QueryDetailsModal } from "{{ src }}/src/js/query-details-modal.js"
 
     const spec = {{ spec | tojson }}
     const sqlMap = {{ sql_map | tojson }}
@@ -175,8 +108,25 @@
 
     const { total, withResults } = werkvoorraadComponent.getItemCounts()
     document.querySelector("footer div").innerHTML = `items: ${withResults} / ${total}`
+</script>
+
+<!-- MARK: DARK MODE -->
+<script type="module">
+    import { DarkModeToggle } from "{{ src }}/src/js/darkmode-toggle.js"
+
+    document.addEventListener("color-scheme-change", event => {
+        event.detail.scheme === "dark"
+        ? document.body.classList.add("dark-theme")
+        : document.body.classList.remove("dark-theme")
+    })
+
+    const darkModeToggle = new DarkModeToggle()
+    document.querySelector("header").appendChild(darkModeToggle)
+</script>
 
 {% if embed_vega %}
+<!-- MARK: VEGA -->
+<script type="module">
     // Define the locale options
     const timeFormatLocale = {
         "dateTime": "%a %e %B %Y %X",
@@ -188,7 +138,6 @@
         "months": ["januari", "februari", "maart", "april", "mei", "juni", "juli", "augustus", "september", "oktober", "november", "december"],
         "shortMonths": ["jan", "feb", "mrt", "apr", "mei", "jun", "jul", "aug", "sep", "okt", "nov", "dec"]
     }
-
     const formatLocale = {
         "decimal": ",",
         "thousands": ".",
@@ -196,7 +145,6 @@
         "currency": ["\u20ac\u00a0", ""]
     }
 
-    // Apply the locale settings using Vega APIs
     vega.timeFormatLocale(timeFormatLocale)
     vega.formatLocale(formatLocale)
 
@@ -227,24 +175,25 @@
                 },
             }
         }
+
         for (const chart of Object.values(chartDatasets)) {
             if (!document.getElementById(chart.id)) { continue }
             vegaEmbed(`#${chart.id}`, chart.spec, embedOpt)
         }
     }
+
+    // Listen for color scheme changes and re-render
+    document.addEventListener("color-scheme-change", () => {
+        renderPlots(chartDatasets)
+    })
+
+    // Initial render
+    renderPlots(chartDatasets)
+</script>
 {% endif %}
 
-    document.addEventListener("color-scheme-change", event => {
-        event.detail.scheme === "dark"
-        ? document.body.classList.add("dark-theme")
-        : document.body.classList.remove("dark-theme")
-        {% if embed_vega %}
-        renderPlots(chartDatasets)
-        {% endif %}
-    })
-    const darkModeToggle = new DarkModeToggle()
-    document.querySelector("header").appendChild(darkModeToggle)
-
+<!-- MARK: NAVIGATION -->
+<script>
     let navigation = document.querySelector("nav")
     navigation.addEventListener("click", function(event) {
         let target = event.target.dataset.showTarget
@@ -268,6 +217,7 @@
 </script>
 
 {% if embed_tables %}
+<!-- MARK: TABLES -->
 <script type="module">
     import { DataViewer } from "https://flatbread-dataframes.github.io/flatbread-wc-table-display/src/viewer.js"
     import { DatasetSelector } from "https://flatbread-dataframes.github.io/flatbread-wc-table-display/src/components/dataset-selector.js"
@@ -290,6 +240,7 @@
 </script>
 {% endif %}
 {% if embed_calendar %}
+<!-- MARK: CALENDAR -->
 <script type="module">
     import { Calendar } from "https://lcvriend.github.io/wc-simple-calendar/src/calendar.js"
 
@@ -311,42 +262,13 @@
     calendarElement.setData(calendarDataset)
 </script>
 {% endif %}
-<script type="module">
-    function addBorderToRowspans(table) {
-        table.querySelectorAll("th[rowspan]").forEach(
-            th => {
-                const row = th.closest("tr")
-                if (row.matches(":first-child")) { return }
-                row.style.borderTop = "1px solid var(--color-text)"
-            }
-        )
-    }
-
-    function addBorderToColspans(table) {
-        const borderCols = []
-        table.querySelectorAll(`thead tr:first-child th.col_heading[colspan]`).forEach(
-            th => {
-                if (th.matches(".col_heading.col0")) { return }
-                const col = Array.from(th.classList).find(cls => /^col\d+$/.test(cls))
-                borderCols.push(col)
-            }
-        )
-        borderCols.forEach(col => {
-            table.querySelectorAll(`.${col}`).forEach(
-                col => col.style.borderLeft = "1px solid var(--color-text)"
-            )
-        })
-    }
-
-    document.querySelectorAll("table").forEach(addBorderToRowspans)
-    document.querySelectorAll("table").forEach(addBorderToColspans)
-</script>
+<!-- MARK: GO-TO-TOP -->
 <script>
     const showOnPx = 100
     const backToTopButton = document.querySelector(".back-to-top")
 
     const scrollContainer = () => {
-        return document.documentElement || document.body
+        return document.documentElement ?? document.body
     }
 
     const goToTop = () => {

@@ -125,7 +125,11 @@ NUMS = '0123456789'
 LETTERS = ascii_uppercase
 REYNAERDE = [i.strip(":;., ") for i in excerpt.split('\n') if i]
 TOKENS = [i.lower() for i in tokens if len(i) > 4]
-
+ID_GENERATORS = {
+    'record_id': lambda: fake_str(LETTERS, 5),
+    'char_id': lambda: fake_str(NUMS, 7),
+    'auth_id': lambda: fake_str(LETTERS, 1) + fake_str(NUMS, 6),
+}
 
 fake_str = lambda pop, k: ''.join(random.choices(pop, k=k))
 
@@ -139,31 +143,43 @@ def fetch_random_item_from_list_generator(lst):
 fake_label = fetch_random_item_from_list_generator(REYNAERDE)
 
 
-def fake_data(
-    *args,
-    max_length: int = 30,
-    skip_chance: float = 0.3,
-    **kwargs,
-) -> dict[list]:
-    randomizers = {
-        'record_id': lambda: fake_str(LETTERS, 5),
-        'char_id': lambda: fake_str(NUMS, 7),
-        'auth_id': lambda: fake_str(LETTERS, 1) + fake_str(NUMS, 6),
-    }
+def make_fake_data_with_first_large():
+    call_count = 0
 
-    id_names = ['record_id', 'char_id', 'auth_id']
-    weights = [0.6, 0.3, 0.1]
-    k = random.choices([1, 2, 3], weights=weights)[0]
-    items = random.sample(id_names, k=k)
+    def fake_data(
+        *args,
+        max_length: int = 30,
+        skip_chance: float = 0.3,
+        **kwargs,
+    ) -> dict[list]:
+        nonlocal call_count
+        call_count += 1
 
-    lengths = list(range(max_length))
-    results = {}
-    skip = random.random() < skip_chance
+        randomizers = {
+            'record_id': lambda: fake_str(LETTERS, 5),
+            'char_id': lambda: fake_str(NUMS, 7),
+            'auth_id': lambda: fake_str(LETTERS, 1) + fake_str(NUMS, 6),
+        }
 
-    for id_name in items:
-        n = 0 if skip else random.choice(lengths)
-        results[id_name] = [randomizers[id_name]() for i in range(n)]
+        weights = [0.6, 0.3, 0.1]
+        k = random.choices([1, 2, 3], weights=weights)[0]
+        items = random.sample(list(ID_GENERATORS.keys()), k=k)
+
+        results = {}
+
+        # First call gets large dataset
+        if call_count == 1:
+            n = random.randint(1200, 1500)
+        else:
+            skip = random.random() < skip_chance
+            n = 0 if skip else random.choice(list(range(max_length)))
+
+        for id_name in items:
+            results[id_name] = [randomizers[id_name]() for i in range(n)]
+
         return results
+
+    return fake_data
 
 
 def fake_query_name():
@@ -208,6 +224,25 @@ def fake_container(depth):
         }
 
 
+def inject_large_dataset_into_processed_spec(spec):
+    """Find first leaf item in processed spec and replace its ids with large dataset"""
+    if isinstance(spec, list):
+        for item in spec:
+            if inject_large_dataset_into_processed_spec(item):
+                return True
+    elif isinstance(spec, dict):
+        if 'ids' in spec and 'items' not in spec:
+            # This is a leaf item with actual ID data
+            id_type = random.choice(list(ID_GENERATORS.keys()))
+            spec['ids'] = {
+                id_type: [ID_GENERATORS[id_type]() for _ in range(random.randint(1200, 1500))]
+            }
+            return True
+        elif 'items' in spec:
+            return inject_large_dataset_into_processed_spec(spec['items'])
+    return False
+
+
 if __name__ == '__main__':
     print("""
 -----------------------------------------------------------------------
@@ -216,6 +251,7 @@ if __name__ == '__main__':
 """)
 
     fake_spec = [fake_container(random.randint(1, 3)) for _ in range(4)]
+
     as_json = json.dumps(fake_spec, indent=4)
     json_file = (werkvoorraad.PATH / 'demo_specificatie.json')
     json_file.write_text(as_json)
@@ -234,10 +270,13 @@ if __name__ == '__main__':
         return sql
 
     werkvoorraad.make_werkvoorraad(
-        data_getter = fake_data,
+        data_getter = make_fake_data_with_first_large(),
         sql_getter = sql_getter,
         spec = fake_spec,
         outpath = werkvoorraad.PATH / 'index.html',
+        tpl_kwargs = {
+            'local': True,
+        }
     )
 
     print('\n', '-' * 72)

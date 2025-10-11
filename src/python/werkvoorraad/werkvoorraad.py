@@ -11,11 +11,13 @@ from markdown import markdown
 from jinja2 import Environment, FileSystemLoader
 
 
-type Spec = list[dict[str, Any]] | dict[str, Any]
-type ItemTransformer = Callable[..., str]
+# type Spec = list[dict[str, Any]] | dict[str, Any]
+# type ItemTransformer = Callable[..., str]
+Spec = list[dict[str, Any]] | dict[str, Any]
+ItemTransformer = Callable[..., str]
 
 
-PATH = Path(__file__).parent.parent.resolve()
+PATH = Path(__file__).parent.parent.parent.parent.resolve()
 LOADER = FileSystemLoader(searchpath=PATH / 'templates')
 ENV = Environment(
     loader=LOADER,

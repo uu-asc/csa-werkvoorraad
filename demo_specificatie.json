@@ -1,805 +1,369 @@
 [
     {
-        "id": "CSAIUOZXDHIL",
-        "label": "Dor hu edelheit ende dor hu eere",
+        "id": "SHQANLXTJUJX",
+        "label": "Ende ontfoer ons in sine veste",
         "items": [
             {
-                "id": "RJQOCVMRWWJV",
-                "label": "Die mi Reynaert heeft ghedaen",
-                "items": [
-                    {
-                        "id": "JJIPNIRRNDSL",
-                        "label": "Het was in eenen tsinxen daghe",
-                        "items": [
-                            {
-                                "label": "Dats over menich jaer ghesciet",
-                                "instructie": "Dor hu edelheit ende dor hu eere",
-                                "data": {
-                                    "query": "bliven_maket.sql",
-                                    "where": [
-                                        "dicken > 592"
-                                    ]
-                                }
-                            },
-                            {
-                                "label": "Ende binnen des coninx gheleede",
-                                "instructie": "Ende seide: 'Heere coninc",
-                                "data": {
-                                    "query": "felle_coninc.sql",
-                                    "where": [
-                                        "hadde is not null",
-                                        "spranc < 0.30055559516847263",
-                                        "sconinx = 'RZLSQJ'",
-                                        "coninc = 'LOFAEV'",
-                                        "blent >= 0.21791318331096343"
-                                    ]
-                                }
-                            },
-                            {
-                                "label": "Ende claghede den coninc in Francsoys",
-                                "instructie": "Houden ten wel groeten love",
-                                "data": {
-                                    "query": "hadde_quamen_ghistren.sql",
-                                    "where": [
-                                        "dandre is not null",
-                                        "coninx > 734",
-                                        "sitten = 'TXXMUHLRA'"
-                                    ]
-                                }
-                            },
-                            {
-                                "label": "Ghinghen voer den coninc staen",
-                                "instructie": "Ende seide: 'Heere coninc",
-                                "data": {
-                                    "query": "pancer_winter_trekere.sql",
-                                    "where": [
-                                        "alleene is null",
-                                        "coninc > 947",
-                                        "sonder = 'DEWMOGZ'",
-                                        "staet = 'NQAQBR'",
-                                        "wroughene != 503"
-                                    ]
-                                }
-                            },
-                            {
-                                "label": "Ne mach niet bliven achter",
-                                "instructie": "Was hi ander sins bedocht",
-                                "data": {
-                                    "query": "verre_selve_ontfaen.sql",
-                                    "where": [
-                                        "vaste < 0.8580602205753066",
-                                        "groenen = 'UAWVPE'"
-                                    ]
-                                }
-                            }
-                        ]
-                    },
-                    {
-                        "id": "ORAJAHRHVZGX",
-                        "label": "Ende dor recht ende dor ghenade",
-                        "items": [
-                            {
-                                "label": "Dan was bi niemene dan bi mi",
-                                "instructie": "Een vet morzeel van eere hinnen",
-                                "data": {
-                                    "query": "alleene_beseekede.sql",
-                                    "where": [
-                                        "tybeert = 'GDWJYZRAX'",
-                                        "overdaet = 'AFWRPPTWY'",
-                                        "heleghe = 'TLLPFEMY'",
-                                        "hinnen <= 328"
-                                    ]
-                                }
-                            }
-                        ]
-                    },
-                    {
-                        "id": "NLZMPTLPHFWV",
-                        "label": "Hets recht dat omberecht zi",
-                        "items": [
-                            {
-                                "label": "Hoet so arem was wijlen eere",
-                                "instructie": "Dat Cortoys claghet nu",
-                                "data": {
-                                    "query": "reynaert_groeten_wijlen.sql",
-                                    "where": [
-                                        "sitten = 'ZUAKNTRT'",
-                                        "edelheit < 0.6547457590786262",
-                                        "worst = 'PCEHWWXHF'",
-                                        "ghedaen = 853"
-                                    ]
-                                }
-                            },
-                            {
-                                "label": "Doe dedine sitten gaen",
-                                "instructie": "Daer ic bi nachte quam gheronnen",
-                                "data": {
-                                    "query": "heeft_coninc_nobel.sql",
-                                    "where": [
-                                        "beede = 'MVRHWXAM'",
-                                        "eenich is not null",
-                                        "winter = 106"
-                                    ]
-                                }
-                            },
-                            {
-                                "label": "Dat Cortoys claghet nu",
-                                "instructie": "Nu gaet hier up eene claghe",
-                                "data": {
-                                    "query": "datmen_hadde_blent.sql",
-                                    "where": [
-                                        "reynaert = 'FIWCB'",
-                                        "verlies >= 330",
-                                        "bosch < 0.23684522150464138",
-                                        "ghescreeft is null",
-                                        "cortoys = 'BHITEATET'"
-                                    ]
-                                }
-                            }
-                        ]
-                    },
-                    {
-                        "id": "FSZSYROFTORP",
-                        "label": "Nochtan hoendi mi sent",
-                        "items": [
-                            {
-                                "label": "Hine hebbe te wroughene jeghen hu",
-                                "instructie": "Sonder vos Reynaert alleene",
-                                "data": {
-                                    "query": "ghesciet_staer.sql",
-                                    "where": [
-                                        "onversweghen < 0.6717079382816352",
-                                        "zinghene >= 0.45053374883315944"
-                                    ]
-                                }
-                            },
-                            {
-                                "label": "Dor dat ghi Reynaerde zijt onhout",
-                                "instructie": "Groeten lachter ende verlies",
-                                "data": {
-                                    "query": "datter.sql",
-                                    "where": []
-                                }
-                            },
-                            {
-                                "label": "Ic weet wel al sonder waen",
-                                "instructie": "Daer ic bi nachte quam gheronnen",
-                                "data": {
-                                    "query": "heeft.sql",
-                                    "where": [
-                                        "miere is null",
-                                        "ghent = 'YVZFQ'",
-                                        "minen = 'DVTDWPFYJ'"
-                                    ]
-                                }
-                            },
-                            {
-                                "label": "Hadder Cortoys yewet an",
-                                "instructie": "Die claghe die Cortoys doet.'",
-                                "data": {
-                                    "query": "staen.sql",
-                                    "where": []
-                                }
-                            }
-                        ]
-                    },
-                    {
-                        "id": "OVYPBPPEMAXB",
-                        "label": "Dat alles goets en hadde meere",
-                        "items": [
-                            {
-                                "label": "Dies zwijghics nochtan",
-                                "instructie": "Dats over menich jaer ghesciet",
-                                "data": {
-                                    "query": "niemene_spellen.sql",
-                                    "where": [
-                                        "scade >= 763",
-                                        "eenen is not null",
-                                        "hadde <= 902"
-                                    ]
-                                }
-                            },
-                            {
-                                "label": "Ende claghede den coninc in Francsoys",
-                                "instructie": "Sonder vos Reynaert alleene",
-                                "data": {
-                                    "query": "ghenomen_bevaen.sql",
-                                    "where": [
-                                        "mijns > 0.34827409854806757",
-                                        "staet <= 0.045057882410587946"
-                                    ]
-                                }
-                            },
-                            {
-                                "label": "Den fellen metten grijsen baerde",
-                                "instructie": "Ic weet wel al sonder waen",
-                                "data": {
-                                    "query": "miere_tusschen_haghe.sql",
-                                    "where": [
-                                        "crede = 835",
-                                        "ghesciet = 'VFRHXD'",
-                                        "claghede <= 0.353649334274328",
-                                        "began < 0.05770332417977997",
-                                        "versamet = 0.5021650117963019"
-                                    ]
-                                }
-                            },
-                            {
-                                "label": "Verlore, mochtire an winnen",
-                                "instructie": "Ende spranc midden in den rinc",
-                                "data": {
-                                    "query": "waende.sql",
-                                    "where": []
-                                }
-                            }
-                        ]
-                    }
-                ]
-            },
-            {
-                "id": "WNZBPQCVNICI",
-                "label": "Sonder vos Reynaert alleene",
-                "items": [
-                    {
-                        "id": "TLJBJGKTHZXY",
-                        "label": "Dan alleene eene worst",
-                        "items": [
-                            {
-                                "label": "Ghinghen voer den coninc staen",
-                                "instructie": "Ghelovede te leerne sinen crede",
-                                "data": {
-                                    "query": "veste_gheronnen_niemene.sql",
-                                    "where": [
-                                        "mordeneere is null"
-                                    ]
-                                }
-                            },
-                            {
-                                "label": "Dat Cortoys claghet nu",
-                                "instructie": "Nochtan hoendi mi sent",
-                                "data": {
-                                    "query": "hebbe_hadde.sql",
-                                    "where": [
-                                        "coninc is null",
-                                        "lachter = 0.3952937733920583",
-                                        "wroughene < 363",
-                                        "beste = 'IQVNJKGZN'",
-                                        "ombeere <= 0.9465832147014891"
-                                    ]
-                                }
-                            },
-                            {
-                                "label": "Dat hise beseekede daer si laghen",
-                                "instructie": "An Cuwaerde den hase die hier staet",
-                                "data": {
-                                    "query": "recht_edelheit_mochtire.sql",
-                                    "where": [
-                                        "groenen >= 10",
-                                        "hoendi is not null",
-                                        "wives = 'GQPCID'",
-                                        "ghedaen is not null",
-                                        "datmen <= 0.47645298729435814"
-                                    ]
-                                }
-                            },
-                            {
-                                "label": "Groeten lachter ende verlies",
-                                "instructie": "Doe begonsten si over eene",
-                                "data": {
-                                    "query": "groeten_mijns.sql",
-                                    "where": [
-                                        "claghe >= 401",
-                                        "lachter is not null",
-                                        "francsoys > 999"
-                                    ]
-                                }
-                            }
-                        ]
-                    },
-                    {
-                        "id": "FTXWPIVNDDSY",
-                        "label": "An Cuwaerde den hase die hier staet",
-                        "items": [
-                            {
-                                "label": "Datter twee noint ne saghen",
-                                "instructie": "Wat sechdi van eere laghe?",
-                                "data": {
-                                    "query": "blent_nobel.sql",
-                                    "where": [
-                                        "heleghe = 'XJIWAAWU'",
-                                        "heere <= 0.7956184590048214",
-                                        "mijns = 203"
-                                    ]
-                                }
-                            }
-                        ]
-                    },
-                    {
-                        "id": "EWOMVCKQMIEO",
-                        "label": "Met groenen loveren waren bevaen",
-                        "items": [
-                            {
-                                "label": "Dats over menich jaer ghesciet",
-                                "instructie": "Daer hi in hadde crancken lof",
-                                "data": {
-                                    "query": "datter_staet_onhout.sql",
-                                    "where": [
-                                        "staet = 'VWHQGD'",
-                                        "ghent is not null",
-                                        "selve = 'RSGKO'",
-                                        "haghe < 0.9821289180197422",
-                                        "felle = 0.3438942520640882"
-                                    ]
-                                }
-                            },
-                            {
-                                "label": "Nobel, die coninc, hadde ghedaen",
-                                "instructie": "Die hem besculdich kent, ontsiet!",
-                                "data": {
-                                    "query": "tybeert_houden_saghen.sql",
-                                    "where": []
-                                }
-                            },
-                            {
-                                "label": "Dan alleene eene worst",
-                                "instructie": "hem Reynaert, die felle man",
-                                "data": {
-                                    "query": "scuwedi.sql",
-                                    "where": [
-                                        "molen = 0.02320689707329837",
-                                        "reynaerde is not null",
-                                        "cleene = 'LBLGLAV'",
-                                        "scade <= 616"
-                                    ]
-                                }
-                            }
-                        ]
-                    },
-                    {
-                        "id": "HQCWUYKUCVYI",
-                        "label": "Tybeert, datmen die claghe ombeere?",
-                        "items": [
-                            {
-                                "label": "Ende binnen des coninx gheleede",
-                                "instructie": "Ysengrijn begonste saen",
-                                "data": {
-                                    "query": "beede.sql",
-                                    "where": [
-                                        "wijlen < 545",
-                                        "sprac >= 0.09413097937787096",
-                                        "morzeel >= 150",
-                                        "cortoys = 'AUGFWFYZN'"
-                                    ]
-                                }
-                            },
-                            {
-                                "label": "Die hem besculdich kent, ontsiet!",
-                                "instructie": "Sonder vos Reynaert alleene",
-                                "data": {
-                                    "query": "alles_reynaerde.sql",
-                                    "where": []
-                                }
-                            }
-                        ]
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        "id": "TOSOTXLKBGIV",
-        "label": "Ende seide: 'Heere coninc",
-        "items": [
-            {
-                "id": "KCQZQMMGAPCD",
                 "label": "Omme bejach in eene molen",
-                "items": [
-                    {
-                        "label": "Aldus hi sine tale began",
-                        "instructie": "Houden ten wel groeten love",
-                        "data": {
-                            "query": "commen_ghinghen_bever.sql",
-                            "where": [
-                                "binnen = 'VLZAS'"
-                            ]
-                        }
-                    },
-                    {
-                        "label": "Dat hi mijn wijf hevet verhoert",
-                        "instructie": "Spellen ende lesen beede",
-                        "data": {
-                            "query": "tusschen_vorst.sql",
-                            "where": [
-                                "felle < 576"
-                            ]
-                        }
-                    },
-                    {
-                        "label": "Hine wilde dat hi lijf ende eere",
-                        "instructie": "En dedi ghistren in den daghe",
-                        "data": {
-                            "query": "bejach.sql",
-                            "where": [
-                                "claghede is null",
-                                "mesdaen is null",
-                                "morzeel > 39"
-                            ]
-                        }
-                    },
-                    {
-                        "label": "Ic weet wel al sonder waen",
-                        "instructie": "Ende soudene maken capelaen",
-                        "data": {
-                            "query": "leerne_begonste.sql",
-                            "where": [
-                                "onversweghen = 429",
-                                "eenen is null",
-                                "mordeneere = 'AVQKEE'"
-                            ]
-                        }
-                    },
-                    {
-                        "label": "Ende claghede den coninc in Francsoys",
-                        "instructie": "Hine wilde dat hi lijf ende eere",
-                        "data": {
-                            "query": "tsinxen_begonsten_francsoys.sql",
-                            "where": [
-                                "leerne = 0.09733637677276441",
-                                "hondekijn = 868"
-                            ]
-                        }
-                    }
-                ]
+                "instructie": "Een vet morzeel van eere hinnen",
+                "data": {
+                    "query": "begonsten.sql",
+                    "where": [
+                        "coninc = 'RMPFG'"
+                    ]
+                }
             },
             {
-                "id": "BAQPAMUMLFUG",
-                "label": "Ende soudene maken capelaen",
-                "items": [
-                    {
-                        "label": "Hoet so arem was wijlen eere",
-                        "instructie": "Die te hove zijn commen hier",
-                        "data": {
-                            "query": "hevet.sql",
-                            "where": [
-                                "sconinx = 'KYVKUXX'",
-                                "brocht is not null",
-                                "claghene = 'ZYDNG'",
-                                "hadde is not null"
-                            ]
-                        }
-                    },
-                    {
-                        "label": "Dor hu edelheit ende dor hu eere",
-                        "instructie": "Dat hi waende, hadde hijs gheval",
-                        "data": {
-                            "query": "ghesproken_verlore.sql",
-                            "where": [
-                                "mesvoert is null",
-                                "ghesciet >= 860",
-                                "hevet = 'UTDLUO'",
-                                "bejach is null",
-                                "morzeel is null"
-                            ]
-                        }
-                    },
-                    {
-                        "label": "Hine hebbe te wroughene jeghen hu",
-                        "instructie": "Tybeert, datmen die claghe ombeere?",
-                        "data": {
-                            "query": "onhout_ghenomen.sql",
-                            "where": [
-                                "hadse = 'NCKRQ'",
-                                "ghestolen is not null",
-                                "cleene > 0.8844084519531714",
-                                "ysengrijn is not null"
-                            ]
-                        }
-                    },
-                    {
-                        "label": "Ic hadse bi miere lust ghewonnen",
-                        "instructie": "Hine hadde te claghene over Reynaerde",
-                        "data": {
-                            "query": "cater_ghesciet.sql",
-                            "where": [
-                                "sinen >= 146",
-                                "wroughene != 201",
-                                "hadse is not null"
-                            ]
-                        }
-                    },
-                    {
-                        "label": "Ne mach niet bliven achter",
-                        "instructie": "Alle die diere, groet ende cleene",
-                        "data": {
-                            "query": "cortoys_diere_beede.sql",
-                            "where": []
-                        }
-                    }
-                ]
+                "label": "hem Reynaert, die felle man",
+                "instructie": "Dor dat ghi Reynaerde zijt onhout",
+                "data": {
+                    "query": "hadde_coninc_hevet.sql",
+                    "where": []
+                }
             }
         ]
     },
     {
-        "id": "SGCPDOQZCRSE",
-        "label": "Datter twee noint ne saghen",
+        "id": "MIPIJSBVCCNZ",
+        "label": "Tybeert, datmen die claghe ombeere?",
         "items": [
             {
-                "id": "PKMPAHJHQUUL",
-                "label": "Pancer de bever sprac: 'Dinct hu goet",
-                "items": [
-                    {
-                        "id": "GBAJNHLIWUPC",
-                        "label": "Hoet so arem was wijlen eere",
-                        "items": [
-                            {
-                                "label": "Hine hadde te claghene over Reynaerde",
-                                "instructie": "Eenen slapenden molen man",
-                                "data": {
-                                    "query": "molen.sql",
-                                    "where": [
-                                        "francsoys is not null",
-                                        "felle is not null",
-                                        "wroughene >= 755",
-                                        "slapenden = 'YQBSBBQLA'",
-                                        "coninc > 858"
-                                    ]
-                                }
-                            },
-                            {
-                                "label": "Die noyt eenich dier ghedede?",
-                                "instructie": "Daer ic bi nachte quam gheronnen",
-                                "data": {
-                                    "query": "mordeneere.sql",
-                                    "where": [
-                                        "houden = 0.6031595549959632",
-                                        "ontfoer = 0.45574116355082495",
-                                        "miere >= 158",
-                                        "hadse = 'HJMVHTBUP'"
-                                    ]
-                                }
-                            }
-                        ]
-                    },
-                    {
-                        "id": "XTNVBMPIUMHV",
-                        "label": "Die worst was mine, al en claghic niet",
-                        "items": [
-                            {
-                                "label": "Aldus hi sine tale began",
-                                "instructie": "Dan alleene eene worst",
-                                "data": {
-                                    "query": "loveren.sql",
-                                    "where": [
-                                        "ander is not null",
-                                        "ghedede > 0.3568897042900354",
-                                        "aldus = 'LJXWPIKWB'",
-                                        "molen = 972",
-                                        "diere >= 0.6881190202587091"
-                                    ]
-                                }
-                            },
-                            {
-                                "label": "Dat alles goets en hadde meere",
-                                "instructie": "Isingrijn ende sine maghe",
-                                "data": {
-                                    "query": "wilde.sql",
-                                    "where": [
-                                        "beede is null",
-                                        "aldus = 'UPVOXJ'",
-                                        "yewet is null"
-                                    ]
-                                }
-                            }
-                        ]
-                    }
-                ]
+                "label": "Met groenen loveren waren bevaen",
+                "instructie": "Ende hier omme scuwedi sconinx hof",
+                "data": {
+                    "query": "began_coninc_edelheit.sql",
+                    "where": [
+                        "claghe = 'PKANQZ'",
+                        "claghene >= 0.34648405650492786",
+                        "crancken is null",
+                        "beste != 0.4002623202235637",
+                        "cortoys = 310"
+                    ]
+                }
             },
             {
-                "id": "PZJRAOQKTMHJ",
-                "label": "Dor dat ghi Reynaerde zijt onhout",
+                "label": "Ende dor recht ende dor ghenade",
+                "instructie": "Die te hove zijn commen hier",
+                "data": {
+                    "query": "mesdaen.sql",
+                    "where": [
+                        "tusschen < 893",
+                        "tybeert <= 562",
+                        "wilde is null",
+                        "meeste < 264"
+                    ]
+                }
+            },
+            {
+                "label": "Daer ic die worst in hadde ghestolen",
+                "instructie": "Ysengrijn begonste saen",
+                "data": {
+                    "query": "ghedaen.sql",
+                    "where": [
+                        "baerde = 'ZUASBT'",
+                        "groeten >= 192"
+                    ]
+                }
+            },
+            {
+                "label": "hem Reynaert, die felle man",
+                "instructie": "Was daer niemen, sonder die das",
+                "data": {
+                    "query": "onsculde_achter.sql",
+                    "where": [
+                        "worst != 0.6706060120328886",
+                        "nachte is null",
+                        "worst is null"
+                    ]
+                }
+            }
+        ]
+    },
+    {
+        "id": "GNWPLUJHSGKK",
+        "label": "Vaste tusschen sine beene",
+        "items": [
+            {
+                "id": "HGZFVPYJRTKT",
+                "label": "Daer ic bi nachte quam gheronnen",
                 "items": [
                     {
-                        "id": "UPKCIFEUIJII",
-                        "label": "Voer al dandre ontfaerme hu dies",
-                        "items": [
-                            {
-                                "label": "Ende dor recht ende dor ghenade",
-                                "instructie": "Sijn hof crayeren over al",
-                                "data": {
-                                    "query": "gheval_crayeren_hadde.sql",
-                                    "where": [
-                                        "bever is null",
-                                        "scuwedi is not null",
-                                        "paerkement = 'BESGI'"
-                                    ]
-                                }
-                            },
-                            {
-                                "label": "Dats over menich jaer ghesciet",
-                                "instructie": "Doe begonsten si over eene",
-                                "data": {
-                                    "query": "datmen_soudene_cortoys.sql",
-                                    "where": [
-                                        "waren is null"
-                                    ]
-                                }
-                            },
-                            {
-                                "label": "Den fellen metten grijsen baerde",
-                                "instructie": "Die claghe die Cortoys doet.'",
-                                "data": {
-                                    "query": "alleene.sql",
-                                    "where": [
-                                        "hoendi = 'OTNGA'",
-                                        "ontfaerme = 'ZMCCTY'",
-                                        "gheval >= 309"
-                                    ]
-                                }
-                            },
-                            {
-                                "label": "Datmen maket nu te Ghent",
-                                "instructie": "Hi hadde te hove so vele mesdaen",
-                                "data": {
-                                    "query": "ghedaen.sql",
-                                    "where": [
-                                        "achter is null",
-                                        "hadde <= 497",
-                                        "onghewroken is null",
-                                        "onsculde is null"
-                                    ]
-                                }
-                            }
-                        ]
-                    },
-                    {
-                        "id": "WLDCMISWZAWY",
-                        "label": "Doe begonsten si over eene",
+                        "id": "ILJWNTLVMZUZ",
+                        "label": "Ende seide: 'Heere coninc",
                         "items": [
                             {
                                 "label": "Sijn hof crayeren over al",
-                                "instructie": "Ic hadse bi miere lust ghewonnen",
+                                "instructie": "No onversweghen no onghewroken!'",
                                 "data": {
-                                    "query": "coninc.sql",
+                                    "query": "loveren_claghet.sql",
                                     "where": [
-                                        "kennen = 616",
-                                        "staer = 'JXBDFDAQ'"
-                                    ]
-                                }
-                            },
-                            {
-                                "label": "Voer al dandre ontfaerme hu dies",
-                                "instructie": "Dor hu edelheit ende dor hu eere",
-                                "data": {
-                                    "query": "worden.sql",
-                                    "where": [
-                                        "fellen = 417",
-                                        "dedine < 817",
-                                        "bever is null",
-                                        "sonder = 0.936703420476479",
-                                        "recht is not null"
-                                    ]
-                                }
-                            },
-                            {
-                                "label": "Datter twee noint ne saghen",
-                                "instructie": "Die mi Reynaert heeft ghedaen",
-                                "data": {
-                                    "query": "ysengrijn_grijsen_sconinx.sql",
-                                    "where": [
-                                        "recht = 'ZXKXSFGP'",
-                                        "hadde is null",
-                                        "hadde = 964",
-                                        "soude > 22"
+                                        "metten is null",
+                                        "claghe > 0.8947706302838884",
+                                        "zinghene = 'ILYAMN'"
                                     ]
                                 }
                             }
                         ]
                     },
                     {
-                        "id": "RFZFNGRTTQCR",
-                        "label": "Ende Reynaerd soude hebben ghedaen",
+                        "id": "YOYTKKTEQGIQ",
+                        "label": "Dan was bi niemene dan bi mi",
                         "items": [
                             {
-                                "label": "Dies zwijghics nochtan",
-                                "instructie": "Ende hier omme scuwedi sconinx hof",
+                                "label": "No den coninc, minen heere",
+                                "instructie": "Die hem besculdich kent, ontsiet!",
                                 "data": {
-                                    "query": "hebben_heere_grijsen.sql",
+                                    "query": "hadde.sql",
                                     "where": [
-                                        "saghen != 0.14407894182124092",
-                                        "nochtan = 0.47436401676098927",
-                                        "worst > 971",
-                                        "niemene = 'EJNVTTBX'",
-                                        "reynaert is null"
+                                        "meere >= 619",
+                                        "coninc > 48",
+                                        "hadde is not null",
+                                        "wilde is not null",
+                                        "hadde = 'FTJHJZNV'"
                                     ]
                                 }
                             },
                             {
-                                "label": "Den fellen metten grijsen baerde",
-                                "instructie": "Dat hire niet dorste gaen",
+                                "label": "Hine wilde dat hi lijf ende eere",
+                                "instructie": "Datmen maket nu te Ghent",
                                 "data": {
-                                    "query": "sconinx_beene.sql",
+                                    "query": "wilde_hadde_lesen.sql",
                                     "where": [
-                                        "reynaert is not null"
+                                        "crede <= 335"
                                     ]
                                 }
                             }
                         ]
                     },
                     {
-                        "id": "NBIZNTGGXPLW",
-                        "label": "Tybeert die cater die wart gram",
-                        "items": [
-                            {
-                                "label": "Ende mine kindre so mesvoert",
-                                "instructie": "Vaste tusschen sine beene",
-                                "data": {
-                                    "query": "ghedaen.sql",
-                                    "where": [
-                                        "jeghen <= 0.3381945633688034",
-                                        "ghistren = 'LVKWDKSA'",
-                                        "crede > 0.7127370138238615"
-                                    ]
-                                }
-                            }
-                        ]
-                    },
-                    {
-                        "id": "LAFJYWJTPITZ",
-                        "label": "Dat hi waende, hadde hijs gheval",
+                        "id": "SNAPZCHENSPL",
+                        "label": "Dat Cortoys claghet nu",
                         "items": [
                             {
                                 "label": "Het was in eenen tsinxen daghe",
-                                "instructie": "Omme bejach in eene molen",
+                                "instructie": "Eene die meeste overdaet",
                                 "data": {
-                                    "query": "wives.sql",
-                                    "where": [
-                                        "worst = 'ZYUPLO'",
-                                        "cortoys = 'ZOJYGKW'",
-                                        "verhoert is null",
-                                        "cuwaerde != 913",
-                                        "miere is null"
-                                    ]
-                                }
-                            },
-                            {
-                                "label": "Reynaert es een recht mordeneere",
-                                "instructie": "Houden ten wel groeten love",
-                                "data": {
-                                    "query": "zinghene_versamet_mordeneere.sql",
-                                    "where": [
-                                        "sinen = 'NMKFZ'",
-                                        "dinct = 'IAJWGQ'",
-                                        "wives = 'OOIZL'"
-                                    ]
-                                }
-                            },
-                            {
-                                "label": "Tybeert die cater die wart gram",
-                                "instructie": "Sine onsculde. Ende also saen",
-                                "data": {
-                                    "query": "ghistren.sql",
+                                    "query": "ontfaerme_ontfoer.sql",
                                     "where": []
                                 }
                             },
                             {
-                                "label": "Doe begonsten si over eene",
-                                "instructie": "Stont up een hondekijn, hiet Cortoys",
+                                "label": "Vaste tusschen sine beene",
+                                "instructie": "Ne mach niet bliven achter",
                                 "data": {
-                                    "query": "beede_groenen.sql",
+                                    "query": "heleghe_reynaert_datmen.sql",
                                     "where": [
-                                        "heere >= 0.814176855919457",
-                                        "comen = 'RRGTKL'"
+                                        "reynaerd is null",
+                                        "heere is not null",
+                                        "binnen is null",
+                                        "coninc = 'NCHLVRXX'",
+                                        "coninc is null"
                                     ]
                                 }
                             },
                             {
-                                "label": "Die noyt eenich dier ghedede?",
-                                "instructie": "Sijn hof crayeren over al",
+                                "label": "Houden ten wel groeten love",
+                                "instructie": "Ende Reynaerd soude hebben ghedaen",
                                 "data": {
-                                    "query": "selve_ghesciet_leede.sql",
+                                    "query": "cortoys_mordeneere_sinen.sql",
+                                    "where": []
+                                }
+                            },
+                            {
+                                "label": "Een vet morzeel van eere hinnen",
+                                "instructie": "Dat hise beseekede daer si laghen",
+                                "data": {
+                                    "query": "loveren_ontfoer.sql",
                                     "where": [
-                                        "verhoert is null",
-                                        "claghe < 504"
+                                        "eenich = 'FGPIFO'",
+                                        "niemene is null",
+                                        "molen is not null",
+                                        "maghe is not null",
+                                        "begonsten > 349"
+                                    ]
+                                }
+                            },
+                            {
+                                "label": "Ende hier omme scuwedi sconinx hof",
+                                "instructie": "Alse die heleghe waren brocht",
+                                "data": {
+                                    "query": "maken_ontfoer.sql",
+                                    "where": [
+                                        "beseekede != 0.3859361089640043",
+                                        "datter <= 77"
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": "RCQJDGUNBDZI",
+                "label": "Hoet so arem was wijlen eere",
+                "items": [
+                    {
+                        "id": "MYDMPGTTXXIK",
+                        "label": "Stont up een hondekijn, hiet Cortoys",
+                        "items": [
+                            {
+                                "label": "Wat sechdi van eere laghe?",
+                                "instructie": "Ende sprac: 'Coninc, heere",
+                                "data": {
+                                    "query": "hadde_verhoert.sql",
+                                    "where": [
+                                        "hevet is null",
+                                        "reynaert is null",
+                                        "cuwaerde = 'ALKES'",
+                                        "sonder != 0.43482533220469677",
+                                        "cater > 765"
+                                    ]
+                                }
+                            },
+                            {
+                                "label": "No onversweghen no onghewroken!'",
+                                "instructie": "Ende lude te zinghene crede",
+                                "data": {
+                                    "query": "gheval.sql",
+                                    "where": [
+                                        "reynaert >= 0.604940823180613",
+                                        "begonsten = 'WERWLGPI'",
+                                        "grijsen = 'XIAWR'",
+                                        "verhoert < 0.6191442175824188",
+                                        "morzeel < 0.551107085987"
+                                    ]
+                                }
+                            },
+                            {
+                                "label": "So vele te leede ghedaen",
+                                "instructie": "Houden ten wel groeten love",
+                                "data": {
+                                    "query": "lesen.sql",
+                                    "where": [
+                                        "sonder < 0.8776156487442329"
+                                    ]
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "id": "KYMKZJHGJDZG",
+                        "label": "Dor hu edelheit ende dor hu eere",
+                        "items": [
+                            {
+                                "label": "Daer ic af dicken hebbe ontfaen",
+                                "instructie": "Datter eenen dach af was ghenomen",
+                                "data": {
+                                    "query": "claghede.sql",
+                                    "where": []
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": "UCGVXLXAZRII",
+                "label": "Ontfaerme hu miere scade",
+                "items": [
+                    {
+                        "id": "ESSANGNUWABK",
+                        "label": "Nobel, die coninc, hadde ghedaen",
+                        "items": [
+                            {
+                                "label": "Reynaert es een recht mordeneere",
+                                "instructie": "So vele te leede ghedaen",
+                                "data": {
+                                    "query": "onversweghen_reynaerd_ghesciet.sql",
+                                    "where": [
+                                        "ghistren is not null",
+                                        "comen = 'SWWJKPONA'"
+                                    ]
+                                }
+                            },
+                            {
+                                "label": "Die selve worst stal ende nam",
+                                "instructie": "Dor hu edelheit ende dor hu eere",
+                                "data": {
+                                    "query": "leede.sql",
+                                    "where": [
+                                        "hebben = 'JFHORB'",
+                                        "hebben < 0.6230051527641707"
+                                    ]
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "id": "UNXGJWQNICTE",
+                        "label": "Ontfaerme hu miere scade",
+                        "items": [
+                            {
+                                "label": "Dat hi mijn wijf hevet verhoert",
+                                "instructie": "Dies zwijghics nochtan",
+                                "data": {
+                                    "query": "wives.sql",
+                                    "where": [
+                                        "coninx > 0.09827414701030568",
+                                        "leerne = 'RCKATWJSV'",
+                                        "heere <= 516",
+                                        "ghesciet != 222",
+                                        "nochtan is not null"
+                                    ]
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "id": "THRCUNILXZZZ",
+                        "label": "In eenen winter, in eene vorst",
+                        "items": [
+                            {
+                                "label": "Dat hi waende, hadde hijs gheval",
+                                "instructie": "Ende ontfoer ons in sine veste",
+                                "data": {
+                                    "query": "bevaen.sql",
+                                    "where": [
+                                        "ontsiet < 448",
+                                        "kennen = 'MZNQIECRN'",
+                                        "ghedaen = 'SQZGQUIW'",
+                                        "beede is not null"
+                                    ]
+                                }
+                            },
+                            {
+                                "label": "No den coninc, minen heere",
+                                "instructie": "Isingrijn ende sine maghe",
+                                "data": {
+                                    "query": "paerkement.sql",
+                                    "where": [
+                                        "reynaert > 0.8498572766085852",
+                                        "hoendi <= 0.1273418414691192",
+                                        "niemene < 733"
+                                    ]
+                                }
+                            },
+                            {
+                                "label": "An Cuwaerde den hase die hier staet",
+                                "instructie": "Daer ic bi nachte quam gheronnen",
+                                "data": {
+                                    "query": "veste_ghedaen.sql",
+                                    "where": [
+                                        "waren = 'KEJVEF'",
+                                        "beede is not null",
+                                        "reynaert >= 0.509188281240713",
+                                        "bosch >= 789"
+                                    ]
+                                }
+                            },
+                            {
+                                "label": "Daer ic bi nachte quam gheronnen",
+                                "instructie": "Was daer niemen, sonder die das",
+                                "data": {
+                                    "query": "ghedaen_daghe_claghe.sql",
+                                    "where": [
+                                        "mochtire is null",
+                                        "spellen = 0.4482167165706834"
                                     ]
                                 }
                             }
@@ -810,108 +374,20 @@
         ]
     },
     {
-        "id": "XEPFOHEYPDMG",
-        "label": "Tybeert die cater die wart gram",
+        "id": "PIAPEDDIJMLH",
+        "label": "Daer ic die worst in hadde ghestolen",
         "items": [
             {
-                "id": "ENHROVLTFFYT",
-                "label": "Die te hove zijn commen hier",
-                "items": [
-                    {
-                        "label": "Nu gaet hier up eene claghe",
-                        "instructie": "Tybeert die cater die wart gram",
-                        "data": {
-                            "query": "niemen_crancken_sconinx.sql",
-                            "where": []
-                        }
-                    }
-                ]
-            },
-            {
-                "id": "CZNGQVIHMWWG",
-                "label": "Dan was bi niemene dan bi mi",
-                "items": [
-                    {
-                        "label": "Die te hove zijn commen hier",
-                        "instructie": "Ghinghen voer den coninc staen",
-                        "data": {
-                            "query": "hebben_houden_eenen.sql",
-                            "where": [
-                                "ghelovede >= 0.5086763750210124"
-                            ]
-                        }
-                    },
-                    {
-                        "label": "Den fellen metten grijsen baerde",
-                        "instructie": "Ne mach niet bliven achter",
-                        "data": {
-                            "query": "coninc.sql",
-                            "where": []
-                        }
-                    },
-                    {
-                        "label": "Hine hebbe te wroughene jeghen hu",
-                        "instructie": "Omme bejach in eene molen",
-                        "data": {
-                            "query": "haghe_ontfaerme.sql",
-                            "where": []
-                        }
-                    }
-                ]
-            },
-            {
-                "id": "HUTALJOHYWXL",
-                "label": "Hoet so arem was wijlen eere",
-                "items": [
-                    {
-                        "label": "Het was in eenen tsinxen daghe",
-                        "instructie": "Het was sint so verre comen",
-                        "data": {
-                            "query": "coninc.sql",
-                            "where": [
-                                "bosch = 'REVIGKG'",
-                                "claghede is null",
-                                "wroughene >= 0.3268809113212814",
-                                "ghenade = 'XMSRQWUJP'",
-                                "mesdaen = 'DZBUJV'"
-                            ]
-                        }
-                    },
-                    {
-                        "label": "No den coninc, minen heere",
-                        "instructie": "Ende si worden staer blent",
-                        "data": {
-                            "query": "worst_dedine.sql",
-                            "where": []
-                        }
-                    },
-                    {
-                        "label": "Voer al dandre ontfaerme hu dies",
-                        "instructie": "Ic weet wel al sonder waen",
-                        "data": {
-                            "query": "achter_menich.sql",
-                            "where": [
-                                "sprac != 0.043617814188903314",
-                                "bevaen < 614",
-                                "hadde > 532",
-                                "cleene = 'FYYTUHE'"
-                            ]
-                        }
-                    },
-                    {
-                        "label": "Nu gaet hier up eene claghe",
-                        "instructie": "Ende claghede den coninc in Francsoys",
-                        "data": {
-                            "query": "claghene.sql",
-                            "where": [
-                                "mochtire < 632",
-                                "vaste is null",
-                                "bosch = 884",
-                                "zwijghics > 0.3704222227782126"
-                            ]
-                        }
-                    }
-                ]
+                "label": "Sijn hof crayeren over al",
+                "instructie": "Dat hi waende, hadde hijs gheval",
+                "data": {
+                    "query": "niemene_spranc.sql",
+                    "where": [
+                        "loveren = 'HJSAVUW'",
+                        "heere < 428",
+                        "hadde > 0.12147694849810053"
+                    ]
+                }
             }
         ]
     }

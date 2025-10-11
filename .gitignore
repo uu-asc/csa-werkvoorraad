@@ -1,5 +1,7 @@
 __pycache__
+.vscode
 notebooks
+*.parquet
 *.html
 !index.html
 !*.jinja.html
