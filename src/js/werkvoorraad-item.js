@@ -66,6 +66,7 @@ summary {
     gap: .5em;
     padding-bottom: .75em;
     padding-right: 5em;
+    min-height: 1.5rem;
 
     > [data-action="show-query-details"] {
         position: absolute;
