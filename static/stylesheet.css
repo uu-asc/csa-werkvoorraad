@@ -75,6 +75,7 @@ details[open] > summary:after {
 
 .timestamp-container {
     display: flex;
+    justify-content: space-between;
     align-items: center;
 }
 
