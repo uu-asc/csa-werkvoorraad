@@ -1,7 +1,7 @@
 export class CheckboxGroup extends HTMLElement {
     config = {
         labels: {
-            filtersAll: "Alles",
+            filtersAll: "Alle",
             null: "(geen)",
         }
     }
@@ -56,6 +56,14 @@ export class CheckboxGroup extends HTMLElement {
                     gap: .5em;
                     align-items: center;
                     margin-bottom: .5em;
+                    justify-content: space-between;
+
+                    label {
+                        display: flex;
+                        align-items: center;
+                        font-size: .8em;
+                        gap: .25em;
+                    }
                 }
                 #checkboxes {
                     display: flex;
@@ -72,8 +80,16 @@ export class CheckboxGroup extends HTMLElement {
                     cursor: pointer;
                     padding: .25em .5em;
                     font-family: monospace;
+                    font-size: .875em;
                     border: 1px solid;
                     border-radius: 4px;
+
+                    &.select-all {
+                        width: 1rem;
+                        height: 1rem;
+                        border-radius: 50%;
+                        padding: 0;
+                    }
                 }
                 button:hover {
                     background-color: var(--color-button-hover);
@@ -83,12 +99,15 @@ export class CheckboxGroup extends HTMLElement {
                 }
                 .filter-button.selected {
                     background-color: var(--color-button-active);
-                    border-width: 2px;
+                    outline: 1px solid currentColor;
                 }
             </style>
             <header>
                 <div id="category-name">${this.groupLabel}</div>
-                <button type="button" class="select-all">${this.config.labels.filtersAll}</button>
+                <label>
+                    ${this.config.labels.filtersAll}
+                    <button type="button" class="select-all"></button>
+                </label>
             </header>
             <div id="checkboxes">
             ${this.data.map(val => {
