@@ -130,6 +130,12 @@ ID_GENERATORS = {
     'char_id': lambda: fake_str(NUMS, 7),
     'auth_id': lambda: fake_str(LETTERS, 1) + fake_str(NUMS, 6),
 }
+TAGS = {
+    'personage': ['Reynaert', 'Nobel', 'Ysengrijn', 'Bruun', 'Tibeert', 'Grimbeert', 'Cantecleer'],
+    'locatie': ['hof', 'burcht', 'woud', 'molen', 'klooster'],
+    'thema': ['list', 'verraad', 'rechtspraak', 'wraak', 'pelgrimstocht'],
+    'genre': ['dierenepos', 'satire', 'hoofse literatuur', 'didactiek']
+}
 
 fake_str = lambda pop, k: ''.join(random.choices(pop, k=k))
 
@@ -200,9 +206,8 @@ def fake_query():
     colname = random.choice(TOKENS)
     return f"{colname} {random.choice(randomizers)()}"
 
-
 def fake_item():
-    return {
+    item = {
         "label": random.choice(REYNAERDE),
         "instructie": random.choice(REYNAERDE),
         "data": {
@@ -210,6 +215,28 @@ def fake_item():
             "where": [fake_query() for _ in range(random.randint(0, 5))]
         }
     }
+
+    # Optionally add label (50% chance)
+    if random.random() > 0.5:
+        item["tags"] = fake_tags()
+
+    return item
+
+
+def fake_tags():
+    n_keys = random.randint(1, 3)
+    selected_keys = random.sample(sorted(TAGS), n_keys)
+
+    labels_obj = {}
+    for key in selected_keys:
+        # 70% chance of single value, 30% chance of 2-3 values
+        if random.random() < 0.7:
+            labels_obj[key] = [random.choice(TAGS[key])]
+        else:
+            n_values = random.randint(2, min(3, len(TAGS[key])))
+            labels_obj[key] = random.sample(TAGS[key], n_values)
+
+    return labels_obj
 
 
 def fake_container(depth):
@@ -225,16 +252,16 @@ def fake_container(depth):
 
 
 def inject_large_dataset_into_processed_spec(spec):
-    """Find first leaf item in processed spec and replace its ids with large dataset"""
+    """Find first leaf item in processed spec and replace its results with large dataset"""
     if isinstance(spec, list):
         for item in spec:
             if inject_large_dataset_into_processed_spec(item):
                 return True
     elif isinstance(spec, dict):
-        if 'ids' in spec and 'items' not in spec:
+        if 'results' in spec and 'items' not in spec:
             # This is a leaf item with actual ID data
-            id_type = random.choice(list(ID_GENERATORS.keys()))
-            spec['ids'] = {
+            id_type = random.choice(sorted(ID_GENERATORS))
+            spec['results'] = {
                 id_type: [ID_GENERATORS[id_type]() for _ in range(random.randint(1200, 1500))]
             }
             return True

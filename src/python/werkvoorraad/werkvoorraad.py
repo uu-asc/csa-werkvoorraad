@@ -80,17 +80,16 @@ def process_spec(
                 for item in new_spec
             ]
         case dict():
-            # get data and separate IDs from query metadata
             if data_config := new_spec.get('data'):
-                fetched_ids = data_getter(**data_config, **kwargs)
-                new_spec['ids'] = fetched_ids
+                fetched_results = data_getter(**data_config, **kwargs)
+                new_spec['results'] = fetched_results
 
             transform_items(new_spec)
 
             processed = {}
             for key, value in new_spec.items():
                 if key == 'data':
-                    processed[key] = value  # Keep as-is, already processed
+                    processed[key] = value
                 else:
                     processed[key] = process_spec(value, data_getter, transformers, **kwargs)
             return processed

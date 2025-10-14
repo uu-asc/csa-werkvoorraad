@@ -1,4 +1,4 @@
-import { SelectionPreventionMixin } from "./mixins/selection-prevention.js"
+import { SelectionPreventionMixin } from "./utils/selection-prevention.js"
 
 const style =
 `/* CSS FOR ITEM */
@@ -81,6 +81,21 @@ summary {
     }
 }
 
+.item-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .25em;
+    margin-bottom: .5em;
+}
+
+.tag-value {
+    font-family: monospace;
+    background-color: var(--color-button);
+    padding: .125em .5em;
+    border-radius: 3px;
+    font-size: 0.9em;
+}
+
 .batches {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(15ch, 1fr));
@@ -138,10 +153,11 @@ export class WerkvoorraadItem extends HTMLElement {
 
     constructor(spec, config={}, depth=0) {
         super()
-        const { id, type, label, data, ids, ...rest } = spec
+        const { id, type, label, data, results, tags, ...rest } = spec
         this.label = label
         this.data = data
-        this.ids = ids
+        this.results = results
+        this.tags = tags
         this.rest = rest
         this.config = { ...this.config, ...config }
         this.depth = depth
@@ -152,10 +168,9 @@ export class WerkvoorraadItem extends HTMLElement {
 
         this.handleClick = this.handleClick.bind(this)
         this.handleToggle = this.handleToggle.bind(this)
-        this.handleSearchItem = this.handleSearchItem.bind(this)
     }
 
-    get n() { return Object.values(this.ids).reduce((sum, arr) => sum + arr.length, 0) }
+    get n() { return Object.values(this.results).reduce((sum, arr) => sum + arr.length, 0) }
     get hasResults() { return this.n > 0 }
 
     get _details() { return this.shadow.querySelector("details") }
@@ -212,7 +227,7 @@ export class WerkvoorraadItem extends HTMLElement {
         const start = elem.dataset.start
         const end = elem.dataset.end
 
-        const data = this.ids[target].slice(start, end).join(";")
+        const data = this.results[target].slice(start, end).join(";")
         await navigator.clipboard.writeText(data)
         const clipboardWriteEvent = new CustomEvent("clipboardWriteEvent", {
             bubbles: true,
@@ -225,23 +240,51 @@ export class WerkvoorraadItem extends HTMLElement {
     handleClose() { this.removeAttribute("open")}
     handleToggle() { this._details.open ? this.handleOpen() : this.handleClose() }
 
-    handleSearchItem(regex) {
+    itemMatchesSearch(regex) {
         return regex.test(this.label)
+    }
+
+    itemMatchesTags(selections) {
+        // If no tags on this item, it matches if no filter is active
+        if (!this.tags) {
+            return Object.keys(selections).length === 0
+        }
+
+        // Check if item's labels satisfy all filter selections
+        return Object.entries(selections).every(([key, selectedValues]) => {
+            if (selectedValues.length === 0) return true
+
+            const itemValues = this.tags[key]
+            if (!itemValues) return selectedValues.includes(null)
+
+            const itemValuesArray = Array.isArray(itemValues) ? itemValues : [itemValues]
+            return itemValuesArray.some(val => selectedValues.includes(val))
+        })
+    }
+
+    setVisibility(matchesSearch, matchesLabels) {
+        const showEmpty = this.hasAttribute("show-empty")
+        const isEmpty = this.n === 0
+
+        const shouldShow = matchesSearch && matchesLabels && (showEmpty || !isEmpty)
+        this.classList.toggle("hide", !shouldShow)
     }
 
     render() {
         const buttons =
-            Object.entries(this.ids)
+            Object.entries(this.results)
             .map(([key, arr]) => `<label>${key}</label>${this.renderButton(key, 0, arr.length)}`)
 
         const batches =
-            Object.entries(this.ids)
+            Object.entries(this.results)
             .filter(([key, arr]) => arr.length > this.config.batchSize)
             .map(([key, arr]) => this.renderBatches(key, arr))
 
         const queryDetailsButton = this.data?.query
             ? `<button data-action="show-query-details">${this.config.queryDetailsLabel}</button>`
             : ''
+
+        const labels = this.renderTags()
 
         const details =
             Object.entries(this.rest)
@@ -261,6 +304,7 @@ export class WerkvoorraadItem extends HTMLElement {
                 </summary>
                 <div class="item-details">
                     ${queryDetailsButton}
+                    ${labels}
                     ${details.join("")}
                     ${batches.join("")}
                 </div>
@@ -270,6 +314,19 @@ export class WerkvoorraadItem extends HTMLElement {
                 margin-left: ${this.depth * this.config.offset}rem
             }`
         )
+    }
+
+    renderTags() {
+        if (!this.tags) return ""
+
+        const tags = Object.entries(this.tags)
+            .flatMap(([key, values]) => {
+                const vals = Array.isArray(values) ? values : [values]
+                return vals.map(val => `<span class="tag-value">${key}: ${val}</span>`)
+            })
+            .join("")
+
+        return `<div class="item-tags">${tags}</div>`
     }
 
     renderButton(target, start, end, isBatch=false) {

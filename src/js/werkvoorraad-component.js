@@ -1,4 +1,5 @@
 import { WerkvoorraadHoofdstuk } from "./werkvoorraad-hoofdstuk.js"
+import { extractTags } from "./utils/filter-extraction.js"
 
 const style =
 `/* CSS FOR COMPONENT */
@@ -84,6 +85,8 @@ export class WerkvoorraadComponent extends HTMLElement {
         this.loadFromSpec = this.loadFromSpec.bind(this)
 
         this.items = spec.map(this.loadFromSpec)
+        this.currentSearchRegex = null
+        this.currentFilterSelections = {}
     }
 
     get totalItemCount() {
@@ -97,6 +100,10 @@ export class WerkvoorraadComponent extends HTMLElement {
             total: this.totalItemCount,
             withResults: this.itemsWithResultsCount
         }
+    }
+
+    getTags() {
+        return extractTags(this.items)
     }
 
     connectedCallback() {
@@ -122,24 +129,16 @@ export class WerkvoorraadComponent extends HTMLElement {
     handleCloseAll() { this.items.forEach(item => item.handleCloseAll() ) }
     handleShowEmpty(event) {
         event.target.checked
-        ? this.items.forEach(el => el.setAttribute("show-empty", ""))
-        : this.items.forEach(el => el.removeAttribute("show-empty"))
+            ? this.items.forEach(el => el.setAttribute("show-empty", ""))
+            : this.items.forEach(el => el.removeAttribute("show-empty"))
 
-        // when toggling "show empty" we need to first reset all item visibility
-        // then reapply the current search filter, because previously filtered
-        // empty items won't become visible otherwise due to their hide state
-        // being determined by both the search match AND empty status conditions
-        // in handleSearchItem
-        const matchAllRegex = new RegExp("", "i")
-        this.items.forEach(item => { item.handleSearchItem(matchAllRegex) })
-        const enterEvent = new KeyboardEvent("keyup", { key: "Enter" })
-        this._inputSearchItem.dispatchEvent(enterEvent)
+        this.updateItemVisibility()
     }
     handleSearchItem(event) {
         if (event.key === "Escape") { event.target.value = "" }
         this.saveSearchValue()
-        const regex = new RegExp(event.target.value, "i")
-        this.items.forEach(item => { item.handleSearchItem(regex) })
+        this.currentSearchRegex = event.target.value ? new RegExp(event.target.value, "i") : null
+        this.updateItemVisibility()
     }
     handleClearQuery() {
         const escapeEvent = new KeyboardEvent("keyup", { key: "Escape" })
@@ -149,6 +148,50 @@ export class WerkvoorraadComponent extends HTMLElement {
         const { checked } = event.target
         this.toggleAttribute("zen-mode", checked)
         localStorage.setItem("zenMode", event.target.checked)
+    }
+
+    applyFilter(selections) {
+        console.log('applyFilter called with:', selections)
+        this.currentFilterSelections = selections
+        this.updateItemVisibility()
+    }
+
+    updateItemVisibility() {
+        this.items.forEach(item => {
+            if (item.items) {
+                this.setHoofdstukVisibility(item, this.currentSearchRegex, this.currentFilterSelections)
+            } else {
+                this.setItemVisibility(item, this.currentSearchRegex, this.currentFilterSelections)
+            }
+        })
+    }
+
+    setHoofdstukVisibility(hoofdstuk, searchRegex, filterSelections) {
+        const matchesOwnLabel = searchRegex ? searchRegex.test(hoofdstuk.label) : true
+
+        hoofdstuk.items.forEach(child => {
+            if (child.items) {
+                this.setHoofdstukVisibility(child, searchRegex, filterSelections)
+            } else {
+                // If parent matched, show all children; otherwise filter individually
+                this.setItemVisibility(child, matchesOwnLabel ? null : searchRegex, filterSelections)
+            }
+        })
+
+        const anyChildVisible = hoofdstuk.items.some(child => !child.classList.contains("hide"))
+        hoofdstuk.classList.toggle("hide", !anyChildVisible)
+    }
+
+    setItemVisibility(item, searchRegex, filterSelections) {
+        const showEmpty = item.hasAttribute("show-empty")
+        const matchesSearch = !searchRegex || item.itemMatchesSearch(searchRegex)
+        const matchesTags = Object.keys(filterSelections).length > 0
+            ? item.itemMatchesTags(filterSelections)
+            : true
+        const isEmpty = !showEmpty && item.n === 0
+
+        const shouldShow = matchesSearch && matchesTags && !isEmpty
+        item.classList.toggle("hide", !shouldShow)
     }
 
     render() {

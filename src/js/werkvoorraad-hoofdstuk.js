@@ -1,5 +1,5 @@
 import { WerkvoorraadItem } from "./werkvoorraad-item.js"
-import { SelectionPreventionMixin } from "./mixins/selection-prevention.js"
+import { SelectionPreventionMixin } from "./utils/selection-prevention.js"
 
 const style =
 `/* CSS FOR HOOFDSTUK */
@@ -77,7 +77,6 @@ export class WerkvoorraadHoofdstuk extends HTMLElement {
 
         this.handleToggle = this.handleToggle.bind(this)
         this.handleSummaryClick = this.handleSummaryClick.bind(this)
-        this.handleSearchItem = this.handleSearchItem.bind(this)
         this.loadFromSpec = this.loadFromSpec.bind(this)
 
         this.items = spec.items.map(this.loadFromSpec)
@@ -87,7 +86,7 @@ export class WerkvoorraadHoofdstuk extends HTMLElement {
         const totals = {}
         for (const item of this.items) {
             const isChapter = item instanceof WerkvoorraadHoofdstuk
-            const source = isChapter ? item.totals : item.ids
+            const source = isChapter ? item.totals : item.results
             for (const [key, val] of Object.entries(source)) {
                 const n = Array.isArray(val) ? val.length : val
                 totals[key] = (totals[key] ?? 0) + n
@@ -191,30 +190,6 @@ export class WerkvoorraadHoofdstuk extends HTMLElement {
         const toggleState = this.getToggleStateFromLocalStorage()
         toggleState[this.id] = isOpen
         localStorage.setItem("toggleState", JSON.stringify(toggleState))
-    }
-
-    handleSearchItem(regex) {
-        let wasFound = false
-        const matchesLabel = regex.test(this.label)
-
-        this.items.forEach(item => {
-            // if parent item matches than all children should match
-            // therefore when parent matches, we match children to an empty string
-            const emptySearch = new RegExp("", "i")
-            const query = matchesLabel ? emptySearch : regex
-            const isMatch = item.handleSearchItem(query)
-
-            // if item is empty and we are not showing empty items
-            // then we do not want to show its parent either
-            // so empty items should be discounted in this case
-            const isEmpty = !this.hasAttribute("show-empty") && (item.n === 0)
-            const shouldShow = isMatch && !isEmpty
-            item.classList.toggle("hide", !shouldShow)
-            if (shouldShow) { wasFound = true }
-        })
-
-        this.classList.toggle("hide", !wasFound)
-        return wasFound
     }
 
     handleMouseDown(event) {

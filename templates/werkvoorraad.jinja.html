@@ -40,29 +40,30 @@
 <body>
     <header>
         <h1>{{ title }}</h1>
+        <darkmode-toggle></darkmode-toggle>
+        <div class="timestamp-container">
+            <div>
+                Update {% if language == 'nl' %}werkvoorraad{% else %}Pending work{% endif %}:
+                <timestamp-display
+                    timestamp="{{ ts }}"
+                    threshold="4"
+                    locale="{{ language }}-NL"
+                    show-warning>
+                </timestamp-display>
+            </div>
+        {% if ts_db %}
+            <div>
+                Update database:
+                <timestamp-display
+                    timestamp="{{ ts_db }}"
+                    threshold="2"
+                    locale="{{ language }}-NL"
+                    show-warning>
+                </timestamp-display>
+            </div>
+        {% endif %}
+        </div>
     </header>
-    <div class="timestamp-container">
-        <div>
-            Update {% if language == 'nl' %}werkvoorraad{% else %}Pending work{% endif %}:
-            <timestamp-display
-                timestamp="{{ ts }}"
-                threshold="4"
-                locale="{{ language }}-NL"
-                show-warning>
-            </timestamp-display>
-        </div>
-    {% if ts_db %}
-        <div>
-            Update database:
-            <timestamp-display
-                timestamp="{{ ts_db }}"
-                threshold="2"
-                locale="{{ language }}-NL"
-                show-warning>
-            </timestamp-display>
-        </div>
-    {% endif %}
-    </div>
     <nav>
         <button data-show-target="werkvoorraad" selected>{{ werkvoorraad_label }}</button>
         {% if tabs %}
@@ -73,6 +74,7 @@
     </nav>
     <query-details-modal></query-details-modal>
     <button class="back-to-top hidden">↑</button>
+    <aside></aside>
     <section data-component="werkvoorraad"></section>
     {% if tabs %}
     {% for tab, content in tabs.items() %}
@@ -94,6 +96,7 @@
 <!-- MARK: WERKVRRAAD -->
 <script type="module">
     import { WerkvoorraadComponent } from "{{ src }}/src/js/werkvoorraad-component.js"
+    import { ControlPanel } from "./src/js/control-panel.js"
     import { QueryDetailsModal } from "{{ src }}/src/js/query-details-modal.js"
 
     const spec = {{ spec | tojson }}
@@ -108,6 +111,15 @@
 
     const { total, withResults } = werkvoorraadComponent.getItemCounts()
     document.querySelector("footer div").innerHTML = `items: ${withResults} / ${total}`
+
+    const controlPanel = new ControlPanel([werkvoorraadComponent], config)
+    document.querySelector('aside').appendChild(controlPanel)
+
+    controlPanel.addEventListener('filter-change', (event) => {
+        console.log('filter-change event received:', event.detail)
+        werkvoorraadComponent.applyFilter(event.detail.selections)
+    })
+
 </script>
 
 <!-- MARK: DARK MODE -->
@@ -119,9 +131,6 @@
         ? document.body.classList.add("dark-theme")
         : document.body.classList.remove("dark-theme")
     })
-
-    const darkModeToggle = new DarkModeToggle()
-    document.querySelector("header").appendChild(darkModeToggle)
 </script>
 
 {% if embed_vega %}
