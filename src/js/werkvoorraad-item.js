@@ -244,22 +244,8 @@ export class WerkvoorraadItem extends HTMLElement {
         return regex.test(this.label)
     }
 
-    itemMatchesTags(selections) {
-        // If no tags on this item, it matches if no filter is active
-        if (!this.tags) {
-            return Object.keys(selections).length === 0
-        }
-
-        // Check if item's labels satisfy all filter selections
-        return Object.entries(selections).every(([key, selectedValues]) => {
-            if (selectedValues.length === 0) return true
-
-            const itemValues = this.tags[key]
-            if (!itemValues) return selectedValues.includes(null)
-
-            const itemValuesArray = Array.isArray(itemValues) ? itemValues : [itemValues]
-            return itemValuesArray.some(val => selectedValues.includes(val))
-        })
+    itemMatchesTags(filterSelections) {
+        return filterSelections.matches(this.tags)
     }
 
     setVisibility(matchesSearch, matchesLabels) {

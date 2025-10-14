@@ -9,18 +9,17 @@
 
 body {
     display: grid;
-    max-width: 1000px;
     height: 100vh;
     grid-template-areas:
-        "gutter header "
-        "gutter nav    "
-        "panel  content"
-        "panel  footer "
+        "gut-left header  gut-right"
+        "gut-left nav     gut-right"
+        "gut-left content panel "
+        "gut-left footer  panel "
     ;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 2fr 2fr;
     grid-template-rows: auto auto 1fr auto;
     column-gap: 2rem;
-    margin-inline: auto;
+    margin-inline: 1em;
     background: var(--color-background);
     font-family: Calibri;
     color: var(--color-text);
@@ -63,7 +62,6 @@ aside {
 
 section {
     grid-area: content;
-    max-width: 600px;
 }
 
 section[data-component] summary {

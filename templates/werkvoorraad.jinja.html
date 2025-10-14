@@ -116,7 +116,6 @@
     document.querySelector('aside').appendChild(controlPanel)
 
     controlPanel.addEventListener('filter-change', (event) => {
-        console.log('filter-change event received:', event.detail)
         werkvoorraadComponent.applyFilter(event.detail.selections)
     })
 

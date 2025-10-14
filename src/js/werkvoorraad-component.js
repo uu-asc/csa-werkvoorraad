@@ -1,5 +1,6 @@
 import { WerkvoorraadHoofdstuk } from "./werkvoorraad-hoofdstuk.js"
-import { extractTags } from "./utils/filter-extraction.js"
+import { extractTags } from "./utils/tag-extraction.js"
+import { FilterSelections } from "./utils/filter-selections.js"
 
 const style =
 `/* CSS FOR COMPONENT */
@@ -151,8 +152,7 @@ export class WerkvoorraadComponent extends HTMLElement {
     }
 
     applyFilter(selections) {
-        console.log('applyFilter called with:', selections)
-        this.currentFilterSelections = selections
+        this.currentFilterSelections = new FilterSelections(selections)
         this.updateItemVisibility()
     }
 
@@ -183,12 +183,9 @@ export class WerkvoorraadComponent extends HTMLElement {
     }
 
     setItemVisibility(item, searchRegex, filterSelections) {
-        const showEmpty = item.hasAttribute("show-empty")
         const matchesSearch = !searchRegex || item.itemMatchesSearch(searchRegex)
-        const matchesTags = Object.keys(filterSelections).length > 0
-            ? item.itemMatchesTags(filterSelections)
-            : true
-        const isEmpty = !showEmpty && item.n === 0
+        const matchesTags = filterSelections.matches(item.tags)
+        const isEmpty = !this.hasAttribute("show-empty") && item.n === 0
 
         const shouldShow = matchesSearch && matchesTags && !isEmpty
         item.classList.toggle("hide", !shouldShow)

@@ -14,7 +14,7 @@ summary {
     cursor: pointer;
     font-size: 1.25rem;
     user-select: none;
-    margin-left: auto;
+    margin-right: auto;
     margin-bottom: .5em;
 
     &:hover {
