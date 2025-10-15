@@ -12,7 +12,7 @@ body {
     height: 100vh;
     grid-template-areas:
         "gut-left header  gut-right"
-        "gut-left nav     gut-right"
+        "gut-left nav     panel"
         "gut-left content panel "
         "gut-left footer  panel "
     ;
@@ -37,6 +37,7 @@ header {
         font-size: 2em;
         line-height: 1.25em;
         padding-block: .75em;
+        user-select: none;
     }
 
     .timestamp-container {
@@ -124,24 +125,26 @@ summary {
     flex-wrap: wrap;
     align-items: center;
     gap: .5em;
+
+    code {
+        flex-grow: 1;
+    }
+
+    :last-child {
+        margin-right: 2ch;
+    }
+
+    &:after {
+        content: "+";
+        position: absolute;
+        font-size: 1.75em;
+        right: 0;
+        font-weight: 200;
+        transform-origin: center;
+        transition: 40ms linear;
+    }
 }
 
-summary code {
-    flex-grow: 1;
-}
-summary :last-child {
-    margin-right: 2ch;
-}
-
-summary:after {
-    content: "+";
-    position: absolute;
-    font-size: 1.75em;
-    right: 0;
-    font-weight: 200;
-    transform-origin: center;
-    transition: 40ms linear;
-}
 details[open] > summary:after {
     transform: rotate(45deg);
 }
@@ -163,14 +166,15 @@ details[open] > summary:after {
     border-radius: 50%;
     line-height: 1;
     opacity: .7;
-}
 
-.back-to-top:hover {
-    background-color: var(--color-button-hover);
-    opacity: 1;
-}
-.back-to-top:active {
-    background-color: var(--color-button-active);
+    &:hover {
+        background-color: var(--color-button-hover);
+        opacity: 1;
+    }
+
+    &:active {
+        background-color: var(--color-button-active);
+    }
 }
 
 /* MARK: TABLES */
@@ -209,7 +213,7 @@ caption {
     margin-left: 0;
 }
 
-/* MARK:  VEGA CHARTS */
+/* MARK: VEGA CHARTS */
 .vega-embed {
     margin-bottom: 1.5em;
 }

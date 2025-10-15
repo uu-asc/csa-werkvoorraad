@@ -1,7 +1,11 @@
-import { CheckboxGroup } from './checkbox-group.js'
+import { CheckboxGroup } from './components/checkbox-group.js'
 
 const style = `
-:host {}
+:host {
+    display: block;
+    max-width: 400px;
+}
+
 summary {
     display: grid;
     place-items: center;
@@ -35,6 +39,36 @@ summary {
     gap: 0.5rem;
 }
 
+.component-controls {
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid currentColor;
+
+    &.hidden {
+        display: none;
+    }
+
+    .wv-controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5em;
+
+        .folding-buttons {
+            order: 2;
+        }
+        filter-input {
+            flex-grow: 1;
+            order: 1;
+        }
+
+        label[for="zen-mode"] {
+            order: 3;
+        }
+        label[for="show-empty"] {
+            order: 4;
+        }
+    }
+}
+
 checkbox-group + checkbox-group {
     border-top: 1px solid currentColor;
     padding-top: 0.5rem;
@@ -46,6 +80,8 @@ export class ControlPanel extends HTMLElement {
         super()
         this.attachShadow({ mode: 'open' })
         this.components = components
+        this.componentMap = new Map(components.map(c => [c.id, c]))
+        this.activeComponent = null
         this.config = {
             labels: {
                 filtersButton: "⚙",
@@ -54,6 +90,7 @@ export class ControlPanel extends HTMLElement {
         }
 
         this.handleToggle = this.handleToggle.bind(this)
+        this.handleComponentActivated = this.handleComponentActivated.bind(this)
     }
 
     mergeTags() {
@@ -90,10 +127,41 @@ export class ControlPanel extends HTMLElement {
         this.loadState()
         this.render()
         this._panel.addEventListener('toggle', this.handleToggle)
+        document.addEventListener('component-activated', this.handleComponentActivated)
+
+        if (this.components.length > 0) {
+            this.setActiveComponent(this.components[0])
+        }
+    }
+
+    disconnectedCallback() {
+        document.removeEventListener('component-activated', this.handleComponentActivated)
     }
 
     get _panel() {
         return this.shadowRoot.querySelector('details')
+    }
+
+    handleComponentActivated(event) {
+        const component = event.detail.component
+        if (component && this.components.includes(component)) {
+            this.setActiveComponent(component)
+        }
+    }
+
+    setActiveComponent(component) {
+        if (this.activeComponent === component) return
+
+        this.activeComponent = component
+        this.updateVisibleControls()
+    }
+
+    updateVisibleControls() {
+        const controlSections = this.shadowRoot.querySelectorAll('[data-controls-for]')
+        controlSections.forEach(section => {
+            const sectionComponent = this.componentMap.get(section.dataset.controlsFor)
+            section.classList.toggle('hidden', sectionComponent !== this.activeComponent)
+        })
     }
 
     handleToggle() {
@@ -119,11 +187,24 @@ export class ControlPanel extends HTMLElement {
             </details>
         `
 
-        // Get merged filter options
-        const tagOptions = this.mergeTags()
-
-        // Create and append checkbox groups
         const panelContent = this.shadowRoot.getElementById('panel-content')
+
+        // Create control section for each component
+        this.components.forEach(component => {
+            const controlSection = document.createElement('div')
+            controlSection.dataset.controlsFor = component.id
+            controlSection.classList.add('component-controls', 'hidden')
+
+            const controlUI = component.getControlUI?.()
+            if (controlUI) {
+                controlSection.appendChild(controlUI)
+            }
+
+            panelContent.appendChild(controlSection)
+        })
+
+        // Tag filters (shared across components for now)
+        const tagOptions = this.mergeTags()
         Object.entries(tagOptions).forEach(([category, values]) => {
             const group = new CheckboxGroup(
                 { [category]: values },
@@ -132,7 +213,6 @@ export class ControlPanel extends HTMLElement {
             panelContent.appendChild(group)
         })
 
-        // Listen for selection changes
         this.shadowRoot.addEventListener('selectionchange', this.handleSelectionChange.bind(this))
     }
 
