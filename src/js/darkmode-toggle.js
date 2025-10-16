@@ -17,6 +17,10 @@ button:hover {
 }`
 
 export class DarkModeToggle extends HTMLElement {
+    static get observedAttributes() {
+        return ["scheme"]
+    }
+
     config = {
         buttonTitle: "Click to switch themes"
     }
@@ -26,7 +30,7 @@ export class DarkModeToggle extends HTMLElement {
         this.config = { ...this.config, ...config }
         this.shadow = this.attachShadow({ mode: 'open' })
         this.mediaQuery = window.matchMedia("(prefers-color-scheme: dark)")
-        this.scheme = this.getUserPreference()
+        this._scheme = this.getUserPreference()
         this.handleClick = this.handleClick.bind(this)
         this.handleMediaQueryChange = this.handleMediaQueryChange.bind(this)
         this.dispatch = this.dispatch.bind(this)
@@ -36,9 +40,23 @@ export class DarkModeToggle extends HTMLElement {
         this.render()
         this._button.addEventListener("click", this.handleClick)
         this.mediaQuery.addEventListener("change", this.handleMediaQueryChange)
-        this.dispatch()
+        this.scheme = this._scheme
     }
 
+    attributeChangedCallback(name, oldValue, newValue) {
+        if (name === "scheme" && oldValue !== newValue) {
+            this._scheme = newValue
+            this.updateState()
+        }
+    }
+
+    get scheme() { return this._scheme }
+    set scheme(value) {
+        this._scheme = value
+        this.setAttribute("scheme", value)
+        this.updateState()
+        this.dispatch()
+    }
     get _button() { return this.shadow.querySelector("button") }
     get _sun() { return this.shadow.getElementById("sun") }
     get _moon() { return this.shadow.getElementById("moon") }
@@ -46,15 +64,11 @@ export class DarkModeToggle extends HTMLElement {
     handleClick() {
         this.scheme = this.scheme === "dark" ? "light" : "dark"
         localStorage.setItem("prefers-color-scheme", this.scheme)
-        this.updateState()
-        this.dispatch()
     }
 
     handleMediaQueryChange(event) {
         this.scheme = event.matches ? "dark" : "light"
         localStorage.setItem("prefers-color-scheme", this.scheme)
-        this.updateState()
-        this.dispatch()
     }
 
     dispatch() {

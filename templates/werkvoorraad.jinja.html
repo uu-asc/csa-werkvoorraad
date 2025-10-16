@@ -123,13 +123,13 @@
 
 <!-- MARK: DARK MODE -->
 <script type="module">
-    import { DarkModeToggle } from "{{ src }}/src/js/darkmode-toggle.js"
+    import "{{ src }}/src/js/darkmode-toggle.js"
 
-    document.addEventListener("color-scheme-change", event => {
-        event.detail.scheme === "dark"
-        ? document.body.classList.add("dark-theme")
-        : document.body.classList.remove("dark-theme")
-    })
+    // document.addEventListener("color-scheme-change", event => {
+    //     event.detail.scheme === "dark"
+    //     ? document.body.classList.add("dark-theme")
+    //     : document.body.classList.remove("dark-theme")
+    // })
 </script>
 
 {% if embed_vega %}
