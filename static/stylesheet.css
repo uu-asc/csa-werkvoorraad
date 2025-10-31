@@ -16,7 +16,7 @@ body {
         "gut-left content panel "
         "gut-left footer  panel "
     ;
-    grid-template-columns: 1fr 2fr 2fr;
+    grid-template-columns: 1fr minmax(600px, 3fr) 2fr;
     grid-template-rows: auto auto 1fr auto;
     column-gap: 2rem;
     margin-inline: 1em;
