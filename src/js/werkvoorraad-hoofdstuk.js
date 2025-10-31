@@ -42,6 +42,17 @@ summary {
     }
 }
 
+:host([depth="0"]) {
+    summary {
+        border-top: 4px solid;
+        border-bottom: 1px solid;
+        position: sticky;
+        top: 0;
+        background-color: var(--color-background);
+        z-index: 1;
+    }
+}
+
 details[open] .toggle-indicator {
     transform: rotate(45deg);
 }
@@ -70,6 +81,7 @@ export class WerkvoorraadHoofdstuk extends HTMLElement {
         super()
         this.id = spec.id
         this.depth = depth
+        this.setAttribute('depth', depth)
         this.label = spec.label
         this.config = { ...this.config, ...config }
         this.shadow = this.attachShadow({ mode: "open" })
