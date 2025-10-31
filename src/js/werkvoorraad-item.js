@@ -13,9 +13,10 @@ summary {
     min-width: 200px;
     padding: 0.5em 0;
     display: grid;
-    grid-template-columns: 1fr auto;
+    grid-template-columns: 1fr auto auto;
     align-items: center;
     gap: .5em;
+    overflow-x: hidden;
 
     .label::before {
         content: '•';
@@ -28,7 +29,12 @@ summary {
         grid-template-columns: 1fr auto;
         gap: .25em;
         justify-items: end;
-        margin-right: 2ch;
+    }
+    span.toggle-indicator {
+        margin-left: auto;
+        font-size: 1.25em;
+        transform-origin: center;
+        transition: 100ms ease;
     }
 }
 
@@ -36,15 +42,6 @@ summary {
     summary {
         position: relative;
         cursor: pointer;
-
-        &:after {
-            content: "+";
-            position: absolute;
-            font-size: 1.25em;
-            right: 0;
-            transform-origin: center;
-            transition: 40ms linear;
-        }
     }
 
     &[open] {
@@ -52,7 +49,7 @@ summary {
             border-bottom: 1px dotted;
             margin-bottom: .5em;
 
-            &:after {
+            span.toggle-indicator {
                 transform: rotate(45deg);
             }
         }
@@ -287,6 +284,7 @@ export class WerkvoorraadItem extends HTMLElement {
                 <summary>
                     <div class="label">${this.label}</div>
                     <div class="buttons">${buttons.join("")}</div>
+                    <span class="toggle-indicator">+</span>
                 </summary>
                 <div class="item-details">
                     ${queryDetailsButton}

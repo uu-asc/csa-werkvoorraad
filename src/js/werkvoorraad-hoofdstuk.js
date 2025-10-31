@@ -12,35 +12,37 @@ const style =
 summary {
     border-top: 4px solid;
     min-width: 200px;
-    padding: 0.5em 0;
+    padding: .5em 0;
     position: relative;
     cursor: pointer;
     display: flex;
     align-items: center;
     gap: .5em;
-    white-space: nowrap;
+    overflow-x: hidden;
+
+    > :where(h2, h3, h4, h5, h6) {
+        flex: 0 1 auto;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    code {
+        flex: 1 1 0;
+        display: var(--show-counts);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    span.toggle-indicator {
+        margin-left: auto;
+        font-size: 1.75em;
+        transform-origin: center;
+        transition: 100ms ease;
+    }
 }
 
-summary code {
-    display: var(--show-counts);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-summary :last-child {
-    margin-right: 2ch;
-}
-
-summary:after {
-    content: "+";
-    position: absolute;
-    font-size: 1.75em;
-    right: 0;
-    font-weight: 200;
-    transform-origin: center;
-    transition: 40ms linear;
-}
-details[open] > summary:after {
+details[open] .toggle-indicator {
     transform: rotate(45deg);
 }
 
@@ -232,7 +234,7 @@ export class WerkvoorraadHoofdstuk extends HTMLElement {
                     <summary>
                         <h${2 + this.depth}>${this.label}</h2>
                         <code title="${totalsTooltip}">(${totals})</code>
-                        <div></div>
+                        <span class="toggle-indicator">+</span>
                     </summary>
                 </details>
             </section>`
