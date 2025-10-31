@@ -7,13 +7,15 @@ const style =
     box-sizing: border-box;
     margin: 0;
 }
+:host {
+    display: block;
+}
 
 /* layout */
 summary {
-    border-top: 4px solid;
+    border-top: 2px solid;
     min-width: 200px;
     padding: .5em 0;
-    position: relative;
     cursor: pointer;
     display: flex;
     align-items: center;

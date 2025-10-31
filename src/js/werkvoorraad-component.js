@@ -6,6 +6,7 @@ import "./components/filter-input.js"
 const style =
 `/* CSS FOR COMPONENT */
 :host {
+    display: block;
     --show-counts: block;
 }
 
