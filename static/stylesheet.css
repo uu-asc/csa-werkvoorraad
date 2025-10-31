@@ -72,7 +72,7 @@ aside {
 
 header, nav, section {
     overflow-y: auto;
-    scrollbar-gutter: stable both-edges;
+    scrollbar-gutter: stable;
 }
 
 section {
@@ -81,10 +81,8 @@ section {
 }
 
 /* Firefox only (no -webkit-scrollbar support) */
-@supports not selector(::-webkit-scrollbar) {
-    header, nav, section {
-        padding-inline: 17px;
-    }
+header, nav, section {
+    padding-inline: 17px;
 }
 
 section[data-component] summary {
