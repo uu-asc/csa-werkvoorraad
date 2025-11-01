@@ -113,12 +113,10 @@
     document.querySelector("footer div").innerHTML = `items: ${withResults} / ${total}`
 
     const controlPanel = new ControlPanel([werkvoorraadComponent], config)
-    document.querySelector('aside').appendChild(controlPanel)
-
     controlPanel.addEventListener('filter-change', (event) => {
         werkvoorraadComponent.applyFilter(event.detail.selections)
     })
-
+    document.querySelector('aside').appendChild(controlPanel)
 </script>
 
 <!-- MARK: DARK MODE -->

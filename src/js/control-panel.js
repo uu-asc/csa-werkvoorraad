@@ -187,6 +187,7 @@ export class ControlPanel extends HTMLElement {
             </details>
         `
 
+        this.shadowRoot.addEventListener('selectionchange', this.handleSelectionChange.bind(this))
         const panelContent = this.shadowRoot.getElementById('panel-content')
 
         // Create control section for each component
@@ -213,7 +214,6 @@ export class ControlPanel extends HTMLElement {
             panelContent.appendChild(group)
         })
 
-        this.shadowRoot.addEventListener('selectionchange', this.handleSelectionChange.bind(this))
     }
 
     handleSelectionChange(event) {
