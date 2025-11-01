@@ -125,8 +125,17 @@ export class WerkvoorraadComponent extends HTMLElement {
         container.querySelector('#zen-mode').addEventListener('change', this.handleToggleZenMode)
         this._controls = container
 
-        this.loadSearchValue()
+        this.initializeControls()
         return this._controls
+    }
+
+    initializeControls() {
+        this.loadSearchValue()
+        this.loadZenModeState()
+        
+        if (!this.currentSearchRegex) {
+            this.updateItemVisibility()
+        }
     }
 
     getControlUI() {
@@ -136,7 +145,6 @@ export class WerkvoorraadComponent extends HTMLElement {
 
     connectedCallback() {
         this.render()
-        this.loadZenModeState()
     }
 
     get _buttonOpenAll() { return this._controls.querySelector('#open-all') }
