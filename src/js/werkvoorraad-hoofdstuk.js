@@ -65,15 +65,13 @@ h2, h3, h4, h5, h6 {
 }
 
 /* utility */
-.empty, .hide {
+.hide {
     display: none;
 }
-:host([show-empty]) .empty {
-    display: block;
-}`
+`
 
 export class WerkvoorraadHoofdstuk extends HTMLElement {
-    static observedAttributes = ["open", "show-empty"]
+    static observedAttributes = ["open"]
     config = {
         clipboardWriteLabel: "gekopieerd!",
         offset: .5,
@@ -159,13 +157,6 @@ export class WerkvoorraadHoofdstuk extends HTMLElement {
                 ? this._details.setAttribute("open", "")
                 : this._details.removeAttribute("open")
                 break
-
-            case "show-empty":
-                attrWasAdded
-                ? this.items.forEach(item => item.setAttribute("show-empty", ""))
-                : this.items.forEach(item => item.removeAttribute("show-empty"))
-                break
-
             default:
                 return
         }

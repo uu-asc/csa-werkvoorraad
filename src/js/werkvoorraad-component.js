@@ -149,9 +149,9 @@ export class WerkvoorraadComponent extends HTMLElement {
     handleCloseAll() { this.items.forEach(item => item.handleCloseAll() ) }
     handleShowEmpty(event) {
         event.target.checked
-            ? this.items.forEach(el => el.setAttribute("show-empty", ""))
-            : this.items.forEach(el => el.removeAttribute("show-empty"))
-
+            ? this.setAttribute("show-empty", "")
+            : this.removeAttribute("show-empty")
+        
         this.updateItemVisibility()
     }
     handleSearchItem(event) {

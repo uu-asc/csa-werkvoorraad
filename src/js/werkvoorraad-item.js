@@ -131,12 +131,6 @@ button {
 }
 
 /* utility */
-.empty {
-    display: none;
-}
-:host([show-empty]) .empty {
-    display: block;
-}
 .batches .clicked {
     text-decoration: line-through;
     font-style: italic;
