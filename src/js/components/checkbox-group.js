@@ -220,4 +220,4 @@ export class CheckboxGroup extends HTMLElement {
     }
 }
 
-customElements.define("checkbox-group", CheckboxGroup)
+customElements.define("wv-checkbox-group", CheckboxGroup)

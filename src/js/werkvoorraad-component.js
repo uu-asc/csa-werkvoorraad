@@ -114,7 +114,7 @@ export class WerkvoorraadComponent extends HTMLElement {
                 <input type="checkbox" id="show-empty">
                 ${this.config.labels.showEmpty}
             </label>
-            <filter-input placeholder="${this.config.labels.searchItem}" id="search-item"></filter-input>
+            <wv-filter-input placeholder="${this.config.labels.searchItem}" id="search-item"></wv-filter-input>
             `
 
         // Attach event listeners

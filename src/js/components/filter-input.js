@@ -166,4 +166,4 @@ export class FilterInput extends HTMLElement {
     }
 }
 
-customElements.define("filter-input", FilterInput)
+customElements.define("wv-filter-input", FilterInput)

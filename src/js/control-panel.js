@@ -55,7 +55,7 @@ summary {
         .folding-buttons {
             order: 2;
         }
-        filter-input {
+        wv-filter-input {
             flex-grow: 1;
             order: 1;
         }
@@ -69,7 +69,7 @@ summary {
     }
 }
 
-checkbox-group + checkbox-group {
+wv-checkbox-group + wv-checkbox-group {
     border-top: 1px solid currentColor;
     padding-top: 0.5rem;
 }
@@ -219,7 +219,7 @@ export class ControlPanel extends HTMLElement {
     handleSelectionChange(event) {
         // Collect current state from all checkbox groups
         const selections = {}
-        const groups = this.shadowRoot.querySelectorAll('checkbox-group')
+        const groups = this.shadowRoot.querySelectorAll('wv-checkbox-group')
         groups.forEach(group => {
             const category = group.groupLabel
             const selected = group.getSelectedValues()
