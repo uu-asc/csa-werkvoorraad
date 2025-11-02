@@ -132,6 +132,7 @@ export class WerkvoorraadComponent extends HTMLElement {
     initializeControls() {
         this.loadSearchValue()
         this.loadZenModeState()
+        this.loadShowEmptyState()
         
         if (!this.currentSearchRegex) {
             this.updateItemVisibility()
@@ -156,10 +157,13 @@ export class WerkvoorraadComponent extends HTMLElement {
     handleOpenAll() { this.items.forEach(item => item.handleOpenAll() ) }
     handleCloseAll() { this.items.forEach(item => item.handleCloseAll() ) }
     handleShowEmpty(event) {
-        event.target.checked
+        const checked = event.target.checked
+        
+        checked
             ? this.setAttribute("show-empty", "")
             : this.removeAttribute("show-empty")
         
+        localStorage.setItem("showEmpty", checked)
         this.updateItemVisibility()
     }
     handleSearchItem(event) {
@@ -243,6 +247,13 @@ export class WerkvoorraadComponent extends HTMLElement {
         this._checkboxZenMode.checked = zenMode
         if (zenMode) {
             this.setAttribute("zen-mode", "")
+        }
+    }
+    loadShowEmptyState() {
+        const showEmpty = localStorage.getItem("showEmpty") === "true"
+        this._buttonShowEmpty.checked = showEmpty
+        if (showEmpty) {
+            this.setAttribute("show-empty", "")
         }
     }
 }
