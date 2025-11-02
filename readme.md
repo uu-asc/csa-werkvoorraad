@@ -18,7 +18,7 @@ Zie hier een [voorbeeld werkvoorraad](https://uu-asc.github.io/csa-werkvoorraad/
 Je kunt de werkvoorraad doorzoeken met het zoekveld (te vinden in het control panel dat te openen is via het tandwiel ⚙). De zoekfunctie filtert hoofdstukken/items op basis van hun label. Met `Escape` kun je het zoekveld legen. Je zoekterm wordt bewaard tussen sessies.
 
 ### Items selecteren en kopiëren
-Klik binnen een item op een button om de waarden behorend bij de in het label genoemde identifier naar je klembord te kopiëren. Rechtsbovenin verschijnt kort "gekopieerd!" ter bevestiging. Voor items met veel resultaten (>500) worden automatisch batches aangemaakt zodat je deze  in kleinere porties kunt kopiëren. Batch buttons worden (tijdens de sessie) doorgestreept nadat je erop geklikt hebt.
+Klik binnen een item op een button om de waarden behorend bij de in het label genoemde identifier naar je klembord te kopiëren. In de button verschijnt kortstondig een vinkje (✓) ter bevestiging. Items met veel resultaten (>500) worden automatisch gegroepeerd in batches. De batch buttons zijn te vinden als je het item openklapt en worden (tijdens de sessie) doorgestreept nadat je erop geklikt hebt.
 
 ### Filteren op tags
 Items kunnen worden getagd met metadata (bv. type, prioriteit, categorie). In het control panel kun je filteren op deze tags:

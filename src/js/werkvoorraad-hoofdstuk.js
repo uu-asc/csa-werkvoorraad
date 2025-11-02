@@ -73,7 +73,6 @@ h2, h3, h4, h5, h6 {
 export class WerkvoorraadHoofdstuk extends HTMLElement {
     static observedAttributes = ["open"]
     config = {
-        clipboardWriteLabel: "gekopieerd!",
         offset: .5,
     }
 
@@ -132,19 +131,12 @@ export class WerkvoorraadHoofdstuk extends HTMLElement {
 
     get _details() { return this.shadow.querySelector("details") }
     get _summary() { return this.shadow.querySelector("summary") }
-    get _display() { return this.shadow.querySelector("summary div") }
     get _stylesheet() { return this.shadowRoot.styleSheets[0] }
 
     connectedCallback() {
         this.render()
         this._details.addEventListener("toggle", this.handleToggle)
         this._summary.addEventListener("click", this.handleSummaryClick)
-        this.addEventListener("clipboardWriteEvent", event => {
-            event.stopPropagation()
-            this._display.innerHTML = this.config.clipboardWriteLabel
-            setTimeout(() => { this._display.innerHTML = "" }, 1000)
-        })
-
         this._summary.addEventListener("mousedown", this.handleMouseDown)
         this._summary.addEventListener("mouseup", this.handleMouseUp)
     }

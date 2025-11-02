@@ -31,6 +31,7 @@ summary {
         display: grid;
         grid-template-columns: 1fr auto;
         gap: .25em;
+        align-items: center;
         justify-items: end;
     }
     span.toggle-indicator {
@@ -125,13 +126,28 @@ button {
     }
 }
 
+button[data-target] {
+    display: grid;
+    grid-template-areas: "overlap";
+
+    .count,
+    .checkmark {
+        grid-area: overlap;
+        place-self: center;
+        pointer-events: none;
+    }
+    .checkmark {
+        visibility: hidden;
+    }
+}
+
 .link:hover {
     cursor: pointer;
     text-decoration: underline;
 }
 
 /* utility */
-.batches .clicked {
+.batches .clicked .count {
     text-decoration: line-through;
     font-style: italic;
 }
@@ -223,11 +239,15 @@ export class WerkvoorraadItem extends HTMLElement {
 
         const data = this.results[target].slice(start, end).join(";")
         await navigator.clipboard.writeText(data)
-        const clipboardWriteEvent = new CustomEvent("clipboardWriteEvent", {
-            bubbles: true,
-            composed: true,
-        })
-        this.dispatchEvent(clipboardWriteEvent)
+
+        const countSpan = elem.querySelector('.count')
+        const checkmarkSpan = elem.querySelector('.checkmark')
+        countSpan.style.visibility = 'hidden'
+        checkmarkSpan.style.visibility = 'visible'
+        setTimeout(() => {
+            countSpan.style.visibility = 'visible'
+            checkmarkSpan.style.visibility = 'hidden'
+        }, 1000)
     }
 
     handleOpen() { this.setAttribute("open", "") }
@@ -312,7 +332,10 @@ export class WerkvoorraadItem extends HTMLElement {
 
     renderButton(target, start, end, isBatch=false) {
         const label = isBatch ? `${start}-${end}` : end
-        return `<button data-target="${target}" data-start="${start}" data-end="${end}">${label}</button>`
+        return `<button data-target="${target}" data-start="${start}" data-end="${end}">
+            <span class="count">${label}</span>
+            <span class="checkmark">✓</span>
+        </button>`
     }
 
     renderBatches(target, arr) {
