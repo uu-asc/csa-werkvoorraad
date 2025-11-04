@@ -19,7 +19,7 @@ body {
     grid-template-columns: 1fr minmax(600px, 3fr) 2fr;
     grid-template-rows: auto auto 1fr auto;
     column-gap: 1rem;
-    margin-inline: 1em;
+    margin-inline: 3rem;
     background: var(--color-background);
     font-family: Calibri;
     color: var(--color-text);
@@ -27,6 +27,7 @@ body {
 @media (max-width: 1024px) {
     body {
         grid-template-columns: minmax(0, 1fr) minmax(0, 600px) minmax(0, 1fr);
+        margin-inline: 1rem;
         column-gap: 0;
     }
     aside {
